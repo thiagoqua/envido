@@ -1,0 +1,4 @@
+puse los arreglos de cartas dentro de la clase jugador
+cambié el setpuntos por addpuntos
+la funcion sist puntuacion no devuelve nada. modifica los valores de los respectivos jugadores
+se agrega la función envido y truco a los jugadores, para ver quién gana
