@@ -1,4 +1,4 @@
-package truco;
+//package truco;
 public class Mazo{
     private Carta cartas[] = new Carta[40];
     
