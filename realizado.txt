@@ -1,4 +1,31 @@
-puse los arreglos de cartas dentro de la clase jugador
-cambié el setpuntos por addpuntos
-la funcion sist puntuacion no devuelve nada. modifica los valores de los respectivos jugadores
-se agrega la función envido y truco a los jugadores, para ver quién gana
+
+	11/10
+	
+	- Se agregaron los setters a la clase Carta, porque en la clase Mazo se llamaba a setPalo y setNumero.
+	- Se agrego la clase Jugador.
+	- Se agregaron funciones a Main.
+	- Se agrego la funcion toString en Carta para imprimir los objetos.
+	
+	12/10
+
+	- Puse los arreglos de cartas dentro de la clase jugador
+	- Cambio el setpuntos por addpuntos
+	- La funcion sist puntuacion no devuelve nada. modifica los valores de los respectivos jugadores
+	- Se agrega la funcion envido y truco a los jugadores, para ver quien gana
+	
+	13/10
+	
+	- El arreglo de cartas se agrego a la clase Jugador y, por ende, la funcion rondas() no recibe como argumento las cartas.
+		> El arreglo de cartas es accedido directamente por el jugador
+	- Se agrego la funcion mata() en la clase Carta, que determina que carta mata a otra de acuerdo a su valor.
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
