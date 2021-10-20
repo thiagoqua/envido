@@ -1,4 +1,4 @@
-
+﻿
 	11/10
 	
 	- Se agregaron los setters a la clase Carta, porque en la clase Mazo se llamaba a setPalo y setNumero.
@@ -19,8 +19,10 @@
 		> El arreglo de cartas es accedido directamente por el jugador
 	- Se agrego la funcion mata() en la clase Carta, que determina que carta mata a otra de acuerdo a su valor.
 	
+	20/10
+	- se agrega archivo MainTest.java con el fin de ir probando las cosas nuevas ahí y no manchar el original
 	
-	ola k ase
+	chequeando si todo anda joya con mi usuario
 	
 	
 	
