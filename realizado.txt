@@ -20,7 +20,7 @@
 	- Se agrego la funcion mata() en la clase Carta, que determina que carta mata a otra de acuerdo a su valor.
 	
 	
-	
+	ola k ase
 	
 	
 	
