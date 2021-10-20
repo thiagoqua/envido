@@ -3,7 +3,6 @@ public class Carta{
 
 	private int numero;
     private String palo;
-    private Carta[] orden = new Carta[14];          //para poder así definir quién gana en el truco
 
     public Carta(){
         this(0,"");
@@ -30,7 +29,8 @@ public class Carta{
 		this.palo = palo;
 	}
 
-    public void initOrden(){
+    private Carta[] getOrden(){
+        Carta orden[] = new Carta[14];
         orden[0] = new Carta(1,"espada");
         orden[1] = new Carta(1,"basto");
         orden[2] = new Carta(7,"espada");
@@ -38,14 +38,14 @@ public class Carta{
         orden[4] = new Carta(3,"");
         orden[5] = new Carta(2,"");
         orden[6] = new Carta(1,"");
-        orden[8] = new Carta(12,"");
-        orden[9] = new Carta(11,"");
-        orden[10] = new Carta(10,"");
-        orden[11] = new Carta(7,"");
-        orden[12] = new Carta(6,"");
-        orden[13] = new Carta(5,"");
-        orden[14] = new Carta(4,"");
-    }
+        orden[7] = new Carta(12,"");
+        orden[8] = new Carta(11,"");
+        orden[9] = new Carta(10,"");
+        orden[10] = new Carta(7,"");
+        orden[11] = new Carta(6,"");
+        orden[12] = new Carta(5,"");
+        orden[13] = new Carta(4,"");
+    return orden;}
 	
 	@Override
 	public String toString() {
@@ -62,13 +62,12 @@ public class Carta{
 	
     public boolean mata(Carta x){
         int indexOfX,indexOfMine;
-        indexOfX = indexOfMine = -1;
         Carta auxx = x;
         Carta auxmine = new Carta();
+        Carta orden[] = getOrden();
+        indexOfX = indexOfMine = -1;
         auxmine.setNumero(numero);
         auxmine.setPalo(palo);
-        if(orden[0].getNumero() == 0)
-            initOrden();
         //le borro el palo ya que da lo mismo si lo tiene o no para el orden
         if(!auxx.equals(orden[0]) && !auxx.equals(orden[1]) && !auxx.equals(orden[2]) && !auxx.equals(orden[3]))
             auxx.setPalo("");
@@ -83,6 +82,6 @@ public class Carta{
                 break;
         }
         if(indexOfMine < indexOfX)
-            return true;
+            return true;        //ver tema PARDA
     return false;}
 }
