@@ -28,19 +28,17 @@ public class Jugador {
 	public boolean getMano() {return soy_mano;}
 	public boolean getBandera() {return bandera;}
 	public boolean getCantoPrimi() {return cantoPrimi;}
-	//public Carta[] getCartas() {return cartas;}
 	
 	/* SETTERS */
 	
 	public void setTag(String tag) {this.tag = tag;}
 	
 	/*Una primera forma para inicializar las banderas es directamente pasarle un argumento*/
-	/*Habr� que ver mas adelante cual es la forma mas efectiva*/
+	/*Habria que ver mas adelante cual es la forma mas efectiva*/
 	
 	public void setBandera(boolean b) {this.bandera = b;}	
 	public void setMano(boolean m) {this.soy_mano = m;}	
 	public void setCantoPrimi(boolean m) {this.cantoPrimi = m;}
-	//public void setCartas(Carta nuevas[]) {this.cartas = nuevas;}
 
 	public void addPuntos(int nuevos){
 		if((this.puntos + nuevos) <= 30)

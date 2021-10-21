@@ -60,7 +60,7 @@ public class Carta{
         }
     return false;}
 	
-    public boolean mata(Carta x){
+    public boolean mata(Carta x) throws PardaExeption{
         int indexOfX,indexOfMine;
         Carta auxx = x;
         Carta auxmine = new Carta();
@@ -82,6 +82,8 @@ public class Carta{
                 break;
         }
         if(indexOfMine < indexOfX)
-            return true;        //ver tema PARDA
+            return true;
+        else if(indexOfMine == indexOfX)
+            throw new PardaExeption();
     return false;}
 }
