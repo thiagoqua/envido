@@ -18,7 +18,7 @@ public class Mazo{
                 }
             }
         }
-        mezclar();                                              //mando a mezclar
+        mezclar(); mezclar();                                   //mando a mezclar
     }
 
     public void mezclar(){

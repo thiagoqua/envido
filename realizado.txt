@@ -25,6 +25,12 @@
 	21/10
 	- se finaliza la función sistPuntuación.
 	- se agrega archivo PardaException para cotemplar la parda a la hora de matar cartas.
+
+	26/10
+	- se desarrolla método envido de clase jugador.
+	- se desarrolla método getPuntosEnvido de clase jugador.
+	- ambas comprobadas y testeado su correcto funcionamiento.
+
 	
 	
 	

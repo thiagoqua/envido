@@ -2,7 +2,27 @@ public class MainTest {
     public static void main(String[] args) {        
         Jugador j1 = new Jugador("TIKI");
         Jugador j2 = new Jugador("ESTEBAN");
-        String cantos[] = new String[5];
+        Mazo mazo = new Mazo();
+
+        for(int i=0;i<3;++i){
+            j1.cartas[i] = mazo.sacar();
+            j2.cartas[i] = mazo.sacar();
+        }
+
+        System.out.println("cartas de j1:");
+        for(Carta temp : j1.cartas)
+            System.out.println(temp);
+            
+        System.out.println("cartas de j2:");
+        for(Carta temp : j2.cartas)
+            System.out.println(temp);
+        
+        System.out.println("j1 gano el envido?\t" + j1.envido(j2));
+
+        System.out.println("porque los puntos de j1 son " + j1.getPuntosEnvido());
+        System.out.println("y los puntos de j2 son " + j2.getPuntosEnvido());
+
+        /*String cantos[] = new String[5];
 
         cantos[0] = "envido";
         cantos[1] = "elmasca porongas";
@@ -14,7 +34,7 @@ public class MainTest {
 
         try{
             sistPuntuacion(cantos,j1,j2);
-        } catch(IllegalArgumentException e){}
+        } catch(IllegalArgumentException e){}*/
 
         //System.out.println("puntos de j1 " + j1.getPuntos() + "\npuntos de j2 " + j2.getPuntos());
         /*
