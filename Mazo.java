@@ -1,10 +1,11 @@
 //package truco;
 public class Mazo{
-    private Carta cartas[] = new Carta[40];
+    private Carta cartas[];
     
     public Mazo(){
         int indice = 0;
         final String palos[] = new String[4];
+        cartas = new Carta[40];
         palos[0] = "basto"; palos[1] = "copa"; palos[2] = "espada"; palos[3] = "oro";
         for(String palo : palos){                               //genero las 48 cartas con sus números y palos
             for(int i=1;i<=10;++i){
@@ -49,14 +50,10 @@ public class Mazo{
     public Carta sacar(){
         int i;
         Carta temp = new Carta();
-        for(i=0;i<40 && cartas[i].getNumero()==0;++i){}         //seteo al índice en la primer carta del mazo
-        if(i == 40){                                            //si no hay más cartas en el mazo, retorno una carta con el número -2
-            temp.setNumero(-2);
-            return temp;
-        }
+        for(i=0;i<40 && cartas[i] == null;++i){}                //seteo al índice en la primer carta del mazo
         temp.setNumero(cartas[i].getNumero());                  //seteo el palo de la carta que saqué al temporal
         temp.setPalo(cartas[i].getPalo());                      //seteo el número de la carta que saqué al temporal
-        cartas[i].setNumero(0);                                 //le asigno 0 al número de la carta que saqué para informar que justamente la carta fue sacada
+        cartas[i] = null;                                       //le asigno 0 al número de la carta que saqué para informar que justamente la carta fue sacada
     return temp;}                                               
 
     public void reponer(){

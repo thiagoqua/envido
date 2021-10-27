@@ -31,11 +31,10 @@ public class Jugador {
 	
 	/* SETTERS */
 	
-	public void setTag(String tag) {this.tag = tag;}
-	
 	/*Una primera forma para inicializar las banderas es directamente pasarle un argumento*/
 	/*Habria que ver mas adelante cual es la forma mas efectiva*/
 	
+	public void setTag(String tag) {this.tag = tag;}
 	public void setBandera(boolean b) {this.bandera = b;}	
 	public void setMano(boolean m) {this.soy_mano = m;}	
 	public void setCantoPrimi(boolean m) {this.cantoPrimi = m;}
@@ -51,20 +50,25 @@ public class Jugador {
 	/* REPRESENTAN TODAS LAS ACCIONES QUE PUEDE REALIZAR UN JUGADOR EN UNA RONDA */
 	/* ES NECESARIO CONECTAR EL CODIGO DE ESTAS FUNCIONES CON LOS BOTONES DE LA INTERFAZ */
 	
-	public void cantar() {
+	public void cantar(){
 	}
 	
-	public void seleccionarCarta() {
+	public void seleccionarCarta(){
 	}
 	
-	public void irseAlMazo() {
+	public void irseAlMazo(){
 	}
 	
-	public void rendirse() {
+	public void rendirse(){
 	}
 	
-	public void quieroNoquiero() {
-	}	
+	public void quieroNoquiero(){
+	}
+
+	public Carta tirar(int index){
+		Carta temp = cartas[index];
+		cartas[index] = null;
+	return temp;}
 
 	public boolean envido(Jugador j2){
 		if(getPuntosEnvido() == j2.getPuntosEnvido())
@@ -154,6 +158,6 @@ public class Jugador {
 	return puntos;}
 	
 	public boolean truco(Jugador j2){
-		//se verifica quien gana el truco
-	return false;}
+		return false;
+	}
 }

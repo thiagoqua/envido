@@ -3,6 +3,7 @@ public class MainTest {
         Jugador j1 = new Jugador("TIKI");
         Jugador j2 = new Jugador("ESTEBAN");
         Mazo mazo = new Mazo();
+        Carta tempj1,tempj2;
 
         for(int i=0;i<3;++i){
             j1.cartas[i] = mazo.sacar();
@@ -17,10 +18,11 @@ public class MainTest {
         for(Carta temp : j2.cartas)
             System.out.println(temp);
         
-        System.out.println("j1 gano el envido?\t" + j1.envido(j2));
+        tempj1 = j1.tirar(1); tempj2 = j2.tirar(0);
+        
+        System.out.println("carta tirada por j1: " + tempj1);
+        System.out.println("carta tirada por j2: " + tempj2);
 
-        System.out.println("porque los puntos de j1 son " + j1.getPuntosEnvido());
-        System.out.println("y los puntos de j2 son " + j2.getPuntosEnvido());
 
         /*String cantos[] = new String[5];
 
