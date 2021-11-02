@@ -23,13 +23,18 @@
 	- se agrega archivo MainTest.java con el fin de ir probando las cosas nuevas ahí y no manchar el original
 	
 	21/10
-	- se finaliza la función sistPuntuación.
-	- se agrega archivo PardaException para cotemplar la parda a la hora de matar cartas.
+	- se empieza la función sistPuntuación.
+	- se agrega archivo PardaException para contemplar la parda a la hora de matar cartas.
 
 	26/10
 	- se desarrolla método envido de clase jugador.
 	- se desarrolla método getPuntosEnvido de clase jugador.
 	- ambas comprobadas y testeado su correcto funcionamiento.
+
+	02/11
+	- se finaliza la funcion sistPuntación y se chequeó que funcione correctamente.
+	- se agrega función isWinning en clase jugador, que retorna true si el jugador que invoca al método va ganando la partida.
+	- se agrega función addPuntosF en clase jugador, que suma los puntos correspondientes al resultado de la falta envido.
 
 	
 	

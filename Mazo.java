@@ -1,4 +1,5 @@
 //package truco;
+
 public class Mazo{
     private Carta cartas[];
     

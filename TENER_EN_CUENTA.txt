@@ -1,0 +1,9 @@
+
+	A TENER EN CUENTA
+	
+	Si una persona gana un Envido y la partida termina antes de mostrar todas las cartas, hay que asegurarse
+		que se muestren en mesa los puntos del Envido.
+		
+	Cuando un jugador canta el envido, en la pestaña del otro jugador tiene que aparecer automaticamente las opciones de envido.
+	
+	

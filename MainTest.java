@@ -1,13 +1,30 @@
+//package truco;
+
 public class MainTest {
     public static void main(String[] args) {        
         Jugador j1 = new Jugador("TIKI");
         Jugador j2 = new Jugador("ESTEBAN");
         Mazo mazo = new Mazo();
-        Carta tempj1,tempj2;
+        //Interfaz pantalla = new Interfaz();
+        String cantos[] = new String[5];
+
+        cantos[0] = "envido";           //j1
+        cantos[1] = "envido";           //j2
+        cantos[2] = "real envido";      //j1
+        cantos[3] = "quiero";           //j2
+        //cantos[4] = "quiero";           //j1
+
+        j1.setCantoPrimi(true);
 
         for(int i=0;i<3;++i){
             j1.cartas[i] = mazo.sacar();
             j2.cartas[i] = mazo.sacar();
+        }
+
+        try{
+            sistPuntuacion(cantos,j1,j2);
+        } catch(IllegalArgumentException e){
+            e.printStackTrace();
         }
 
         System.out.println("cartas de j1:");
@@ -17,28 +34,8 @@ public class MainTest {
         System.out.println("cartas de j2:");
         for(Carta temp : j2.cartas)
             System.out.println(temp);
-        
-        tempj1 = j1.tirar(1); tempj2 = j2.tirar(0);
-        
-        System.out.println("carta tirada por j1: " + tempj1);
-        System.out.println("carta tirada por j2: " + tempj2);
 
-
-        /*String cantos[] = new String[5];
-
-        cantos[0] = "envido";
-        cantos[1] = "elmasca porongas";
-        cantos[2] = "elmasca porongas";
-        cantos[3] = "no quiero";
-        //cantos[4] = "no quiero";
-
-        j1.setCantoPrimi(true);
-
-        try{
-            sistPuntuacion(cantos,j1,j2);
-        } catch(IllegalArgumentException e){}*/
-
-        //System.out.println("puntos de j1 " + j1.getPuntos() + "\npuntos de j2 " + j2.getPuntos());
+        System.out.println("\npuntos de j1 " + j1.getPuntos() + "\npuntos de j2 " + j2.getPuntos());
         /*
         // VARIABLES DE MAIN 
         int r = 0;	//reserva retorno de ronda() aunque no sirve pa' nada; lo pongo porque sino me tira error
@@ -77,148 +74,189 @@ public class MainTest {
         //j1 siempre debe ser el que canta primero
         int index = 0;
         if(cantado[index].equals("envido")){                    //canta j1
-            if(cantado[index++].equals("quiero"))               //canta j2
+            index++;
+            if(cantado[index].equals("quiero")){               //canta j2
                 if(j1.envido(j2))
                     j1.addPuntos(2);
                 else
                     j2.addPuntos(2);
+            }
             else if(cantado[index].equals("no quiero"))         //canta j2
                 j1.addPuntos(1);
-            else if(cantado[index].equals("envido"))            //canta j2
-                if(cantado[index++].equals("quiero"))           //canta j1
+            else if(cantado[index].equals("envido")){            //canta j2
+                index++;
+                if(cantado[index].equals("quiero")){           //canta j1
                     if(j1.envido(j2))
                         j1.addPuntos(4);
                     else
                         j2.addPuntos(4);
+                }
                 else if(cantado[index].equals("no quiero"))     //canta j1
                     j2.addPuntos(2);
-                else if(cantado[index].equals("real envido"))   //canta j1
-                    if(cantado[index++].equals("quiero"))       //canta j2
+                else if(cantado[index].equals("real envido")){   //canta j1
+                    index++;
+                    if(cantado[index].equals("quiero")){       //canta j2
                         if(j1.envido(j2))
                             j1.addPuntos(7);
                         else
                             j2.addPuntos(7);
+                    }
                     else if(cantado[index].equals("no quiero")) //canta j2
                         j1.addPuntos(4);
-                    else if(cantado[index].equals("falta envido"))//canta j2
-                        if(cantado[index++].equals("quiero"))   //canta j1
+                    else if(cantado[index].equals("falta envido")){//canta j2
+                        index++;
+                        if(cantado[index].equals("quiero")){   //canta j1
                             if(j1.envido(j2))
-                                j1.addPuntos(30);   //ver acá que pasa ocn la falta
+                                j1.addPuntosF(j2);   //ver acá que pasa ocn la falta
                             else
-                                j2.addPuntos(30);   //acá también
+                                j2.addPuntosF(j1);   //acá también
+                        }
                         else if(cantado[index].equals("no quiero"))//canta j1
                             j2.addPuntos(7);
                         else 
                             throw new IllegalArgumentException(cantado[index] + " no matcheado");
+                    }
                     else 
                         throw new IllegalArgumentException(cantado[index] + " no matcheado");
-                else if(cantado[index].equals("falta envido"))//canta j2
-                    if(cantado[index++].equals("quiero"))   //canta j1
+                }
+                else if(cantado[index].equals("falta envido")){//canta j2
+                    index++;
+                    if(cantado[index].equals("quiero")){   //canta j1
                         if(j1.envido(j2))
-                            j1.addPuntos(30);   //ver acá que pasa ocn la falta
+                            j1.addPuntosF(j2);   //ver acá que pasa ocn la falta
                         else
-                            j2.addPuntos(30);   //acá también
+                            j2.addPuntosF(j1);   //acá también
+                    }
                     else if(cantado[index].equals("no quiero"))//canta j1
-                        j2.addPuntos(4);
-                else 
-                    throw new IllegalArgumentException(cantado[index] + " no matcheado");
-            else if(cantado[index].equals("real envido"))   //canta j2
-                if(cantado[index++].equals("quiero"))       //canta j1
-                    if(j1.envido(j2))
-                        j1.addPuntos(7);
-                    else
-                        j2.addPuntos(7);
-                else if(cantado[index].equals("no quiero")) //canta j1
-                    j1.addPuntos(2);
-                else if(cantado[index].equals("falta envido"))//canta j1
-                    if(cantado[index++].equals("quiero"))   //canta j2
-                        if(j1.envido(j2))
-                            j1.addPuntos(30);   //ver acá que pasa ocn la falta
-                        else
-                            j2.addPuntos(30);   //acá también
-                    else if(cantado[index].equals("no quiero"))//canta j2
-                        j2.addPuntos(7);
+                        j1.addPuntos(4);
                     else 
                         throw new IllegalArgumentException(cantado[index] + " no matcheado");
+                }
                 else 
                     throw new IllegalArgumentException(cantado[index] + " no matcheado");
-            else if(cantado[index].equals("falta envido"))//canta j2
-                if(cantado[index++].equals("quiero"))   //canta j1
+            }
+            else if(cantado[index].equals("real envido")){   //canta j2
+                index++;
+                if(cantado[index].equals("quiero")){       //canta j1
                     if(j1.envido(j2))
-                        j1.addPuntos(30);   //ver acá que pasa ocn la falta
+                        j1.addPuntos(5);
                     else
-                        j2.addPuntos(30);   //acá también
-                else if(cantado[index].equals("no quiero"))//canta j1
-                    j2.addPuntos(7);
+                        j2.addPuntos(5);
+                }
+                else if(cantado[index].equals("no quiero")) //canta j1
+                    j2.addPuntos(2);
+                else if(cantado[index].equals("falta envido")){//canta j1
+                    index++;
+                    if(cantado[index].equals("quiero")){   //canta j2
+                        if(j1.envido(j2))
+                            j1.addPuntosF(j2);   //ver acá que pasa ocn la falta
+                        else
+                            j2.addPuntosF(j1);   //acá también
+                    }
+                    else if(cantado[index].equals("no quiero"))//canta j2
+                        j2.addPuntos(5);
+                    else 
+                        throw new IllegalArgumentException(cantado[index] + " no matcheado");
+                }
                 else 
                     throw new IllegalArgumentException(cantado[index] + " no matcheado");
+            }
+            else if(cantado[index].equals("falta envido")){//canta j2
+                index++;
+                if(cantado[index].equals("quiero")){   //canta j1
+                    if(j1.envido(j2))
+                        j1.addPuntosF(j2);   //ver acá que pasa ocn la falta
+                    else
+                        j2.addPuntosF(j1);   //acá también
+                }
+                else if(cantado[index].equals("no quiero"))//canta j1
+                    j2.addPuntos(2);
+                else 
+                    throw new IllegalArgumentException(cantado[index] + " no matcheado");
+            }
             else 
                 throw new IllegalArgumentException(cantado[index] + " no matcheado");
         }
         else if(cantado[index].equals("real envido")){  //canta j1
-            if(cantado[index++].equals("quiero"))       //canta j2
+            index++;
+            if(cantado[index].equals("quiero")){       //canta j2
                 if(j1.envido(j2))
                     j1.addPuntos(3);
                 else
                     j2.addPuntos(3);
+            }
             else if(cantado[index].equals("no quiero")) //canta j2
-                j1.addPuntos(2);
-            else if(cantado[index].equals("falta envido"))//canta j2
-                if(cantado[index++].equals("quiero"))   //canta j1
+                j1.addPuntos(1);
+            else if(cantado[index].equals("falta envido")){//canta j2
+                index++;
+                if(cantado[index].equals("quiero")){   //canta j1
                     if(j1.envido(j2))
-                        j1.addPuntos(30);   //ver acá que pasa ocn la falta
+                        j1.addPuntosF(j2);   //ver acá que pasa ocn la falta
                     else
-                        j2.addPuntos(30);   //acá también
+                        j2.addPuntosF(j1);   //acá también
+                }
                 else if(cantado[index].equals("no quiero"))//canta j1
-                    j2.addPuntos(4);
+                    j2.addPuntos(3);
                 else 
                     throw new IllegalArgumentException(cantado[index] + " no matcheado");
+            }
             else 
                 throw new IllegalArgumentException(cantado[index] + " no matcheado");
         }
         else if(cantado[index].equals("falta envido")){ //canta j1
-            if(cantado[index++].equals("quiero"))       //canta j2
+            index++;
+            if(cantado[index].equals("quiero")){       //canta j2
                     if(j1.envido(j2))
-                        j1.addPuntos(30);   //ver acá que pasa ocn la falta
+                        j1.addPuntosF(j2);   //ver acá que pasa ocn la falta
                     else
-                        j2.addPuntos(30);   //acá también
+                        j2.addPuntosF(j1);   //acá también
+            }
             else if(cantado[index].equals("no quiero"))//canta j2
                     j1.addPuntos(1);
             else 
                 throw new IllegalArgumentException(cantado[index] + " no matcheado");
         }
-        else{               //se canto el truco por j1
-            if(cantado[index++].equals("quiero")) //canta j2
+        else if(cantado[index].equals("truco")){               //se canto el truco por j1
+            index++;
+            if(cantado[index].equals("quiero")){ //canta j2
                 if(j1.truco(j2))
                     j1.addPuntos(2);
                 else
                     j2.addPuntos(2);
+            }
             else if(cantado[index].equals("no quiero")) //canta j2
                 j1.addPuntos(1);
-            else if(cantado[index].equals("retruco"))   //canta j2
-                if(cantado[index++].equals("quiero"))     //canta j1
+            else if(cantado[index].equals("retruco")){   //canta j2
+                index++;
+                if(cantado[index].equals("quiero")){     //canta j1
                     if(j1.truco(j2))
                         j1.addPuntos(3);
                     else
                         j2.addPuntos(3);
+                }
                 else if(cantado[index].equals("no quiero")) //canta j1
                     j2.addPuntos(2);
-                else if(cantado[index].equals("vale cuatro"))   //canta j1
-                    if(cantado[index++].equals("quiero"))     //canta j2
+                else if(cantado[index].equals("vale cuatro")){   //canta j1
+                    index++;
+                    if(cantado[index].equals("quiero")){     //canta j2
                         if(j1.truco(j2))
                             j1.addPuntos(4);
                         else
                             j2.addPuntos(4);
+                    }
                     else if(cantado[index].equals("no quiero")) //canta j2
                         j1.addPuntos(3);
                     else 
                         throw new IllegalArgumentException(cantado[index] + " no matcheado");
+                }
                 else 
                     throw new IllegalArgumentException(cantado[index] + " no matcheado");
+            }
             else 
                 throw new IllegalArgumentException(cantado[index] + " no matcheado");
         }
-        System.out.println(index);
+        else 
+            throw new IllegalArgumentException(cantado[index] + " no matcheado");
     }
        
     public static int ronda(Jugador j1, Jugador j2, Mazo m) {		//	NOTA: si no la hago static, me salta un error

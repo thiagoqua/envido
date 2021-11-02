@@ -1,4 +1,5 @@
 //package truco;
+
 public class Carta{
 
 	private int numero;
@@ -13,13 +14,9 @@ public class Carta{
         this.palo = new String(palo);
     }
 
-    public int getNumero(){
-        return numero;
-    }
+    public int getNumero(){return numero;}
 
-    public String getPalo(){
-        return palo;
-    }
+    public String getPalo(){return palo;}
     
     public void setNumero(int numero) {
 		this.numero = numero;

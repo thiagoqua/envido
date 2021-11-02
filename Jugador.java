@@ -1,5 +1,4 @@
-//package truco;
-
+//package truco
 public class Jugador {
 
 	private int puntos;
@@ -24,9 +23,13 @@ public class Jugador {
 	/* GETTERS */
 	
 	public int getPuntos() {return puntos;}
+	
 	public String getTag() {return tag;}
+	
 	public boolean getMano() {return soy_mano;}
+	
 	public boolean getBandera() {return bandera;}
+	
 	public boolean getCantoPrimi() {return cantoPrimi;}
 	
 	/* SETTERS */
@@ -35,15 +38,29 @@ public class Jugador {
 	/*Habria que ver mas adelante cual es la forma mas efectiva*/
 	
 	public void setTag(String tag) {this.tag = tag;}
+	
 	public void setBandera(boolean b) {this.bandera = b;}	
+	
 	public void setMano(boolean m) {this.soy_mano = m;}	
+	
 	public void setCantoPrimi(boolean m) {this.cantoPrimi = m;}
+
+	public boolean isWinning(Jugador j2){
+		return puntos > j2.getPuntos();
+	}
 
 	public void addPuntos(int nuevos){
 		if((this.puntos + nuevos) <= 30)
-			this.puntos+=nuevos;
+			this.puntos += nuevos;
 		else 
 			this.puntos = 30;
+	}
+
+	public void addPuntosF(Jugador j2){		//agrega puntos si se canta la falta envido. el que la invoca es el que la ganó.
+		if(isWinning(j2))
+			puntos = 30;
+		else
+			puntos += 30 - j2.getPuntos();
 	}
 	
 	/* POSIBLES FUNCIONES QUE SE LLEGUEN A NECESITAR */
