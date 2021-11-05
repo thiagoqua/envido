@@ -1,5 +1,5 @@
 //package truco;
-
+//FORCING
 public class Carta{
 
 	private int numero;

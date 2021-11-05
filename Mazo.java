@@ -1,5 +1,5 @@
 //package truco;
-
+//FORCING
 public class Mazo{
     private Carta cartas[];
     
