@@ -5,7 +5,7 @@ public class MainTest {
         Jugador j1 = new Jugador("TIKI");
         Jugador j2 = new Jugador("ESTEBAN");
         Mazo mazo = new Mazo();
-        //Interfaz pantalla = new Interfaz();
+        Interfaz pantalla = new Interfaz();
         String cantado[] = new String[5];
 
         initCANTOS();
