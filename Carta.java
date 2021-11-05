@@ -57,12 +57,12 @@ public class Carta{
         }
     return false;}
 	
-    public boolean mata(Carta x) throws PardaExeption{
-        int indexOfX,indexOfMine;
-        Carta auxx = x;
+    public boolean mata(Carta given) throws PardaExeption{
+        int indexOfGiven,indexOfMine;
+        Carta auxx = given;
         Carta auxmine = new Carta();
         Carta orden[] = getOrden();
-        indexOfX = indexOfMine = -1;
+        indexOfGiven = indexOfMine = -1;
         auxmine.setNumero(numero);
         auxmine.setPalo(palo);
         //le borro el palo ya que da lo mismo si lo tiene o no para el orden
@@ -72,15 +72,15 @@ public class Carta{
             auxmine.setPalo("");
         for(int i=0;i<orden.length;++i){
             if(orden[i].equals(auxx))
-                indexOfX = i;
+                indexOfGiven = i;
             if(orden[i].equals(auxmine))
                 indexOfMine = i;
-            if(indexOfMine > 0 && indexOfX > 0)
+            if(indexOfMine > 0 && indexOfGiven > 0)
                 break;
         }
-        if(indexOfMine < indexOfX)
+        if(indexOfMine < indexOfGiven)
             return true;
-        else if(indexOfMine == indexOfX)
+        else if(indexOfMine == indexOfGiven)
             throw new PardaExeption();
     return false;}
 }
