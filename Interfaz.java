@@ -27,9 +27,7 @@ import javax.swing.border.Border;
 
 public class Interfaz extends JFrame{
 	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	
 	/*BOTONES PARA CANTAR*/
