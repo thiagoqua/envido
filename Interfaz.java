@@ -1,10 +1,8 @@
-//package truco;
-//FORCING
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -12,7 +10,10 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
+import javax.swing.JOptionPane;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -20,6 +21,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
@@ -36,6 +38,7 @@ public class Interfaz extends JFrame{
 	private JButton truco;
 	private JButton envido;
 	private JButton mazo;
+	private JButton rendirse;
 	
 	/*COMPONENTES DEL CENTRO*/
 	
@@ -75,6 +78,8 @@ public class Interfaz extends JFrame{
 	private JButton config;
 	private JButton salir;
 	
+	/*COMPONENTES DE JUGAR, LUEGO DE CLICKEAR*/
+	
 	private JButton jugarMaquina;
 	private JButton jugarPersona;
 	private JButton volver;
@@ -82,20 +87,32 @@ public class Interfaz extends JFrame{
 	private JPanel banner;
 	private JLabel cartel;
 	
+	/*COMPONENTES DE CONFIGURACION, LUEGO DE CLICKEAR*/
+	
+	private JLabel ingrese_nombre;
+	private JTextField texto_nombre;
+	private JButton ok; 
+	
+	/*CONTENEDORES DE LA VENTANA PRINCIPAL*/
+	
 	private Container cp;
 	
 	private JPanel menu;
 	private JPanel union;
 	private JPanel unionDer;
 	
+	
+	
+	
 	public Interfaz() {
+	
 		
 	
 		
 	/*CREACION DE VENTANA BASICA*/
-		
+	setIconImage(new ImageIcon(getClass().getResource("/images/icon.jpg")).getImage());
 	setTitle("TRUCO");
-	setSize(800,600);
+	setSize(800,600);			//SE PUEDE CAMBIAR A 1200x900 Y MANTENER BIEN LA ESTRUCTURA (AUNQUE HABRIA QUE CAMBIAR EL TAMAÑO DE LAS IMAGENES)
 	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	setLocationRelativeTo(null);
 	
@@ -104,6 +121,8 @@ public class Interfaz extends JFrame{
 	contorno = BorderFactory.createLineBorder(Color.BLUE);
 	contorno2 = BorderFactory.createLineBorder(Color.RED);
 	contorno3 = BorderFactory.createLineBorder(Color.BLACK);
+	
+	texto_nombre = new JTextField("");
 	
 	cp = getContentPane();
 	
@@ -116,6 +135,7 @@ public class Interfaz extends JFrame{
 	truco = new JButton("TRUCO");
 	envido = new JButton("ENVIDO");
 	mazo = new JButton("MAZO");
+	rendirse = new JButton("RENDIRSE");
 	
 	menu = new JPanel();
 	GridLayout columna = new GridLayout(8,1);
@@ -127,20 +147,21 @@ public class Interfaz extends JFrame{
 	menu.add(truco);
 	menu.add(envido);
 	menu.add(mazo);
-	menu.add(new JLabel(""));
+	menu.add(rendirse);
+//	menu.add(new JLabel(""));
 	menu.add(new JLabel(""));
 	
 	/*CREACION DE LOS COMPONENTES CENTRALES*/
 	
 	l1 = new JLabel();
-	l1.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/base.jpg")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+	l1.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
 	l1.setHorizontalAlignment(SwingConstants.CENTER);
 	l2 = new JLabel();
-	l2.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/base.jpg")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+	l2.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
 	l2.setHorizontalAlignment(SwingConstants.CENTER);
 	l3 = new JLabel();
 	l3.setHorizontalAlignment(SwingConstants.CENTER);
-	l3.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/base.jpg")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+	l3.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
 	
 	JPanel cartas = new JPanel(new GridLayout(1,3,4,4));
 	cartas.add(l1);
@@ -152,9 +173,12 @@ public class Interfaz extends JFrame{
 	JPanel cantos = new JPanel();
 	cantos.setLayout(new GridBagLayout());
 	
-	texto = new JLabel("TRUCO",SwingConstants.CENTER);
+
+	texto = new JLabel("<html>"+ "" +"</html>",SwingConstants.CENTER);
+	texto.setPreferredSize(new Dimension(300,30));
 	texto.setBorder(contorno3);
 	texto.setFont(new Font("Consolas",Font.PLAIN,30));
+	
 	quiero = new JButton("QUIERO");
 	noQuiero = new JButton("NO QUIERO");
 	
@@ -181,14 +205,14 @@ public class Interfaz extends JFrame{
 	//
 	
 	l4 = new JLabel();
-	l4.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/base.jpg")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+	l4.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
 	l4.setHorizontalAlignment(SwingConstants.CENTER);
 	l5 = new JLabel();
-	l5.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/base.jpg")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+	l5.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
 	l5.setHorizontalAlignment(SwingConstants.CENTER);
 	l6 = new JLabel();
 	l6.setHorizontalAlignment(SwingConstants.CENTER);
-	l6.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/base.jpg")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+	l6.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
 	
 	JPanel cartas2 = new JPanel(new GridLayout(1,3,4,4));
 	cartas2.add(l4);
@@ -198,11 +222,11 @@ public class Interfaz extends JFrame{
 	//
 	
 	c1 = new JButton();
-	c1.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/base.jpg")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+	c1.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
 	c2 = new JButton();
-	c2.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/base.jpg")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+	c2.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
 	c3 = new JButton();
-	c3.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/base.jpg")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+	c3.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
 	
 	JPanel cartas3 = new JPanel(new GridLayout(1,3,4,4));
 	cartas3.add(c1);
@@ -220,7 +244,6 @@ public class Interfaz extends JFrame{
 	
 	
 	/*CREACION DE LOS COMPONENTES DERECHOS*/
-	
 	pts1 = new JLabel("0");
 	pts1.setBorder(contorno);
 	pts1.setHorizontalAlignment(SwingConstants.CENTER);
@@ -229,11 +252,11 @@ public class Interfaz extends JFrame{
 	pts2.setBorder(contorno2);
 	pts2.setHorizontalAlignment(SwingConstants.CENTER);
 	
-	j1 = new JLabel("TIKI");
+	j1 = new JLabel("");
 	j1.setBorder(contorno);
 	j1.setHorizontalAlignment(SwingConstants.CENTER);
 	
-	j2 = new JLabel("ESTEBAN");
+	j2 = new JLabel("");
 	j2.setBorder(contorno2);
 	j2.setHorizontalAlignment(SwingConstants.CENTER);
 	
@@ -243,7 +266,7 @@ public class Interfaz extends JFrame{
 	img_mano.setHorizontalAlignment(SwingConstants.CENTER);
 	
 	img_mazo = new JLabel();
-	img_mazo.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/base.jpg")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+	img_mazo.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/mazo.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
 	img_mazo.setBorder(contorno2);
 	img_mazo.setHorizontalAlignment(SwingConstants.CENTER);
 	
@@ -317,7 +340,7 @@ public class Interfaz extends JFrame{
 		gbc.weighty = 1.0;
 		principal.add(inicio,gbc);
 		
-		cartel = new JLabel("2021 TIKI Y ESTEBAN ASOCIADOS. TODOS LOS DERECHOS RESERVADOS.");
+		cartel = new JLabel("© 2021 TIKI Y ESTEBAN ASOCIADOS. TODOS LOS DERECHOS RESERVADOS.");
 		gbc.gridx = 0;
 		gbc.gridy = 2;
 		gbc.gridwidth = 1;
@@ -328,6 +351,7 @@ public class Interfaz extends JFrame{
 		
 	}
 	
+	//
 	
 	public void ActionListener() {
 		
@@ -341,6 +365,8 @@ public class Interfaz extends JFrame{
 				
 			}
 		});
+		
+		//
 		
 		jugar.addActionListener(new ActionListener() {
 			
@@ -391,6 +417,9 @@ public class Interfaz extends JFrame{
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						
+						j1.setText(texto_nombre.getText());			//CHEQUEAR SI ESTO VA ACÁ
+						j2.setText("BOT EASY");
+						
 						cp.removeAll();
 						cp.revalidate();
 						cp.repaint();
@@ -398,8 +427,32 @@ public class Interfaz extends JFrame{
 						cp.add(union,BorderLayout.CENTER);
 						cp.add(unionDer,BorderLayout.EAST);
 						
+						rendirse.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								
+								JFrame confirmar = new JFrame();
+						        int result = JOptionPane.showConfirmDialog(confirmar, "¿Está seguro que desea salir? El juego se dará como perdido.");
+
+						        if (result == 0) {
+						        	cp.removeAll();
+									cp.revalidate();
+									cp.repaint();
+									cp.add(ventanaPrincipal());
+									
+									ActionListener();	
+						        }
+						        
+						        else if (result == 1) {}
+						        else {}
+
+								
+							}
+						});		//FIN RENDIRSE
+						
 					}
-				});
+				});		//FIN ACTION-LISTENER JUGAR-MAQUINA
 				
 				
 				volver.addActionListener(new ActionListener() {
@@ -422,6 +475,89 @@ public class Interfaz extends JFrame{
 			}	//FIN ACTION-PERFORMED JUGAR	
 			
 		});		//FIN ACTION-LISTENER JUGAR
+		
+		//
+		
+		config.addActionListener(new ActionListener() {
+			
+		
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				/*CAMBIAR NOMBRE*/
+				
+				ingrese_nombre = new JLabel("Ingrese un nombre (máx. 12 caracteres): ");
+				texto_nombre = new JTextField(texto_nombre.getText());
+				texto_nombre.setPreferredSize(new Dimension(100,20));
+				texto_nombre.addKeyListener((KeyListener) new KeyListener() {
+					
+					public void keyTyped(KeyEvent e) {
+						if (texto_nombre.getText().length()== 12) {
+							e.consume(); 
+						}
+				    }
+
+					@Override
+					public void keyPressed(KeyEvent e) {}
+
+					@Override
+					public void keyReleased(KeyEvent e) {} 
+					
+				});
+				
+				ok = new JButton("OK");
+				
+				JPanel menu2 = new JPanel();
+				menu2.setLayout(new BoxLayout(menu2, BoxLayout.X_AXIS));
+				menu2.add(ingrese_nombre);
+				menu2.add(texto_nombre);
+				menu2.add(ok);
+				
+				JPanel principal2 = new JPanel();
+				principal2.setLayout(new GridBagLayout());
+				GridBagConstraints gbc3 = new GridBagConstraints();
+				
+				gbc3.gridx = 0;
+				gbc3.gridy = 0;
+				gbc3.gridwidth = 1;
+				gbc3.gridheight = 1;
+				principal2.add(banner,gbc3);
+				
+				gbc3.gridx = 0;
+				gbc3.gridy = 1;
+				gbc3.gridwidth = 1;
+				gbc3.gridheight = 1;
+				gbc3.weighty = 1.0;
+				principal2.add(menu2,gbc3);
+				
+				gbc3.gridx = 0;
+				gbc3.gridy = 2;
+				gbc3.gridwidth = 1;
+				gbc3.gridheight = 1;
+				principal2.add(cartel,gbc3);
+				
+				cp.removeAll();
+				cp.revalidate();
+				cp.repaint();
+				cp.add(principal2);
+				
+				ok.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						
+						cp.removeAll();
+						cp.revalidate();
+						cp.repaint();
+						cp.add(ventanaPrincipal());
+						
+						ActionListener();
+						
+					}
+				});	//FIN OK
+				
+			}
+		});		//FIN CONFIG
 		
 	}	//FIN FUNCION ACTION-LISTENER
 	

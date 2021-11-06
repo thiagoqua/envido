@@ -30,13 +30,21 @@
 	- se desarrolla método envido de clase jugador.
 	- se desarrolla método getPuntosEnvido de clase jugador.
 	- ambas comprobadas y testeado su correcto funcionamiento.
-
+	
+	01/11
+	- desarrollada la clase Interfaz.
+	
 	02/11
 	- se finaliza la funcion sistPuntación y se chequeó que funcione correctamente.
 	- se agrega función isWinning en clase jugador, que retorna true si el jugador que invoca al método va ganando la partida.
 	- se agrega función addPuntosF en clase jugador, que suma los puntos correspondientes al resultado de la falta envido.
 
+	06/11
 	
+	- Se agregó el boton "Rendirse".
+	- Se agregó el apartado de Configuracion para cambiar el nombre.
+	- Se reemplazaron las imagenes de prueba por imagenes del mazo real.
+	- Se modificó ligeramente el apartado donde se muestran los cantos de los jugadores (donde estan los botones "Quiero" "No quiero").
 	
 	
 	

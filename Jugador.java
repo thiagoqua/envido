@@ -1,5 +1,4 @@
-//package truco
-//FORCING
+
 public class Jugador {
 
 	private int puntos;
