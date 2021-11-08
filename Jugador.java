@@ -1,12 +1,12 @@
-
 public class Jugador {
-
-	private int puntos;
-	private String tag;					//nombre del jugador
-	private boolean soy_mano;
-	private boolean bandera;
-	private boolean cantoPrimi;
+	
+	protected int puntos;
+	protected String tag;					//nombre del jugador
+	protected boolean soy_mano;			//si el mazo está a la izquierda del jugador
+	protected boolean bandera;			//si es su turno durante la ronda
+	protected boolean cantoPrimi;
 	public Carta cartas[];
+	protected Carta tiradas[];
 	
 	/*MAS ADELANTE SE VERA SI EL NOMBRE SE INICIA DIRECTAMENTE EN EL CONSTRUCTOR, O LOS JUGADORES LO TIPEAN DESDE CONSOLA/INTERFAZ */
 	
@@ -62,25 +62,6 @@ public class Jugador {
 		else
 			puntos += 30 - j2.getPuntos();
 	}
-	
-	/* POSIBLES FUNCIONES QUE SE LLEGUEN A NECESITAR */
-	/* REPRESENTAN TODAS LAS ACCIONES QUE PUEDE REALIZAR UN JUGADOR EN UNA RONDA */
-	/* ES NECESARIO CONECTAR EL CODIGO DE ESTAS FUNCIONES CON LOS BOTONES DE LA INTERFAZ */
-	
-	public void cantar(){
-	}
-	
-	public void seleccionarCarta(){
-	}
-	
-	public void irseAlMazo(){
-	}
-	
-	public void rendirse(){
-	}
-	
-	public void quieroNoquiero(){
-	}
 
 	public Carta tirar(int index){
 		Carta temp = cartas[index];
@@ -90,8 +71,7 @@ public class Jugador {
 	public boolean envido(Jugador j2){
 		if(getPuntosEnvido() == j2.getPuntosEnvido())
 			return soy_mano;				//si el jugador que invoca es mano gana el envido
-		return getPuntosEnvido() > j2.getPuntosEnvido();
-	}
+	return getPuntosEnvido() > j2.getPuntosEnvido();}
 
 	public int getPuntosEnvido(){
 		int puntos;

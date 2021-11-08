@@ -1,4 +1,5 @@
 public class Mazo{
+    
     private Carta cartas[];
     
     public Mazo(){

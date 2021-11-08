@@ -1,4 +1,3 @@
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -27,7 +26,6 @@ import javax.swing.border.Border;
 
 public class Interfaz extends JFrame{
 	
-
 	private static final long serialVersionUID = 1L;
 	
 	/*BOTONES PARA CANTAR*/
@@ -110,7 +108,7 @@ public class Interfaz extends JFrame{
 	/*CREACION DE VENTANA BASICA*/
 	setIconImage(new ImageIcon(getClass().getResource("/images/icon.jpg")).getImage());
 	setTitle("TRUCO");
-	setSize(800,600);			//SE PUEDE CAMBIAR A 1200x900 Y MANTENER BIEN LA ESTRUCTURA (AUNQUE HABRIA QUE CAMBIAR EL TAMAÑO DE LAS IMAGENES)
+	setSize(800,600);			//SE PUEDE CAMBIAR A 1200x900 Y MANTENER BIEN LA ESTRUCTURA (AUNQUE HABRIA QUE CAMBIAR EL TAMAï¿½O DE LAS IMAGENES)
 	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	setLocationRelativeTo(null);
 	
@@ -338,7 +336,7 @@ public class Interfaz extends JFrame{
 		gbc.weighty = 1.0;
 		principal.add(inicio,gbc);
 		
-		cartel = new JLabel("© 2021 TIKI Y ESTEBAN ASOCIADOS. TODOS LOS DERECHOS RESERVADOS.");
+		cartel = new JLabel("ï¿½ 2021 TIKI Y ESTEBAN ASOCIADOS. TODOS LOS DERECHOS RESERVADOS.");
 		gbc.gridx = 0;
 		gbc.gridy = 2;
 		gbc.gridwidth = 1;
@@ -415,7 +413,7 @@ public class Interfaz extends JFrame{
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						
-						j1.setText(texto_nombre.getText());			//CHEQUEAR SI ESTO VA ACÁ
+						j1.setText(texto_nombre.getText());			//CHEQUEAR SI ESTO VA ACï¿½
 						j2.setText("BOT EASY");
 						
 						cp.removeAll();
@@ -431,7 +429,7 @@ public class Interfaz extends JFrame{
 							public void actionPerformed(ActionEvent e) {
 								
 								JFrame confirmar = new JFrame();
-						        int result = JOptionPane.showConfirmDialog(confirmar, "¿Está seguro que desea salir? El juego se dará como perdido.");
+						        int result = JOptionPane.showConfirmDialog(confirmar, "ï¿½Estï¿½ seguro que desea salir? El juego se darï¿½ como perdido.");
 
 						        if (result == 0) {
 						        	cp.removeAll();
@@ -484,7 +482,7 @@ public class Interfaz extends JFrame{
 				
 				/*CAMBIAR NOMBRE*/
 				
-				ingrese_nombre = new JLabel("Ingrese un nombre (máx. 12 caracteres): ");
+				ingrese_nombre = new JLabel("Ingrese un nombre (mï¿½x. 12 caracteres): ");
 				texto_nombre = new JTextField(texto_nombre.getText());
 				texto_nombre.setPreferredSize(new Dimension(100,20));
 				texto_nombre.addKeyListener((KeyListener) new KeyListener() {

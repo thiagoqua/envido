@@ -46,6 +46,9 @@
 	- Se reemplazaron las imagenes de prueba por imagenes del mazo real.
 	- Se modificó ligeramente el apartado donde se muestran los cantos de los jugadores (donde estan los botones "Quiero" "No quiero").
 	
+	08/11
+	- Se agrega clase IA y se comienza su desarrollo.
+	
 	
 	
 	

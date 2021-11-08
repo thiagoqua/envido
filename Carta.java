@@ -79,6 +79,6 @@ public class Carta{
         if(indexOfMine < indexOfGiven)
             return true;
         else if(indexOfMine == indexOfGiven)
-            throw new PardaExeption();
+            throw new PardaExeption(numero);
     return false;}
 }
