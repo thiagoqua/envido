@@ -1,9 +1,15 @@
 
-	A TENER EN CUENTA
-	
 	Si una persona gana un Envido y la partida termina antes de mostrar todas las cartas, hay que asegurarse
 		que se muestren en mesa los puntos del Envido.
 		
 	Cuando un jugador canta el envido, en la pestaña del otro jugador tiene que aparecer automaticamente las opciones de envido.
+
+--	PARTE DE IA:
+	cuando la IA canta, ya sea envido o truco, va a ctualizar el arreglo de cantos que se le pasa, con el fin de que en el main se chequee
+	que es lo que se canta, y se le informe al jugador que es lo que se cantó. Una vez el jugador quiera, no quiera o revire, se vuelven 
+	a invocar las funciones correspondientes de la IA. 
+	Si el jugador responde que si o que no, directamente se llama a sist. puntuación y se suman los correspondientes puntos.
+	Si el jugador revira, se tiene que completar el arreglo de cantos con el debido canto realizado y se debe 
+	llamar yourTurnAccept de la IA, y ahí ella va a decidir y volver a completar el arreglo	de cantos según corresponda.
 	
 	

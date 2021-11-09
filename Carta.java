@@ -2,6 +2,7 @@ public class Carta{
 
 	private int numero;
     private String palo;
+    private static final Carta[] ORDEN = new Carta[14];
 
     public Carta(){
         this(0,"");
@@ -24,23 +25,22 @@ public class Carta{
 		this.palo = palo;
 	}
 
-    private Carta[] getOrden(){
-        Carta orden[] = new Carta[14];
-        orden[0] = new Carta(1,"espada");
-        orden[1] = new Carta(1,"basto");
-        orden[2] = new Carta(7,"espada");
-        orden[3] = new Carta(7,"oro");
-        orden[4] = new Carta(3,"");
-        orden[5] = new Carta(2,"");
-        orden[6] = new Carta(1,"");
-        orden[7] = new Carta(12,"");
-        orden[8] = new Carta(11,"");
-        orden[9] = new Carta(10,"");
-        orden[10] = new Carta(7,"");
-        orden[11] = new Carta(6,"");
-        orden[12] = new Carta(5,"");
-        orden[13] = new Carta(4,"");
-    return orden;}
+    private static void initOrden(){
+        ORDEN[0] = new Carta(1,"espada");
+        ORDEN[1] = new Carta(1,"basto");
+        ORDEN[2] = new Carta(7,"espada");
+        ORDEN[3] = new Carta(7,"oro");
+        ORDEN[4] = new Carta(3,"");
+        ORDEN[5] = new Carta(2,"");
+        ORDEN[6] = new Carta(1,"");
+        ORDEN[7] = new Carta(12,"");
+        ORDEN[8] = new Carta(11,"");
+        ORDEN[9] = new Carta(10,"");
+        ORDEN[10] = new Carta(7,"");
+        ORDEN[11] = new Carta(6,"");
+        ORDEN[12] = new Carta(5,"");
+        ORDEN[13] = new Carta(4,"");
+    }
 	
 	@Override
 	public String toString() {
@@ -59,19 +59,20 @@ public class Carta{
         int indexOfGiven,indexOfMine;
         Carta auxx = given;
         Carta auxmine = new Carta();
-        Carta orden[] = getOrden();
+        if(ORDEN[0] == null)                                    //si no esta inicializado el arreglo de orden
+            initOrden();
         indexOfGiven = indexOfMine = -1;
         auxmine.setNumero(numero);
         auxmine.setPalo(palo);
-        //le borro el palo ya que da lo mismo si lo tiene o no para el orden
-        if(!auxx.equals(orden[0]) && !auxx.equals(orden[1]) && !auxx.equals(orden[2]) && !auxx.equals(orden[3]))
+        //le borro el palo ya que da lo mismo si lo tiene o no para el ORDEN
+        if(!auxx.equals(ORDEN[0]) && !auxx.equals(ORDEN[1]) && !auxx.equals(ORDEN[2]) && !auxx.equals(ORDEN[3]))
             auxx.setPalo("");
-        if(!auxmine.equals(orden[0]) && !auxmine.equals(orden[1]) && !auxmine.equals(orden[2]) && !auxmine.equals(orden[3]))
+        if(!auxmine.equals(ORDEN[0]) && !auxmine.equals(ORDEN[1]) && !auxmine.equals(ORDEN[2]) && !auxmine.equals(ORDEN[3]))
             auxmine.setPalo("");
-        for(int i=0;i<orden.length;++i){
-            if(orden[i].equals(auxx))
+        for(int i=0;i<ORDEN.length;++i){
+            if(ORDEN[i].equals(auxx))
                 indexOfGiven = i;
-            if(orden[i].equals(auxmine))
+            if(ORDEN[i].equals(auxmine))
                 indexOfMine = i;
             if(indexOfMine > 0 && indexOfGiven > 0)
                 break;
@@ -80,5 +81,19 @@ public class Carta{
             return true;
         else if(indexOfMine == indexOfGiven)
             throw new PardaExeption(numero);
+    return false;}
+
+    public boolean isGood(){
+        int index;
+        Carta mine = new Carta();
+        mine.setNumero(numero);
+        mine.setPalo(palo);
+        if(ORDEN[0] == null)                                    //si no esta inicializado el arreglo de orden
+            initOrden();
+        for(index = 0;index < ORDEN.length;++index)         //busco el orden de mi carta
+            if(mine.equals(ORDEN[index]))
+                break;
+        if(index <= 5)                                          //si mi carta es un 2 o mos grande
+            return true;
     return false;}
 }

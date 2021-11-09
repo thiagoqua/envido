@@ -8,8 +8,6 @@ public class MainTest {
         //Interfaz pantalla = new Interfaz();
         String cantado[] = new String[5];
 
-        initCANTOS();
-
         // cantado[0] = CANTOS[0];     //j1
         // cantado[1] = CANTOS[0];     //j2
         // cantado[2] = CANTOS[1];     //j1
@@ -22,18 +20,24 @@ public class MainTest {
         }
 
         System.out.println("cartas de j1\n");
-        for(Carta x: j1.cartas)
+        for(Carta x : j1.cartas)
             System.out.println(x);
 
         System.out.println("\ncartas de IA\n");
         for(Carta x : j2.cartas)
             System.out.println(x);
 
+        Carta tiraj1 = j1.tirar((int)Math.random() * 3);
         j2.setBandera(true);
-        Carta tiraj1 = j1.tirar(1);
+        j2.activatePuedoCantarEnvido();
         Carta tiraj2[] = j2.yourTurn(cantado,tiraj1);
 
-        System.out.println("j1 tiro " + tiraj1 + " y la IA tiro " + tiraj2[0] + " y " + tiraj2[1]);
+        System.out.println("\nj1 tiro" + tiraj1 + "\nIA tiro " + tiraj2[0] + " y " + tiraj2[1]);
+
+        System.out.println("\nIA canto\n");
+        for(String temp : cantado)
+            if(temp != null)
+                System.out.println(temp);
 
         // for(String x : cantado)
         //     System.out.println(x);
