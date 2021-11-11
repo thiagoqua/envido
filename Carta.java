@@ -25,6 +25,12 @@ public class Carta{
 		this.palo = palo;
 	}
 
+    private static Carta builder(Carta c){          //crea y devuelve una copia de la carta que se le pasa
+        Carta temp = new Carta();
+        temp.numero = c.numero;
+        temp.palo = c.palo;
+    return temp;}
+
     private static void initOrden(){
         ORDEN[0] = new Carta(1,"espada");
         ORDEN[1] = new Carta(1,"basto");
@@ -57,7 +63,7 @@ public class Carta{
 	
     public boolean mata(Carta given) throws PardaExeption{
         int indexOfGiven,indexOfMine;
-        Carta auxx = given;
+        Carta auxx = builder(given);
         Carta auxmine = new Carta();
         if(ORDEN[0] == null)                                    //si no esta inicializado el arreglo de orden
             initOrden();
