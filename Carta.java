@@ -90,7 +90,7 @@ public class Carta{
         mine.setPalo(palo);
         if(ORDEN[0] == null)                                    //si no esta inicializado el arreglo de orden
             initOrden();
-        for(index = 0;index < ORDEN.length;++index)         //busco el orden de mi carta
+        for(index = 0;index < ORDEN.length;++index)             //busco el orden de mi carta
             if(mine.equals(ORDEN[index]))
                 break;
         if(index <= 5)                                          //si mi carta es un 2 o mos grande

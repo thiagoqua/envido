@@ -38,13 +38,17 @@ public class IA extends Jugador{
         }
         else{     
             mato = someKillsIt(tirada);
-            //SI EMPARDO TIRO ALTA DESPUES
             if(mato == -1){                             //si no la mato ni empardo tiro una baja
                 tiro[0] = tirarBajo();
                 return tiro;
             }
+            else if(isParda(super.cartas[mato],tirada)){//si hago parda
+                tiro[0] = super.tirar(mato);            //la empardo
+                tiro[1] = tirarAlto();                  //y tiro la mas alta
+                return tiro;
+            }
             else{
-                tiro[0] = super.tirar(mato);            //sino la mato
+                tiro[0] = super.tirar(mato);            //la mato
                 tiro[1] = tirarBajo();                  //y tiro baja
                 return tiro;               
             }
@@ -221,17 +225,25 @@ public class IA extends Jugador{
         }
     return -1;}                                             //si no la mata ni emparda, devuelve -1
 
+    private boolean isParda(Carta mine,Carta enemy){       //devuelve true si se hizo parda
+        try{
+            mine.mata(enemy);
+        } catch(PardaExeption pe){
+            return true;                                    
+        }
+    return false;}
+
     private Carta tirarBajo(){                              //tira la carta mas baja que tiene
         int notNull,manyNulls;
         notNull = manyNulls = 0;
-        for(int i = 0;i < 3;++i){
+        for(int i = 0;i < 3;++i){                           //me fijo cuantas cartas tengo actualmente no tiradas
             if(super.cartas[i] == null)
                 ++manyNulls;
             else
-                notNull = i;
+                notNull = i;                                //me guardo la que no es nula para tirarla si es la unica que me queda
         }
         try{
-            if(manyNulls == 0){
+            if(manyNulls == 0){                             //si todavia no tire ninguna carta
                 if(!super.cartas[0].mata(super.cartas[1]) && !super.cartas[0].mata(super.cartas[2]))
                     return super.tirar(0);
                 else if(!super.cartas[1].mata(super.cartas[0]) && !super.cartas[1].mata(super.cartas[2]))
@@ -239,7 +251,7 @@ public class IA extends Jugador{
                 else 
                     return super.tirar(2);
             }
-            else if(manyNulls == 1){
+            else if(manyNulls == 1){                        //si ya tire 1 carta y me quedan 2
                 if(super.cartas[0] == null){
                     if(!super.cartas[1].mata(super.cartas[2]))
                         return super.tirar(1);
@@ -259,7 +271,54 @@ public class IA extends Jugador{
                         return super.tirar(1);
                 }
             }
+            else                                            //si ya tire 2 cartas y me queda 1
+                return super.tirar(notNull);
+        } catch(PardaExeption pe){
+            for(Carta temp : super.cartas)
+                if(temp != null && temp.getNumero() == pe.numeroCarta)
+                    return temp;
+        }
+    return null;}
+
+    private Carta tirarAlto(){
+        int notNull,manyNulls;
+        notNull = manyNulls = 0;
+        for(int i = 0;i < 3;++i){                           //me fijo cuantas cartas tengo actualmente no tiradas
+            if(super.cartas[i] == null)
+                ++manyNulls;
             else
+                notNull = i;                                //me guardo la que no es nula para tirarla si es la unica que me queda
+        }
+        try{
+            if(manyNulls == 0){                             //si no tire ninguna carta
+                if(super.cartas[0].mata(super.cartas[1]) && super.cartas[0].mata(super.cartas[2]))
+                    return super.tirar(0);
+                else if(super.cartas[1].mata(super.cartas[0]) && super.cartas[1].mata(super.cartas[2]))
+                    return super.tirar(1);
+                else 
+                    return super.tirar(2);
+            }
+            else if(manyNulls == 1){                        //si tire 1 carta y me quedan 2
+                if(super.cartas[0] == null){
+                    if(super.cartas[1].mata(super.cartas[2]))
+                        return super.tirar(1);
+                    else
+                        return super.tirar(2);
+                }
+                else if(super.cartas[1] == null){
+                    if(super.cartas[0].mata(super.cartas[2]))
+                        return super.tirar(0);
+                    else
+                        return super.tirar(2);            
+                }
+                else if(super.cartas[2] == null){
+                    if(super.cartas[0].mata(super.cartas[1]))
+                        return super.tirar(0);
+                    else
+                        return super.tirar(1);
+                }
+            }
+            else                                            //si tire 2 cartas y me queda 1
                 return super.tirar(notNull);
         } catch(PardaExeption pe){
             for(Carta temp : super.cartas)

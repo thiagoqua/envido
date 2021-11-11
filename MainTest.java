@@ -27,7 +27,7 @@ public class MainTest {
         for(Carta x : j2.cartas)
             System.out.println(x);
 
-        Carta tiraj1 = j1.tirar((int)Math.random() * 3);
+        Carta tiraj1 = j1.tirar((int)(Math.random() * 3));
         j2.setBandera(true);
         j2.activatePuedoCantarEnvido();
         Carta tiraj2[] = j2.yourTurn(cantado,tiraj1);
