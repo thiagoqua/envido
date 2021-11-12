@@ -6,7 +6,6 @@ public class Jugador {
 	protected boolean bandera;			//si es su turno durante la ronda
 	protected boolean cantoPrimi;
 	public Carta cartas[];
-	protected Carta tiradas[];
 	
 	/*MAS ADELANTE SE VERA SI EL NOMBRE SE INICIA DIRECTAMENTE EN EL CONSTRUCTOR, O LOS JUGADORES LO TIPEAN DESDE CONSOLA/INTERFAZ */
 	

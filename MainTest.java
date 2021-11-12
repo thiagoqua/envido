@@ -10,6 +10,8 @@ public class MainTest {
         //Interfaz pantalla = new Interfaz();
         String cantado[] = new String[5];
 
+
+
         // cantado[0] = CANTOS[0];     //j1
         // cantado[1] = CANTOS[0];     //j2
         // cantado[2] = CANTOS[1];     //j1

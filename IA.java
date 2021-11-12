@@ -47,6 +47,7 @@ public class IA extends Jugador{
             }
             puedoCantarEnvido = false;
         }
+        //ACA TERMINA LA PARTE DE ENVIDO
         if(tirada == null){                              //si todavía no se tiraron cartas, tiro una baja
             tiro[0] = tirarBajo();
             return tiro;
@@ -477,10 +478,4 @@ public class IA extends Jugador{
                 if(temp != null && temp.isGood())
                     ++many;
     return many;}
-	
-	private void irseAlMazo(){
-	}
-	
-	private void rendirse(){
-	}
 }
