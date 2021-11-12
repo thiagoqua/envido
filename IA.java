@@ -11,27 +11,42 @@ public class IA extends Jugador{
     public void activatePuedoCantarEnvido(){puedoCantarEnvido = true;}
 
     public Carta[] yourTurn(String cantos[],Carta tirada){      //metodo que se invocaría cada vez que le toca jugar a la IA
-        int mato;
+        int mato,cartasGood;
         Carta tiro[] = new Carta[2];
+        
         if(puedoCantarEnvido){    
             int puntosEnvido = super.getPuntosEnvido();
             if(super.bandera){
                 if(puntosEnvido > 22 && puntosEnvido < 29){
-                    cantar(0,cantos);
                     super.cantoPrimi = true;
+                    cantar(0,cantos);
+                    // try{
+                    //     wait();                                 //espero respuesta del jugador desde main
+                    // } catch(InterruptedException e){
+
+                    // }
                 }
                 else if(puntosEnvido >= 28 && puntosEnvido < 32){
-                    cantar(1,cantos);
                     super.cantoPrimi = true;
+                    cantar(1,cantos);
+                    // try{
+                    //     wait();                                 //espero respuesta del jugador desde main
+                    // } catch(InterruptedException e){
+
+                    // }
                 }
                 else if(puntosEnvido >= 32){
-                    cantar(2,cantos);
                     super.cantoPrimi = true;
+                    cantar(2,cantos);
+                    // try{
+                    //     wait();                                 //espero respuesta del jugador desde main
+                    // } catch(InterruptedException e){
+
+                    // }
                 }
             }
             puedoCantarEnvido = false;
         }
-        //FALTA VER CUANDO CANTO EL TRUCO
         if(tirada == null){                              //si todavía no se tiraron cartas, tiro una baja
             tiro[0] = tirarBajo();
             return tiro;
@@ -42,71 +57,200 @@ public class IA extends Jugador{
                 tiro[0] = tirarBajo();
                 return tiro;
             }
-            else if(isParda(super.cartas[mato],tirada)){//si hago parda
-                tiro[0] = super.tirar(mato);            //la empardo
-                tiro[1] = tirarAlto();                  //y tiro la mas alta
-                return tiro;
+            else if(isParda(super.cartas[mato],tirada)){    //si hago parda
+                tiro[0] = super.tirar(mato);                //la empardo
+                cartasGood = manyGoods();                   //me fijo cuantas cartas buenas tengo despues de empardar
+                if(cartasGood > 0){                         //si tengo cartas buenas
+                    super.cantoPrimi = true;
+                    cantar(3,cantos);                       //canto truco
+                    // try{
+                    //     wait();                                 //espero respuesta del jugador desde main
+                    // } catch(InterruptedException e){
+
+                    // }
+                    tiro[1] = tirarAlto();                  //y tiro la mas alta
+                    return tiro;
+                }
+                else{                                       //sino empardo y tiro la mas alta que tenga de todas formas
+                    tiro[0] = super.tirar(mato);            //la empardo
+                    tiro[1] = tirarAlto();                  //y tiro la mas alta
+                    return tiro;
+                }
             }
             else{
-                tiro[0] = super.tirar(mato);            //la mato
-                tiro[1] = tirarBajo();                  //y tiro baja
-                return tiro;               
+                tiro[0] = super.tirar(mato);                //la mato
+                cartasGood = manyGoods();                   //me fijo cuantas cartas buenas tengo despues de matar
+                if(manyGoods() > 0){                        //si tengo cartas buenas
+                    super.cantoPrimi = true;
+                    cantar(3,cantos);                       //canto truco
+                    // try{
+                    //     wait();                                 //espero respuesta del jugador desde main
+                    // } catch(InterruptedException e){
+
+                    // }
+                    tiro[1] = tirarAlto();                  //y reviento
+                    return tiro;               
+                }
+                else{
+                    tiro[1] = tirarBajo();
+                    return tiro;
+                }
             }
         }
     }
 
     public void yourTurnAccept(String cantos[]){             //metodo que se invocaria cada vez que tiene que aceptar, rechazar o revirar la IA
-        int end = 0,puntosEnvido,manyGoods = 0;
+        int end = 0,puntosEnvido,cartasGood;
         puntosEnvido = getPuntosEnvido();
+        cartasGood = manyGoods();
         while(cantos[end+1] != null){++end;}                    //accedo a lo ultimo que se canto
-        for(Carta temp : super.cartas)                          //me fijo cuantas cartas buenas tengo (para el truco)
-                if(temp.isGood())
-                    ++manyGoods;
         if(cantos[end].equals("envido")){
-            if(puntosEnvido > 22 && puntosEnvido < 27)
+            if(puntosEnvido > 22 && puntosEnvido < 27){
                 cantar(6,cantos);           //quiero
-            else if(puntosEnvido >= 27 && puntosEnvido <= 29)
+                // try{
+                //     wait();                                 //espero respuesta del jugador desde main
+                // } catch(InterruptedException e){
+
+                // }
+            }
+            else if(puntosEnvido >= 27 && puntosEnvido <= 29){
                 cantar(1,cantos);           //le canto real envido
-            else if(puntosEnvido > 29)
+                // try{
+                //     wait();                                 //espero respuesta del jugador desde main
+                // } catch(InterruptedException e){
+
+                // }
+            }
+            else if(puntosEnvido > 29){
                 cantar(2,cantos);           //le canto falta envido
-            else
+                // try{
+                //     wait();                                 //espero respuesta del jugador desde main
+                // } catch(InterruptedException e){
+
+                // }
+            }
+            else{
                 cantar(7,cantos);           //no quiero
+                // try{
+                //     wait();                                 //espero respuesta del jugador desde main
+                // } catch(InterruptedException e){
+
+                // }
+            }
         }
         else if(cantos[end].equals("real envido")){
-            if(puntosEnvido >= 27 && puntosEnvido <= 29)
+            if(puntosEnvido >= 27 && puntosEnvido <= 29){
                 cantar(6,cantos);           //quiero
-            else if(puntosEnvido > 29)
+                // try{
+                //     wait();                                 //espero respuesta del jugador desde main
+                // } catch(InterruptedException e){
+
+                // }
+            }
+            else if(puntosEnvido > 29){
                 cantar(2,cantos);           //le canto falta envido
-            else
+                // try{
+                //     wait();                                 //espero respuesta del jugador desde main
+                // } catch(InterruptedException e){
+
+                // }
+            }
+            else{
                 cantar(7,cantos);           //no quiero
+                // try{
+                //     wait();                                 //espero respuesta del jugador desde main
+                // } catch(InterruptedException e){
+
+                // }
+            }
         }
         else if(cantos[end].equals("falta envido")){
-            if(puntosEnvido > 29)
+            if(puntosEnvido > 29){
                 cantar(6,cantos);           //quiero
-            else
+                // try{
+                //     wait();                                 //espero respuesta del jugador desde main
+                // } catch(InterruptedException e){
+
+                // }
+            }
+            else{
                 cantar(7,cantos);           //no quiero
+                // try{
+                //     wait();                                 //espero respuesta del jugador desde main
+                // } catch(InterruptedException e){
+
+                // }
+            }
         }
         else if(cantos[end].equals("truco")){
-            if(manyGoods == 1)
+            if(cartasGood == 1){
                 cantar(6,cantos);           //quiero
-            else if(manyGoods >= 2)
+                // try{
+                //     wait();                                 //espero respuesta del jugador desde main
+                // } catch(InterruptedException e){
+
+                // }
+            }
+            else if(cartasGood >= 2){
                 cantar(4,cantos);           //le canto retruco
-            else
+                // try{
+                //     wait();                                 //espero respuesta del jugador desde main
+                // } catch(InterruptedException e){
+
+                // }
+            }
+            else{
                 cantar(7,cantos);           //no quiero
+                // try{
+                //     wait();                                 //espero respuesta del jugador desde main
+                // } catch(InterruptedException e){
+
+                // }
+            }
         }
         else if(cantos[end].equals("retruco")){
-            if(manyGoods == 2)
+            if(cartasGood == 2){
                 cantar(6,cantos);           //quiero
-            else if(manyGoods == 3)
+                // try{
+                //     wait();                                 //espero respuesta del jugador desde main
+                // } catch(InterruptedException e){
+
+                // }
+            }
+            else if(cartasGood == 3){
                 cantar(5,cantos);           //le canto vale cuatro
-            else
+                // try{
+                //     wait();                                 //espero respuesta del jugador desde main
+                // } catch(InterruptedException e){
+
+                // }
+            }
+            else{
                 cantar(7,cantos);           //no quiero
+                // try{
+                //     wait();                                 //espero respuesta del jugador desde main
+                // } catch(InterruptedException e){
+
+                // }
+            }
         }
         else if(cantos[end].equals("vale cuatro")){
-            if(manyGoods == 3)
+            if(cartasGood == 3){
                 cantar(6,cantos);           //quiero
-            else
+                // try{
+                //     wait();                                 //espero respuesta del jugador desde main
+                // } catch(InterruptedException e){
+
+                // }
+            }
+            else{
                 cantar(7,cantos);           //no quiero
+                // try{
+                //     wait();                                 //espero respuesta del jugador desde main
+                // } catch(InterruptedException e){
+
+                // }
+            }
         }
     }
 
@@ -326,6 +470,13 @@ public class IA extends Jugador{
                     return temp;
         }
     return null;}
+
+    private int manyGoods(){
+        int many = 0;
+        for(Carta temp : super.cartas)                          //me fijo cuantas cartas buenas tengo (para el truco)
+                if(temp != null && temp.isGood())
+                    ++many;
+    return many;}
 	
 	private void irseAlMazo(){
 	}

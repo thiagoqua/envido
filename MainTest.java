@@ -4,6 +4,8 @@ public class MainTest {
 
         Jugador j1 = new Jugador("ESTEBAN");
         IA j2 = new IA("TIKI");
+        Carta tiraj1 = new Carta();
+        Carta tiraj2[] = new Carta[2];
         Mazo mazo = new Mazo();
         //Interfaz pantalla = new Interfaz();
         String cantado[] = new String[5];
@@ -27,17 +29,30 @@ public class MainTest {
         for(Carta x : j2.cartas)
             System.out.println(x);
 
-        Carta tiraj1 = j1.tirar((int)(Math.random() * 3));
+        tiraj1 = j1.tirar((int)(Math.random() * 3));
         j2.setBandera(true);
         j2.activatePuedoCantarEnvido();
-        Carta tiraj2[] = j2.yourTurn(cantado,tiraj1);
+
+        // Thread IAThread = new Thread(){
+        //     @Override
+        //     public void run() {
+        //         j2.yourTurn(cantado,tiraj1);
+        //     }
+        // };
+
+        tiraj2 = j2.yourTurn(cantado,tiraj1);
 
         System.out.println("\nj1 tiro" + tiraj1 + "\nIA tiro " + tiraj2[0] + " y " + tiraj2[1]);
 
-        System.out.println("\nIA canto\n");
-        for(String temp : cantado)
-            if(temp != null)
-                System.out.println(temp);
+        System.out.println("\nse canto\n");
+        
+        cantado[1] = "quiero";
+        for(int i = 0;cantado[i] != null;++i)
+            System.out.println(cantado[i]);
+
+        //sistPuntuacion(cantado,j2,j1);
+
+        //System.out.println("puntos de j1:\t" + j1.getPuntos() + "\npuntos de IA:\t" + j2.getPuntos());
 
         // for(String x : cantado)
         //     System.out.println(x);
