@@ -499,13 +499,13 @@ public class Interfaz extends JFrame{
 						cp.add(union,BorderLayout.CENTER);
 						cp.add(unionDer,BorderLayout.EAST);
 						
-						/*SE SETEAN ALGUNAS CONFIGS PEQUEÑAS*/
+						/*SE SETEAN ALGUNAS CONFIGS PEQUEï¿½AS*/
 						
 						j1.setText(texto_nombre.getText());			//SE ESTABLECE EL NOMBRE ESCRITO POR EL JUGADOR
 						j2.setText("BOT EASY");						//NOMBRE DE LA IA
 						
 						//OTROS BOTONES DESACTIVADOS (PORQUE SIEMPRE EMPIEZA LA IA)
-						//CUANDO LA IA TIRA, DEBEN ACTIVARSE. CUANDO LA IA JUEGA, ESTÁN DESACTIVADOS.
+						//CUANDO LA IA TIRA, DEBEN ACTIVARSE. CUANDO LA IA JUEGA, ESTï¿½N DESACTIVADOS.
 						
 						quiero.setEnabled(false);
 						noQuiero.setEnabled(false);
@@ -543,7 +543,7 @@ public class Interfaz extends JFrame{
 							public void actionPerformed(ActionEvent e) {
 								
 								JFrame confirmar = new JFrame();
-						        int result = JOptionPane.showConfirmDialog(confirmar, "¿Esta seguro que desea salir? El juego se daria como perdido.");
+						        int result = JOptionPane.showConfirmDialog(confirmar, "ï¿½Esta seguro que desea salir? El juego se daria como perdido.");
 
 						        if (result == 0) {
 						        	cp.removeAll();
@@ -755,7 +755,7 @@ public class Interfaz extends JFrame{
 						});
 						
 						
-						/** A PARTIR DE ACÁ DEBE HABER UN WHILE (O UN THREAD) QUE ENVUELVA/REPITA TODO HASTA QUE ALGUNO DE LOS DOS GANE*/
+						/** A PARTIR DE ACï¿½ DEBE HABER UN WHILE (O UN THREAD) QUE ENVUELVA/REPITA TODO HASTA QUE ALGUNO DE LOS DOS GANE*/
 					    
 				        Thread juego = new Thread() {
 							
@@ -768,7 +768,9 @@ public class Interfaz extends JFrame{
 									
 								    for(int i=0;i<3;++i){
 								            IA.cartas[i] = mazoCartas.sacar();
-								    		j.cartas[i] = mazoCartas.sacar();					            
+											IA.copyCartas[i] = IA.cartas[i];
+								    		j.cartas[i] = mazoCartas.sacar();
+											j.copyCartas[i] = j.cartas[i];            
 								    }
 								 	
 							        for(Carta x : IA.cartas)
@@ -839,7 +841,7 @@ public class Interfaz extends JFrame{
 																		e.printStackTrace();
 																	}
 													    		}
-													    		System.out.println("\nRetomo la ejecución\n");
+													    		System.out.println("\nRetomo la ejecuciï¿½n\n");
 											    			}
 											    			
 											    		};
@@ -891,7 +893,7 @@ public class Interfaz extends JFrame{
 											    				
 											    				/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
 											    				
-											    				System.out.println("la IA reviró");
+											    				System.out.println("la IA revirï¿½");
 											    				
 											    				/***/
 											    				
@@ -921,7 +923,7 @@ public class Interfaz extends JFrame{
 																				e.printStackTrace();
 																			}
 															    		}
-															    		System.out.println("\nRetomo la ejecución\n");
+															    		System.out.println("\nRetomo la ejecuciï¿½n\n");
 													    			}
 													    			
 													    		};
@@ -977,7 +979,7 @@ public class Interfaz extends JFrame{
 
 													}
 										        	
-										        	/*CUANDO YA SE CANTÓ ENVIDO EL ARREGLO DE CANTADOS SE PONE A NULL PARA EL TRUCO*/
+										        	/*CUANDO YA SE CANTï¿½ ENVIDO EL ARREGLO DE CANTADOS SE PONE A NULL PARA EL TRUCO*/
 										        	
 										        	texto = new JLabel("<html>"+ "" +"</html>");
 										        	
@@ -1018,7 +1020,7 @@ public class Interfaz extends JFrame{
 											        /*EL JUGADOR PUEDE CANTAR TRUCO*/
 											        
 											        
-											        /*EL JUGADOR PUEDE CANTAR ENVIDO (SI NO SE CANTÓ PREVIAMENTE*/
+											        /*EL JUGADOR PUEDE CANTAR ENVIDO (SI NO SE CANTï¿½ PREVIAMENTE*/
 											        
 										        }
 									        

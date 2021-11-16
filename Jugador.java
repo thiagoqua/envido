@@ -6,6 +6,7 @@ public class Jugador {
 	protected boolean bandera;			//si es su turno durante la ronda
 	protected boolean cantoPrimi;
 	public Carta cartas[];
+	public Carta copyCartas[];		//mantiene una copia de las cartas que no se anulan, como solución provisoria a la excepción
 	
 	/*MAS ADELANTE SE VERA SI EL NOMBRE SE INICIA DIRECTAMENTE EN EL CONSTRUCTOR, O LOS JUGADORES LO TIPEAN DESDE CONSOLA/INTERFAZ */
 	
@@ -17,6 +18,7 @@ public class Jugador {
 		this.cantoPrimi = false;	/* cuando se inicialize el arreglo de cantos, el jugador que cante primero inicializa
 		esta variable en true para poder sacar bien los puntos después */
 		this.cartas = new Carta[3];
+		this.copyCartas = new Carta[3];
 	}
 	
 	/* GETTERS */
@@ -73,10 +75,11 @@ public class Jugador {
 	return getPuntosEnvido() > j2.getPuntosEnvido();}
 
 	public int getPuntosEnvido(){
+	//A LA HORA DE ENTREGAR VOLVER A PONER CARTAS EN VEZ DE COPYCARTAS
 		int puntos;
-		if(cartas[0].getPalo().equals(cartas[1].getPalo()) && cartas[1].getPalo().equals(cartas[2].getPalo())){	//caso flor
+		if(copyCartas[0].getPalo().equals(copyCartas[1].getPalo()) && copyCartas[1].getPalo().equals(copyCartas[2].getPalo())){	//caso flor
 			int c1,c2,c3;
-			c1 = cartas[0].getNumero(); c2 = cartas[1].getNumero(); c3 = cartas[2].getNumero();
+			c1 = copyCartas[0].getNumero(); c2 = copyCartas[1].getNumero(); c3 = copyCartas[2].getNumero();
 			//si alguna carta es 10, 11 o 12 no suma para los puntos
 			if(c1 >= 10 && c1 <= 12)
 				c1 = 0;
@@ -103,9 +106,9 @@ public class Jugador {
 					puntos = c2 + c3 + 20;
 			}
 		}
-		else if(cartas[0].getPalo().equals(cartas[1].getPalo())){
+		else if(copyCartas[0].getPalo().equals(copyCartas[1].getPalo())){
 			int c1,c2;
-			c1 = cartas[0].getNumero(); c2 = cartas[1].getNumero();
+			c1 = copyCartas[0].getNumero(); c2 = copyCartas[1].getNumero();
 			//si alguna carta es 10, 11 o 12 no suma para los puntos
 			if(c1 >= 10 && c1 <= 12)
 				c1 = 0;
@@ -113,9 +116,9 @@ public class Jugador {
 				c2 = 0;
 			puntos = c1 + c2 + 20;
 		}
-		else if(cartas[0].getPalo().equals(cartas[2].getPalo())){
+		else if(copyCartas[0].getPalo().equals(copyCartas[2].getPalo())){
 			int c1,c2;
-			c1 = cartas[0].getNumero(); c2 = cartas[2].getNumero();
+			c1 = copyCartas[0].getNumero(); c2 = copyCartas[2].getNumero();
 			//si alguna carta es 10, 11 o 12 no suma para los puntos
 			if(c1 >= 10 && c1 <= 12)
 				c1 = 0;
@@ -123,9 +126,9 @@ public class Jugador {
 				c2 = 0;
 			puntos = c1 + c2 + 20;
 		}
-		else if(cartas[1].getPalo().equals(cartas[2].getPalo())){
+		else if(copyCartas[1].getPalo().equals(copyCartas[2].getPalo())){
 			int c1,c2;
-			c1 = cartas[1].getNumero(); c2 = cartas[2].getNumero();
+			c1 = copyCartas[1].getNumero(); c2 = copyCartas[2].getNumero();
 			//si alguna carta es 10, 11 o 12 no suma para los puntos
 			if(c1 >= 10 && c1 <= 12)
 				c1 = 0;
@@ -133,9 +136,9 @@ public class Jugador {
 				c2 = 0;
 			puntos = c1 + c2 + 20;
 		}
-		else{			//no tiene cartas del mismo palo
+		else{			//no tiene copyCartas del mismo palo
 			int c1,c2,c3;
-			c1 = cartas[0].getNumero(); c2 = cartas[1].getNumero(); c3 = cartas[2].getNumero();
+			c1 = copyCartas[0].getNumero(); c2 = copyCartas[1].getNumero(); c3 = copyCartas[2].getNumero();
 			//si la carta es 10, 11 o 12 no suma para los puntos
 			if(c1 >= 10 && c1 <= 12)
 				c1 = 0;
@@ -143,7 +146,7 @@ public class Jugador {
 				c2 = 0;
 			if(c3 >= 10 && c3 <= 12)
 				c3 = 0;
-
+	
 			if(c1 >= c2 && c1 >= c3)		//la primer carta es la mas grande
 				puntos = c1;
 			else if(c2 >= c1 && c2 >= c3)	//la segunda carta es la mas grande
