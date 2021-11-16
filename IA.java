@@ -4,8 +4,8 @@ public class IA extends Jugador{
 
     private boolean puedoCantarEnvido;                  //la habilito desde main cuando estoy en la primer mano
 
-    public IA(String tag){
-        super(tag);
+    public IA(){
+        //super(tag);
     }
 	
     public void activatePuedoCantarEnvido(){puedoCantarEnvido = true;}
@@ -20,34 +20,36 @@ public class IA extends Jugador{
                 if(puntosEnvido > 22 && puntosEnvido < 29){
                     super.cantoPrimi = true;
                     cantar(0,cantos);
-                    // try{
-                    //     wait();                                 //espero respuesta del jugador desde main
-                    // } catch(InterruptedException e){
-
-                    // }
+//                     try{
+//                         wait();                                 //espero respuesta del jugador desde main
+//                     } catch(InterruptedException e){
+//
+//                     }
                 }
                 else if(puntosEnvido >= 28 && puntosEnvido < 32){
                     super.cantoPrimi = true;
                     cantar(1,cantos);
-                    // try{
-                    //     wait();                                 //espero respuesta del jugador desde main
-                    // } catch(InterruptedException e){
-
-                    // }
+//                     try{
+//                         wait();                                 //espero respuesta del jugador desde main
+//                     } catch(InterruptedException e){
+//
+//                     }
                 }
                 else if(puntosEnvido >= 32){
                     super.cantoPrimi = true;
                     cantar(2,cantos);
-                    // try{
-                    //     wait();                                 //espero respuesta del jugador desde main
-                    // } catch(InterruptedException e){
-
-                    // }
+//                     try{
+//                         wait();                                 //espero respuesta del jugador desde main
+//                     } catch(InterruptedException e){
+//
+//                     }
                 }
             }
             puedoCantarEnvido = false;
         }
+        
         //ACA TERMINA LA PARTE DE ENVIDO
+        
         if(tirada == null){                              //si todavía no se tiraron cartas, tiro una baja
             tiro[0] = tirarBajo();
             return tiro;

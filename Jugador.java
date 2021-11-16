@@ -9,8 +9,8 @@ public class Jugador {
 	
 	/*MAS ADELANTE SE VERA SI EL NOMBRE SE INICIA DIRECTAMENTE EN EL CONSTRUCTOR, O LOS JUGADORES LO TIPEAN DESDE CONSOLA/INTERFAZ */
 	
-	public Jugador(String tag) {
-		this.tag = tag;
+	public Jugador() {
+		//this.tag = tag;
 		this.puntos = 0;
 		this.soy_mano = false;
 		this.bandera = false;

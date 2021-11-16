@@ -52,7 +52,7 @@ public class Carta{
 	public String toString() {
 		return ( "(" + this.numero + "," + this.palo + ")" );
 	}
-
+	
     @Override
     public boolean equals(Object obj) {
         if(obj instanceof Carta){

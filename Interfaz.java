@@ -31,10 +31,20 @@ public class Interfaz extends JFrame{
 	/*BOTONES PARA CANTAR*/
 	
 	private JButton flecha;
+	private JButton flecha2;
+	
 	private JButton truco;
 	private JButton envido;
 	private JButton mazo;
 	private JButton rendirse;
+	
+	private JButton cantarTruco;
+	private JButton retruco;
+	private JButton vale_4;
+	
+	private JButton cantarEnvido;
+	private JButton real_envido;
+	private JButton falta_envido;
 	
 	/*COMPONENTES DEL CENTRO*/
 	
@@ -53,6 +63,7 @@ public class Interfaz extends JFrame{
 	private JButton c1;
 	private JButton c2;
 	private JButton c3;
+	private JButton ctemp;
 	
 	/*COMPONENTES DE LA DERECHA*/
 	
@@ -94,17 +105,47 @@ public class Interfaz extends JFrame{
 	private Container cp;
 	
 	private JPanel menu;
+	private JPanel menuCantosE;
+	private JPanel menuCantosT;
 	private JPanel union;
 	private JPanel unionDer;
 	
+	/*OBJETOS DE OTRAS CLASES*/
 	
+	private Jugador j;
+	private IA IA;
+	private Mazo mazoCartas;
+	private Carta cartaPalo;
 	
+	/*OBJETOS NECESARIOS PARA LOS JUGADORES E IA*/
+	
+	private String cantado[];	//acumula los cantos sucesivos
+    private Carta tiraJ;
+    private Carta tiraIA[];
+	private boolean accionUsuario;	//permite trabar o destrabar la IA cuando espera la respuesta del jugador
+	private boolean turno;	//para saber cuando le toca a la IA y cuando esta luego debe esperar la respuesta del jugador
+    private boolean jugando;
+	
+    //
+    
+    
 	
 	public Interfaz() {
 	
-		
+	/*INICIALIZACION DE OBJETOS DE OTRAS CLASES*/
 	
-		
+	j = new Jugador();
+	IA = new IA();
+	mazoCartas = new Mazo();
+	cartaPalo = new Carta();
+	
+	cantado = new String[5];	//acumula los cantos sucesivos
+    tiraJ = new Carta();
+    tiraIA = new Carta[2];
+    accionUsuario = false;
+	turno = true;
+	jugando = true;
+	
 	/*CREACION DE VENTANA BASICA*/
 	setIconImage(new ImageIcon(getClass().getResource("/images/icon.jpg")).getImage());
 	setTitle("TRUCO");
@@ -128,10 +169,20 @@ public class Interfaz extends JFrame{
 	/*CREACION DE MENU DE BOTONES IZQUIERDO*/
 	
 	flecha = new JButton("<=");
+	flecha2 = new JButton("<=");
+	
 	truco = new JButton("TRUCO");
 	envido = new JButton("ENVIDO");
 	mazo = new JButton("MAZO");
 	rendirse = new JButton("RENDIRSE");
+	
+	cantarTruco = new JButton("TRUCO");
+	retruco = new JButton("RETRUCO");
+	vale_4 = new JButton("VALE 4");
+	
+	cantarEnvido = new JButton("ENVIDO");
+	real_envido = new JButton("REAL ENVIDO");
+	falta_envido = new JButton("FALTA ENVIDO");
 	
 	menu = new JPanel();
 	GridLayout columna = new GridLayout(8,1);
@@ -139,25 +190,50 @@ public class Interfaz extends JFrame{
 	menu.setPreferredSize(new Dimension(100,600));
 	menu.add(new JLabel(""));
 	menu.add(new JLabel(""));
-	menu.add(flecha);
 	menu.add(truco);
 	menu.add(envido);
 	menu.add(mazo);
 	menu.add(rendirse);
-//	menu.add(new JLabel(""));
 	menu.add(new JLabel(""));
+	menu.add(new JLabel(""));
+	
+	menuCantosE = new JPanel();
+	GridLayout columna2 = new GridLayout(8,1);
+	menuCantosE.setLayout(columna2);
+	menuCantosE.setPreferredSize(new Dimension(100,600));
+	menuCantosE.add(new JLabel(""));
+	menuCantosE.add(new JLabel(""));
+	menuCantosE.add(flecha);
+	menuCantosE.add(cantarEnvido);
+	menuCantosE.add(real_envido);
+	menuCantosE.add(falta_envido);
+	menuCantosE.add(new JLabel(""));
+	menuCantosE.add(new JLabel(""));
+	
+	menuCantosT = new JPanel();
+	GridLayout columna3 = new GridLayout(8,1);
+	menuCantosT.setLayout(columna3);
+	menuCantosT.setPreferredSize(new Dimension(100,600));
+	menuCantosT.add(new JLabel(""));
+	menuCantosT.add(new JLabel(""));
+	menuCantosT.add(flecha2);
+	menuCantosT.add(cantarTruco);
+	menuCantosT.add(retruco);
+	menuCantosT.add(vale_4);
+	menuCantosT.add(new JLabel(""));
+	menuCantosT.add(new JLabel(""));
 	
 	/*CREACION DE LOS COMPONENTES CENTRALES*/
 	
 	l1 = new JLabel();
-	l1.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+	//l1.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
 	l1.setHorizontalAlignment(SwingConstants.CENTER);
 	l2 = new JLabel();
-	l2.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+	//l2.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
 	l2.setHorizontalAlignment(SwingConstants.CENTER);
 	l3 = new JLabel();
 	l3.setHorizontalAlignment(SwingConstants.CENTER);
-	l3.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+	//l3.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
 	
 	JPanel cartas = new JPanel(new GridLayout(1,3,4,4));
 	cartas.add(l1);
@@ -176,7 +252,11 @@ public class Interfaz extends JFrame{
 	texto.setFont(new Font("Consolas",Font.PLAIN,30));
 	
 	quiero = new JButton("QUIERO");
+	quiero.setBackground(Color.GREEN);
+	quiero.setPreferredSize(new Dimension(150,30));
 	noQuiero = new JButton("NO QUIERO");
+	noQuiero.setBackground(Color.RED);
+	noQuiero.setPreferredSize(new Dimension(150,30));
 	
 	GridBagConstraints constraints = new GridBagConstraints();
 	constraints.gridx = 0;
@@ -201,14 +281,14 @@ public class Interfaz extends JFrame{
 	//
 	
 	l4 = new JLabel();
-	l4.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+	//l4.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
 	l4.setHorizontalAlignment(SwingConstants.CENTER);
 	l5 = new JLabel();
-	l5.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+	//l5.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
 	l5.setHorizontalAlignment(SwingConstants.CENTER);
 	l6 = new JLabel();
 	l6.setHorizontalAlignment(SwingConstants.CENTER);
-	l6.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+	//l6.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
 	
 	JPanel cartas2 = new JPanel(new GridLayout(1,3,4,4));
 	cartas2.add(l4);
@@ -216,13 +296,10 @@ public class Interfaz extends JFrame{
 	cartas2.add(l6);
 	
 	//
-	
+	ctemp = new JButton();
 	c1 = new JButton();
-	c1.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
 	c2 = new JButton();
-	c2.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
 	c3 = new JButton();
-	c3.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
 	
 	JPanel cartas3 = new JPanel(new GridLayout(1,3,4,4));
 	cartas3.add(c1);
@@ -257,12 +334,12 @@ public class Interfaz extends JFrame{
 	j2.setHorizontalAlignment(SwingConstants.CENTER);
 	
 	img_mano = new JLabel();
-	img_mano.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/mano.png")).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+	img_mano.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/mazo.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
 	img_mano.setBorder(contorno);
 	img_mano.setHorizontalAlignment(SwingConstants.CENTER);
 	
 	img_mazo = new JLabel();
-	img_mazo.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/mazo.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+	img_mazo.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/mano.png")).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
 	img_mazo.setBorder(contorno2);
 	img_mazo.setHorizontalAlignment(SwingConstants.CENTER);
 	
@@ -413,8 +490,7 @@ public class Interfaz extends JFrame{
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						
-						j1.setText(texto_nombre.getText());			//CHEQUEAR SI ESTO VA ACï¿½
-						j2.setText("BOT EASY");
+						/*SE CREA LA INTERFAZ DE JUEGO*/
 						
 						cp.removeAll();
 						cp.revalidate();
@@ -423,13 +499,51 @@ public class Interfaz extends JFrame{
 						cp.add(union,BorderLayout.CENTER);
 						cp.add(unionDer,BorderLayout.EAST);
 						
+						/*SE SETEAN ALGUNAS CONFIGS PEQUEÑAS*/
+						
+						j1.setText(texto_nombre.getText());			//SE ESTABLECE EL NOMBRE ESCRITO POR EL JUGADOR
+						j2.setText("BOT EASY");						//NOMBRE DE LA IA
+						
+						//OTROS BOTONES DESACTIVADOS (PORQUE SIEMPRE EMPIEZA LA IA)
+						//CUANDO LA IA TIRA, DEBEN ACTIVARSE. CUANDO LA IA JUEGA, ESTÁN DESACTIVADOS.
+						
+						quiero.setEnabled(false);
+						noQuiero.setEnabled(false);
+						truco.setEnabled(false);
+						envido.setEnabled(false);
+						mazo.setEnabled(false);
+						
+						//
+						
+						
+						c1.addActionListener(new ActionListener() {
+							@Override
+							public void actionPerformed(ActionEvent e) {		
+								tirarCartaEnMesa(c1);
+							}
+						});
+						
+						c2.addActionListener(new ActionListener() {
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								tirarCartaEnMesa(c2);
+							}
+						});
+						
+						c3.addActionListener(new ActionListener() {
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								tirarCartaEnMesa(c3);
+							}
+						});
+						
 						rendirse.addActionListener(new ActionListener() {
 							
 							@Override
 							public void actionPerformed(ActionEvent e) {
 								
 								JFrame confirmar = new JFrame();
-						        int result = JOptionPane.showConfirmDialog(confirmar, "ï¿½Estï¿½ seguro que desea salir? El juego se darï¿½ como perdido.");
+						        int result = JOptionPane.showConfirmDialog(confirmar, "¿Esta seguro que desea salir? El juego se daria como perdido.");
 
 						        if (result == 0) {
 						        	cp.removeAll();
@@ -447,7 +561,509 @@ public class Interfaz extends JFrame{
 							}
 						});		//FIN RENDIRSE
 						
-					}
+						flecha.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								//creo el menu original
+								cp.remove(menuCantosE);
+								cp.add(menu,BorderLayout.WEST);
+								cp.revalidate();
+								cp.repaint();
+								
+							}
+						});
+						
+						flecha2.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								//creo el menu original
+								cp.remove(menuCantosT);
+								cp.add(menu,BorderLayout.WEST);
+								cp.revalidate();
+								cp.repaint();
+								
+							}
+						});
+						
+						truco.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								flecha2.setEnabled(true);
+								
+								cp.remove(menu);
+								cp.add(menuCantosT,BorderLayout.WEST);
+								cp.revalidate();
+								cp.repaint();
+								
+								//creo los listeners del truco
+								
+								cantarTruco.addActionListener(new ActionListener(){
+									
+									@Override
+									public void actionPerformed(ActionEvent e) {
+										for(int i=0;i<5;i++) {
+											cantado[i] = null;
+										}
+										cantado[0] = "truco";
+										texto.setText("<html>"+ cantado[0] +"</html>");
+										accionUsuario = true;
+									}
+									
+								});
+								
+								retruco.addActionListener(new ActionListener() {
+									
+									@Override
+									public void actionPerformed(ActionEvent e) {
+										int i;
+										for(i=0;i<5;i++) {
+											if(cantado[i]==null) {
+												cantado[i] = "retruco";
+												break;
+											}
+										}	
+										texto.setText("<html>"+ cantado[i] +"</html>");
+										accionUsuario = true;
+									}
+								});
+								
+								vale_4.addActionListener(new ActionListener() {
+									
+									@Override
+									public void actionPerformed(ActionEvent e) {
+										int i;
+										for(i=0;i<5;i++) {
+											if(cantado[i]==null) {
+												cantado[i] = "vale cuatro";
+												break;
+											}
+										}	
+										texto.setText("<html>"+ cantado[i] +"</html>");
+										accionUsuario = true;
+									}
+								});
+								
+							}
+						});
+						
+						envido.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								
+								flecha.setEnabled(true);
+								
+								//creo el menu con los envidos 
+								
+								cp.remove(menu);
+								cp.add(menuCantosE,BorderLayout.WEST);
+								cp.revalidate();
+								cp.repaint();
+								
+								//creo los listeners del envido
+								
+								//NOTA: NO PUEDO PONER A NULL EL ARREGLO, PORQUE EXISTE EL ENVIDO-ENVIDO
+								cantarEnvido.addActionListener(new ActionListener(){
+									
+									@Override
+									public void actionPerformed(ActionEvent e) {
+										int i;
+										for(i=0;i<5;i++) {
+											if(cantado[i]==null) {
+												cantado[i] = "envido";
+												break;
+											}
+										}
+										texto.setText("<html>"+ cantado[i] +"</html>");
+										accionUsuario = true;
+									}
+									
+								});
+								
+								real_envido.addActionListener(new ActionListener() {
+									
+									@Override
+									public void actionPerformed(ActionEvent e) {
+										int i;
+										for(i=0;i<5;i++) {
+											if(cantado[i]==null) {
+												cantado[i] = "real envido";
+												break;
+											}
+										}	
+										texto.setText("<html>"+ cantado[i] +"</html>");
+										accionUsuario = true;
+									}
+								});
+								
+								falta_envido.addActionListener(new ActionListener() {
+									
+									@Override
+									public void actionPerformed(ActionEvent e) {
+										int i;
+										for(i=0;i<5;i++) {
+											if(cantado[i]==null) {
+												cantado[i] = "falta envido";
+												break;
+											}
+										}	
+										texto.setText("<html>"+ cantado[i] +"</html>");
+										accionUsuario = true;
+									}
+								});
+													
+							}
+						});
+						
+						quiero.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								
+								for(int i=0; i<5 ;i++) {
+									if(cantado[i]==null) {
+										cantado[i] = "quiero";
+										break;
+									}
+								}
+								
+								accionUsuario = true;
+								quiero.setEnabled(false);
+								noQuiero.setEnabled(false);
+							}
+						});
+						
+						noQuiero.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								
+								for(int i=0; i<5;i++) {
+									if(cantado[i]==null) {
+										cantado[i] = "no quiero";
+										break;
+									}
+								}
+								
+								accionUsuario = true;
+								noQuiero.setEnabled(false);
+								quiero.setEnabled(false);
+							}
+						});
+						
+						
+						/** A PARTIR DE ACÁ DEBE HABER UN WHILE (O UN THREAD) QUE ENVUELVA/REPITA TODO HASTA QUE ALGUNO DE LOS DOS GANE*/
+					    
+				        Thread juego = new Thread() {
+							
+					    	@Override
+					    	public void run() {
+					    		
+					    		while(jugando) {
+					    			
+									/*SE REPARTEN CARTAS PARA JUGADOR E IA*/
+									
+								    for(int i=0;i<3;++i){
+								            IA.cartas[i] = mazoCartas.sacar();
+								    		j.cartas[i] = mazoCartas.sacar();					            
+								    }
+								 	
+							        for(Carta x : IA.cartas)
+							            System.out.println(x + "\n");
+					    			
+					    			/*SE VISUALIZAN LAS CARTAS DEL JUGADOR EN PANTALLA*/
+					    
+					    			mostrarCartasJugador();
+
+					    			/*ESTE HILO EJECUTARA LA ACCION DE LA MAQUINA (TIRAR CARTAS, ETC.)*/
+
+									Thread IAThread = new Thread(){
+							             
+										@Override
+							            public void run() {
+											while(turno) {	
+												
+												/*LA IA EMPIEZA (RONDA 1) */
+												 
+									    		IA.setBandera(true);				//nota: cambiarlo por una variable
+												IA.activatePuedoCantarEnvido();		//nota: decidir si quiero que sea true o false
+												tiraIA = IA.yourTurn(cantado,tiraJ);
+												
+												System.out.println("\nTira:");
+												System.out.println(tiraIA[0]);
+												
+												System.out.println("\nCantado:");
+										        for(int i = 0;cantado[i] != null;++i) {
+										            System.out.println(cantado[i]);
+										        }
+												
+										        /* CANTA ENVIDO (SI TIENE) */
+										        
+										        if(cantado[0] != null) {
+										        	if(cantado[0].equals("envido") || cantado[0].equals("real envido") || cantado[0].equals("falta envido")) {
+														
+										        		if(cantado[0].equals("falta envido")) {
+										        			envido.setEnabled(false);
+										        		}
+										        		else if (cantado[0].equals("real envido")){
+										        			envido.setEnabled(true);;
+										        			cantarEnvido.setEnabled(false);
+										        			real_envido.setEnabled(false);
+										        		}
+										        		else {
+										        			envido.setEnabled(true);
+										        		}
+										        		
+										        		texto.setText("<html>"+ cantado[0] +"</html>");
+														quiero.setEnabled(true);
+														noQuiero.setEnabled(true);
+														
+											    		c1.setEnabled(false);
+											    		c2.setEnabled(false);
+											    		c3.setEnabled(false);
+											    		
+											    		Thread espero = new Thread() {
+											    			
+											    			@Override
+											    			public void run() {
+													    		
+											    				System.out.print("\nEspero que el jugador quiera/no quiera - retruque ");
+											    				while(accionUsuario == false) {
+											    					try {
+														    			System.out.print(". ");
+														    			Thread.sleep(1000);
+																	} catch (InterruptedException e) {
+																		e.printStackTrace();
+																	}
+													    		}
+													    		System.out.println("\nRetomo la ejecución\n");
+											    			}
+											    			
+											    		};
+											    		
+														espero.start();			
+														
+														try {
+															espero.join();					
+//															Thread.sleep(1000);
+														}catch(InterruptedException e) {}
+											    		
+											    		accionUsuario = false;
+											    		
+											    		//SI EL JUGADOR QUIERE
+											    		
+											    		if(cantado[1].equals("quiero") || cantado[1].equals("no quiero")) {
+											    			//SE SUMAN PUNTOS
+											    			
+											    		}
+											    		
+											    		/*SI EL JUGADOR REVIRA*/
+											    		
+											    		else if(cantado[1].equals("envido") || cantado[1].equals("real envido") || cantado[1].equals("falta envido")) {
+											    			
+											    			IA.yourTurnAccept(cantado);
+											    			
+											    			//SI LA IA QUIERE/NO QUIERE
+											    			
+											    			if(cantado[2].equals("quiero") || cantado[2].equals("no quiero")) {
+											    				
+											    				//SE SUMAN PUNTOS
+											    				/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
+											    				
+											    				if(cantado[2].equals("quiero")) {
+											    					System.out.println("la IA quiso");
+											    				}
+											    				else {
+											    					System.out.println("la IA no quiso");
+											    				}
+											    				
+											    				
+											    				/***/
+											    				
+											    			}
+											    			
+											    			//SI LA IA REVIRA, CREO OTRO HILO DE ESPERA
+											    			
+											    			else if(cantado[2].equals("real envido") || cantado[2].equals("falta envido")) {
+											    				
+											    				/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
+											    				
+											    				System.out.println("la IA reviró");
+											    				
+											    				/***/
+											    				
+											    				texto.setText("<html>"+ cantado[2] +"</html>");
+																quiero.setEnabled(true);
+																noQuiero.setEnabled(true);
+											    				
+											    				if(cantado[2].equals("real envido")) {
+											    					envido.setEnabled(true);
+											    					falta_envido.setEnabled(true);
+											    				}
+											    				else {
+											    					envido.setEnabled(false);
+											    				}
+											    				
+													    		Thread espero2 = new Thread() {
+													    			
+													    			@Override
+													    			public void run() {
+															    		
+													    				System.out.print("\nEspero que el jugador quiera/no quiera - retruque ");
+													    				while(accionUsuario == false) {
+													    					try {
+																    			System.out.print(". ");
+																    			Thread.sleep(1000);
+																			} catch (InterruptedException e) {
+																				e.printStackTrace();
+																			}
+															    		}
+															    		System.out.println("\nRetomo la ejecución\n");
+													    			}
+													    			
+													    		};
+												    			
+													    		espero2.start();			//nota: ver donde ponerlo si no funca
+													    		
+																try {
+																	espero2.join();					
+//																	Thread.sleep(1000);
+																}catch(InterruptedException e) {}
+													    		
+																//SI EL JUGADOR QUIERE
+																
+																if(cantado[3].equals("quiero") || cantado[3].equals("no quiero")) {
+																	
+																	//SE SUMAN PUNTOS
+																	
+																}
+																
+																//SI EL JUGADOR REVIRA
+																
+																else if(cantado[3].equals("falta envido")) {
+																	
+																	IA.yourTurnAccept(cantado);
+																	
+																	//SI LA IA QUISO/NO QUISO
+																	
+																	if(cantado[4].equals("quiero") || cantado[4].equals("no quiero")) {
+																		
+																		//SE SUMAN PUNTOS
+																		
+																		/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
+													    				
+																		if(cantado[2].equals("quiero")) {
+													    					System.out.println("la IA quiso");
+													    				}
+													    				else {
+													    					System.out.println("la IA no quiso");
+													    				}
+													    		
+													    				/***/
+																		
+																	}
+																	
+																}
+																
+											    			}
+											    			
+											    			//nota: posible lugar donde vaya el hilo espero2
+											    			
+											    		}
+											    		
+
+													}
+										        	
+										        	/*CUANDO YA SE CANTÓ ENVIDO EL ARREGLO DE CANTADOS SE PONE A NULL PARA EL TRUCO*/
+										        	
+										        	texto = new JLabel("<html>"+ "" +"</html>");
+										        	
+										        	for(int i=0;i<5;i++) {
+										        		cantado[i] = null;
+										        	}
+										        	
+										        	envido.setEnabled(false);
+										        										        	
+										        	mostrarTirada(tiraIA);
+										        	truco.setEnabled(true);
+											        c1.setEnabled(true);
+											        c2.setEnabled(true);
+											        c3.setEnabled(true);
+											        accionUsuario = false;
+										        	
+											        IA.setBandera(false);
+											        
+										        }	//FIN IF DEL CANTO DE ENVIDO
+										        
+										        /*SI NO TIENE PARA EL ENVIDO TIRA LA CARTA DIRECTAMENTE*/
+										        
+										        else {
+											        
+										        	mostrarTirada(tiraIA);
+											        truco.setEnabled(true);
+											        c1.setEnabled(true);
+											        c2.setEnabled(true);
+											        c3.setEnabled(true);
+											        accionUsuario = false;
+											        
+											      //tengo que realizar otro hilo de espera por si el jugador canta truco/envido / o tira carta
+											        
+											        /*EL JUGADOR PUEDE TIRAR CARTA DIRECTAMENTE*/
+											        
+											        
+											        
+											        /*EL JUGADOR PUEDE CANTAR TRUCO*/
+											        
+											        
+											        /*EL JUGADOR PUEDE CANTAR ENVIDO (SI NO SE CANTÓ PREVIAMENTE*/
+											        
+										        }
+									        
+										        turno = false;
+											
+											}     //FIN WHILE IATHREAD
+										
+										} //FIN RUN IATHREAD
+										
+									};
+									
+									IAThread.start();
+									
+									try {
+										IAThread.join();					//sincroniza los hilos
+//										Thread.sleep(1000);
+									}catch(InterruptedException e) {}
+								
+						    		if(pts1.getText().equals("30") || pts2.getText().equals("30") ) {
+										JOptionPane.showMessageDialog(Interfaz.this, "FIN DEL JUEGO.");
+										jugando = false;
+										
+										//tal vez deba restaurar el contenedor original, llevando a la persona al menu principal
+										
+									}	
+									
+						    		//PROVISORIO: PORQUE SINO TIRA EXCEPCION
+						    		//NO TIRA EXCEPCION CUANDO LA MAQUINA SE DEDICA A ESPERAR. SI DEJA DE ESPERAR VUELVE A TIRAR EXCEPCION
+						    		//POSIBLE SOLUCION: TRATAR EL WHILE CON DOS VARIABLES BOOLEANAS
+						    		jugando = false;
+						    		
+					    		} //FIN WHILE JUEGO
+					    	
+
+					    	
+							}	//FIN RUN JUEGO
+						
+					    };
+						
+						juego.start();
+								
+						/** FIN DE WHILE*/
+						
+					}	//FIN ACTION-PERFORMED JUGAR-MAQUINA
+				
 				});		//FIN ACTION-LISTENER JUGAR-MAQUINA
 				
 				
@@ -482,7 +1098,7 @@ public class Interfaz extends JFrame{
 				
 				/*CAMBIAR NOMBRE*/
 				
-				ingrese_nombre = new JLabel("Ingrese un nombre (mï¿½x. 12 caracteres): ");
+				ingrese_nombre = new JLabel("Ingrese un nombre (max. 12 caracteres): ");
 				texto_nombre = new JTextField(texto_nombre.getText());
 				texto_nombre.setPreferredSize(new Dimension(100,20));
 				texto_nombre.addKeyListener((KeyListener) new KeyListener() {
@@ -557,4 +1173,307 @@ public class Interfaz extends JFrame{
 		
 	}	//FIN FUNCION ACTION-LISTENER
 	
-}
+	
+	public void tirarCartaEnMesa(JButton c) {
+		
+		if(l4.getIcon() == null) {
+			l4.setIcon(c.getIcon());
+		} else if(l5.getIcon() == null) {
+			l5.setIcon(c.getIcon());
+		} else {
+			l6.setIcon(c.getIcon());
+		}
+		
+		c.setIcon(null);
+		
+	}
+	
+	
+	public void mostrarCartasJugador() {
+		
+		
+		for(int i=0;i<3;i++) {
+
+	        switch(j.cartas[i].getNumero()) {
+		    case 1:
+		    	if(j.cartas[i].getPalo().equals("basto")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/1_BASTO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));					    							    		
+		    	}else if(j.cartas[i].getPalo().equals("copa")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/1_COPA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}else if(j.cartas[i].getPalo().equals("espada")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/1_ESPADA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	} else {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/1_ORO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}
+		    	break;
+		    case 2:
+		    	if(j.cartas[i].getPalo().equals("basto")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/2_BASTO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));					    							    		
+		    	}else if(j.cartas[i].getPalo().equals("copa")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/2_COPA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}else if(j.cartas[i].getPalo().equals("espada")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/2_ESPADA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	} else {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/2_ORO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}
+		    	break;
+		    case 3:
+		    	if(j.cartas[i].getPalo().equals("basto")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/3_BASTO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));					    							    		
+		    	}else if(j.cartas[i].getPalo().equals("copa")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/3_COPA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}else if(j.cartas[i].getPalo().equals("espada")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/3_ESPADA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	} else {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/3_ORO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}
+		    	break;
+		    case 4:
+		    	if(j.cartas[i].getPalo().equals("basto")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/4_BASTO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));					    							    		
+		    	}else if(j.cartas[i].getPalo().equals("copa")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/4_COPA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}else if(j.cartas[i].getPalo().equals("espada")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/4_ESPADA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	} else {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/4_ORO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}
+		    	break;
+		    case 5:
+		    	if(j.cartas[i].getPalo().equals("basto")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/5_BASTO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));					    							    		
+		    	}else if(j.cartas[i].getPalo().equals("copa")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/5_COPA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}else if(j.cartas[i].getPalo().equals("espada")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/5_ESPADA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	} else {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/5_ORO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}
+		    	break;
+		    case 6:
+		    	if(j.cartas[i].getPalo().equals("basto")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/6_BASTO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));					    							    		
+		    	}else if(j.cartas[i].getPalo().equals("copa")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/6_COPA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}else if(j.cartas[i].getPalo().equals("espada")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/6_ESPADA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	} else {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/6_ORO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}
+		    	break;
+		    case 7:
+		    	if(j.cartas[i].getPalo().equals("basto")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/7_BASTO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));					    							    		
+		    	}else if(j.cartas[i].getPalo().equals("copa")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/7_COPA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}else if(j.cartas[i].getPalo().equals("espada")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/7_ESPADA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	} else {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/7_ORO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}
+		    	break;
+		    case 10:
+		    	if(j.cartas[i].getPalo().equals("basto")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/10_BASTO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));					    							    		
+		    	}else if(j.cartas[i].getPalo().equals("copa")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/10_COPA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}else if(j.cartas[i].getPalo().equals("espada")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/10_ESPADA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	} else {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/10_ORO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}
+		    	break;
+		    case 11:
+		    	if(j.cartas[i].getPalo().equals("basto")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/11_BASTO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));					    							    		
+		    	}else if(j.cartas[i].getPalo().equals("copa")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/11_COPA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}else if(j.cartas[i].getPalo().equals("espada")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/11_ESPADA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	} else {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/11_ORO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}
+		    	break;
+		    case 12:
+		    	if(j.cartas[i].getPalo().equals("basto")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/12_BASTO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));					    							    		
+		    	}else if(j.cartas[i].getPalo().equals("copa")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/12_COPA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}else if(j.cartas[i].getPalo().equals("espada")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/12_ESPADA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	} else {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/12_ORO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}
+		    	break;
+		    }
+	        
+	        switch(i) {
+	        case 0:
+	        	c1.setIcon(ctemp.getIcon());
+	        	break;
+	        case 1:
+	        	c2.setIcon(ctemp.getIcon());
+	        	break;
+	        case 2:
+	        	c3.setIcon(ctemp.getIcon());
+	        	break;
+	        }
+	        
+	        ctemp.setIcon(null);
+	        
+	    }
+
+	}
+	
+	
+	
+	public int mostrarTirada(Carta tira[]) {
+		
+		int j=0;
+		
+		if(l1.getIcon() != null) {
+			j+=1;
+			if(l2.getIcon() != null) {
+				j+=1;
+				if(l3.getIcon() != null) {
+					return 1;
+				}
+			}
+		}
+
+	    for(int i=j; tira[i] != null; i++) {
+
+	        switch(tira[i].getNumero()) {
+		    case 1:
+		    	if(tira[i].getPalo().equals("basto")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/1_BASTO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));					    							    		
+		    	}else if(tira[i].getPalo().equals("copa")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/1_COPA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}else if(tira[i].getPalo().equals("espada")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/1_ESPADA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	} else {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/1_ORO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}
+		    	break;
+		    case 2:
+		    	if(tira[i].getPalo().equals("basto")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/2_BASTO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));					    							    		
+		    	}else if(tira[i].getPalo().equals("copa")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/2_COPA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}else if(tira[i].getPalo().equals("espada")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/2_ESPADA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	} else {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/2_ORO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}
+		    	break;
+		    case 3:
+		    	if(tira[i].getPalo().equals("basto")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/3_BASTO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));					    							    		
+		    	}else if(tira[i].getPalo().equals("copa")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/3_COPA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}else if(tira[i].getPalo().equals("espada")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/3_ESPADA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	} else {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/3_ORO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}
+		    	break;
+		    case 4:
+		    	if(tira[i].getPalo().equals("basto")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/4_BASTO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));					    							    		
+		    	}else if(tira[i].getPalo().equals("copa")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/4_COPA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}else if(tira[i].getPalo().equals("espada")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/4_ESPADA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	} else {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/4_ORO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}
+		    	break;
+		    case 5:
+		    	if(tira[i].getPalo().equals("basto")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/5_BASTO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));					    							    		
+		    	}else if(tira[i].getPalo().equals("copa")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/5_COPA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}else if(tira[i].getPalo().equals("espada")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/5_ESPADA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	} else {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/5_ORO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}
+		    	break;
+		    case 6:
+		    	if(tira[i].getPalo().equals("basto")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/6_BASTO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));					    							    		
+		    	}else if(tira[i].getPalo().equals("copa")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/6_COPA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}else if(tira[i].getPalo().equals("espada")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/6_ESPADA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	} else {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/6_ORO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}
+		    	break;
+		    case 7:
+		    	if(tira[i].getPalo().equals("basto")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/7_BASTO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));					    							    		
+		    	}else if(tira[i].getPalo().equals("copa")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/7_COPA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}else if(tira[i].getPalo().equals("espada")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/7_ESPADA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	} else {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/7_ORO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}
+		    	break;
+		    case 10:
+		    	if(tira[i].getPalo().equals("basto")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/10_BASTO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));					    							    		
+		    	}else if(tira[i].getPalo().equals("copa")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/10_COPA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}else if(tira[i].getPalo().equals("espada")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/10_ESPADA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	} else {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/10_ORO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}
+		    	break;
+		    case 11:
+		    	if(tira[i].getPalo().equals("basto")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/11_BASTO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));					    							    		
+		    	}else if(tira[i].getPalo().equals("copa")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/11_COPA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}else if(tira[i].getPalo().equals("espada")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/11_ESPADA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	} else {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/11_ORO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}
+		    	break;
+		    case 12:
+		    	if(tira[i].getPalo().equals("basto")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/12_BASTO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));					    							    		
+		    	}else if(tira[i].getPalo().equals("copa")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/12_COPA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}else if(tira[i].getPalo().equals("espada")) {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/12_ESPADA.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	} else {
+					ctemp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/12_ORO.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		    	}
+		    	break;
+		    }
+	        
+	        switch(i) {
+	        case 0:
+	        	l1.setIcon(ctemp.getIcon());
+	        	break;
+	        case 1:
+	        	l2.setIcon(ctemp.getIcon());
+	        	break;
+	        case 2:
+	        	l3.setIcon(ctemp.getIcon());
+	        	break;
+	        }
+	        
+	        ctemp.setIcon(null);
+	        
+	    }
+		
+		return 0;
+	}
+	
+	
+}	//FIN INTERFAZ

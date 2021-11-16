@@ -1,7 +1,7 @@
 public class Main {
     public static void main(String[] args) {        
-        Jugador j1 = new Jugador("TIKI");
-        Jugador j2 = new Jugador("ESTEBAN");
+        Jugador j1 = new Jugador();
+        Jugador j2 = new Jugador();
         Mazo mazo = new Mazo();
         //Interfaz pantalla = new Interfaz();
         String cantos[] = new String[5];

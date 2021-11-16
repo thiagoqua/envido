@@ -49,8 +49,9 @@
 	08/11
 	- Se agrega clase IA y se comienza su desarrollo.
 	
-	
-	
+	13-14-15-16/11
+	- Se configuraron los botones faltantes de los cantos, quiero/no quiero y las cartas del jugador.
+	- Se crearon hilos y se inició la secuencia de cantos y tiradas de los jugadores.
 	
 	
 	
