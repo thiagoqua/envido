@@ -25,7 +25,7 @@ public class Carta{
 		this.palo = palo;
 	}
 
-    private static Carta builder(Carta c){          //crea y devuelve una copia de la carta que se le pasa
+    public static Carta builder(Carta c){          //crea y devuelve una copia de la carta que se le pasa
         Carta temp = new Carta();
         temp.numero = c.numero;
         temp.palo = c.palo;

@@ -67,7 +67,7 @@ public class Jugador {
 	}
 
 	public Carta tirar(int index){
-		Carta temp = cartas[index];
+		Carta temp = Carta.builder(cartas[index]);
 		cartas[index] = null;
 	return temp;}
 

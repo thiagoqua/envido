@@ -1,19 +1,30 @@
 import javax.lang.model.util.ElementScanner14;
-
+//VER TEMA DE REVIRAR EN VEZ DE CANTAR TRUCO SIEMPRE
 public class IA extends Jugador{
 
+    private short nroMano;                              //si se está jugando primera, segunda o tercera
+    private boolean tengoPrimera;                       //se activa si la IA hace primera
     private boolean puedoCantarEnvido;                  //la habilito desde main cuando estoy en la primer mano
 
     public IA(){
+        nroMano = 1;
+        tengoPrimera = false;
         //super(tag);
     }
 	
     public void activatePuedoCantarEnvido(boolean cond){puedoCantarEnvido = cond;}
 
+    public void activateTengoPrimera(){tengoPrimera = true;}    //lo uso cuando la IA tira y el jugador no mata
+
+    public void reset(){                                        //lo invoco al finalizar cada ronda
+        nroMano = 1;
+        tengoPrimera = false;
+        puedoCantarEnvido = false;
+    }
+
     public Carta[] yourTurn(String cantos[],Carta tirada){      //metodo que se invocaría cada vez que le toca jugar a la IA
         int mato,cartasGood;
         Carta tiro[] = new Carta[2];
-        
         if(puedoCantarEnvido){    
             int puntosEnvido = super.getPuntosEnvido();
             if(super.bandera){
@@ -50,14 +61,35 @@ public class IA extends Jugador{
         
         //ACA TERMINA LA PARTE DE ENVIDO
         
-        if(tirada == null){                              //si todavía no se tiraron cartas, tiro una baja
-            tiro[0] = tirarBajo();
-            return tiro;
+        if(tirada == null){                             //si todavía no se tiraron cartas
+            if(nroMano == 1){                           //si estoy en la primer mano
+                tiro[0] = tirarBajo();
+                ++nroMano;
+                return tiro;
+            }
+            else{
+                if(tengoPrimera){       
+                    if((cartasGood = manyGoods()) > 0){     //si tengo cartas buenas
+                        if(!isCantado("truco",cantos)){     //si no esta cantado el truco
+                            cantar(3,cantos);                   //canto truco
+//                     try{
+//                         wait();                                 //espero respuesta del jugador desde main
+//                     } catch(InterruptedException e){
+//
+//                     }
+                        }
+                    }
+                }
+                tiro[0] = tirarAlto();                      
+                ++nroMano;
+                return tiro;
+            }
         }
         else{     
             mato = someKillsIt(tirada);
             if(mato == -1){                             //si no la mato ni empardo tiro una baja
                 tiro[0] = tirarBajo();
+                ++nroMano;
                 return tiro;
             }
             else if(isParda(super.cartas[mato],tirada)){    //si hago parda
@@ -65,37 +97,46 @@ public class IA extends Jugador{
                 cartasGood = manyGoods();                   //me fijo cuantas cartas buenas tengo despues de empardar
                 if(cartasGood > 0){                         //si tengo cartas buenas
                     super.cantoPrimi = true;
-                    cantar(3,cantos);                       //canto truco
-                    // try{
-                    //     wait();                                 //espero respuesta del jugador desde main
-                    // } catch(InterruptedException e){
-
-                    // }
+                    if(!isCantado("truco",cantos)){         //si no esta cantado el truco
+                        cantar(3,cantos);                   //canto truco
+//                     try{
+//                         wait();                                 //espero respuesta del jugador desde main
+//                     } catch(InterruptedException e){
+//
+//                     }
+                    }
                     tiro[1] = tirarAlto();                  //y tiro la mas alta
+                    ++nroMano;
                     return tiro;
                 }
                 else{                                       //sino empardo y tiro la mas alta que tenga de todas formas
-                    tiro[0] = super.tirar(mato);            //la empardo
                     tiro[1] = tirarAlto();                  //y tiro la mas alta
+                    ++nroMano;
                     return tiro;
                 }
             }
             else{
-                tiro[0] = super.tirar(mato);                //la mato
+                tiro[0] = super.tirar(mato);                //si la mato
                 cartasGood = manyGoods();                   //me fijo cuantas cartas buenas tengo despues de matar
-                if(manyGoods() > 0){                        //si tengo cartas buenas
+                if(nroMano == 1)                            //si estoy en la primer mano y hago primera
+                    tengoPrimera = true;
+                if(cartasGood > 0){                        //si tengo cartas buenas
                     super.cantoPrimi = true;
-                    cantar(3,cantos);                       //canto truco
-                    // try{
-                    //     wait();                                 //espero respuesta del jugador desde main
-                    // } catch(InterruptedException e){
-
-                    // }
+                    if(!isCantado("truco",cantos)){         //si no esta cantado el truco
+                        cantar(3,cantos);                   //canto truco
+//                     try{
+//                         wait();                                 //espero respuesta del jugador desde main
+//                     } catch(InterruptedException e){
+//
+//                     }
+                    }
                     tiro[1] = tirarAlto();                  //y reviento
+                    ++nroMano;
                     return tiro;               
                 }
                 else{
                     tiro[1] = tirarBajo();
+                    ++nroMano;
                     return tiro;
                 }
             }
@@ -287,6 +328,12 @@ public class IA extends Jugador{
                 break;
         }
 	}
+
+    private boolean isCantado(String quieroCantar,String cantos[]){
+        for(String temp : cantos)
+            if(temp != null && temp.equals(quieroCantar))
+                return true;
+    return false;}
 	
     private int someKillsIt(Carta aMatar){                  //retorna el indice de mi carta que mata a la del j2
         int manyKillsIt = 0,index;

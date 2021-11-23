@@ -10,51 +10,48 @@ public class MainTest {
         String cantado[] = new String[5];
         
         
-        Interfaz pantalla = new Interfaz();
+        //Interfaz pantalla = new Interfaz();
         
-//         cantado[0] = CANTOS[0];     //j1
-//         cantado[1] = CANTOS[0];     //j2
-//         cantado[2] = CANTOS[1];     //j1
-//         cantado[3] = CANTOS[6];     //j2
-//         cantado[4] = CANTOS[6];     //j1
-//        
-//        
-    //    for(int i=0;i<3;++i){
-    //        j1.cartas[i] = mazo.sacar();
-    //        j1.copyCartas[i] = j1.cartas[i];
-    //        j2.cartas[i] = mazo.sacar();
-    //        j2.copyCartas[i] = j2.cartas[i];
-    //    }
-
-    //    System.out.println("cartas de j1\n");
-    //    for(Carta x : j1.cartas)
-    //        System.out.println(x);
-
-    //    System.out.println("\ncartas de IA\n");
-    //    for(Carta x : j2.cartas)
-    //        System.out.println(x);
-
-    //     	/*ACA ES DONDE ME QUEDE*/
-        
-    //    tiraj1 = j1.tirar((int)(Math.random() * 3));
-    //    j2.setBandera(true);
-    //    j2.activatePuedoCantarEnvido();
-    //    tiraj2 = j2.yourTurn(cantado,tiraj1);
-
-    //    System.out.println("\nj1 tiro" + tiraj1 + "\nIA tiro " + tiraj2[0] + " y " + tiraj2[1]);
-
-    //    System.out.println("\nSE CANTO\n");
+        // cantado[0] = CANTOS[0];     //j1
+        // cantado[1] = CANTOS[0];     //j2
+        // cantado[2] = CANTOS[1];     //j1
+        // cantado[3] = CANTOS[6];     //j2
+        // cantado[4] = CANTOS[6];     //j1
        
-    //    cantado[1] = "quiero";
-    //    for(int i = 0;cantado[i] != null;++i)
-    //        System.out.println(cantado[i]);
-        
-    //     sistPuntuacion(cantado,j2,j1);
+       
+       for(int i=0;i<3;++i){
+           j1.cartas[i] = mazo.sacar();
+           j1.copyCartas[i] = j1.cartas[i];
+           j2.cartas[i] = mazo.sacar();
+           j2.copyCartas[i] = j2.cartas[i];
+       }
 
-    //    System.out.println("puntos de j1:\t" + j1.getPuntos() + "\npuntos de IA:\t" + j2.getPuntos());
-//        System.out.println("\nImprimo el cantado:\n");
-//        for(String x : cantado)
-//             System.out.println(x);
+       System.out.println("cartas de j1\n");
+       for(Carta x : j1.cartas)
+           System.out.println(x);
+
+       System.out.println("\ncartas de IA\n");
+       for(Carta x : j2.cartas)
+           System.out.println(x);
+
+        	/*ACA ES DONDE ME QUEDE*/
+        
+       tiraj1 = j1.tirar((int)(Math.random() * 3));
+       j2.setBandera(true);
+       j2.activatePuedoCantarEnvido(true);
+       tiraj2 = j2.yourTurn(cantado,tiraj1);
+
+       System.out.println("\nj1 tiro" + tiraj1 + "\nIA tiro " + tiraj2[0] + " y " + tiraj2[1]);
+
+       System.out.println("\nSE CANTO\n");
+       
+       cantado[1] = "quiero";
+       for(int i = 0;cantado[i] != null;++i)
+           System.out.println(cantado[i]);
+        
+        sistPuntuacion(cantado,j2,j1);
+
+       System.out.println("puntos de j1:\t" + j1.getPuntos() + "\npuntos de IA:\t" + j2.getPuntos());
 
         /*
         // VARIABLES DE MAIN 
