@@ -45,7 +45,9 @@ public class Jugador {
 	public void setMano(boolean m) {this.soy_mano = m;}	
 	
 	public void setCantoPrimi(boolean m) {this.cantoPrimi = m;}
-
+	
+	/* METODOS VARIOS */
+	
 	public boolean isWinning(Jugador j2){
 		return puntos > j2.getPuntos();
 	}

@@ -8,7 +8,7 @@ public class IA extends Jugador{
         //super(tag);
     }
 	
-    public void activatePuedoCantarEnvido(){puedoCantarEnvido = true;}
+    public void activatePuedoCantarEnvido(boolean cond){puedoCantarEnvido = cond;}
 
     public Carta[] yourTurn(String cantos[],Carta tirada){      //metodo que se invocaría cada vez que le toca jugar a la IA
         int mato,cartasGood;

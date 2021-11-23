@@ -48,6 +48,36 @@ public class Carta{
         ORDEN[13] = new Carta(4,"");
     }
 	
+    
+    public int returnOrden(Carta c){
+        int i=0;
+    	
+        /*ANALIZO LAS CARTAS IMPORTANTES PRIMERO*/
+        
+        for(int j=0;j<4;j++) {
+        	
+            if(c.getNumero() == ORDEN[i].getNumero() && c.getPalo().equals(ORDEN[i].getPalo())) {
+            	return i;
+            }
+            else {
+            	i++;
+            }
+        	
+        }
+
+        for(int j=0;j<10;j++) {
+        	if(c.getNumero() == ORDEN[i].getNumero()) {
+            	return i;
+            }
+            else {
+            	i++;
+            }
+        }
+        
+        return -1;
+    }
+    
+    
 	@Override
 	public String toString() {
 		return ( "(" + this.numero + "," + this.palo + ")" );
