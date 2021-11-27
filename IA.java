@@ -1,4 +1,4 @@
-import javax.lang.model.util.ElementScanner14;
+
 //VER TEMA DE REVIRAR EN VEZ DE CANTAR TRUCO SIEMPRE
 public class IA extends Jugador{
 
@@ -300,7 +300,7 @@ public class IA extends Jugador{
 
 	private void cantar(int queCanto,String cantos[]){       //queCanto hace referencia al arreglo de cantos constantes
         int end = 0;
-        while(cantos[end] != null){++end;}                    //accedo a lo ultimo que se canto
+        while(cantos[end] != null && cantos[end] != ""){++end;}                    //accedo a lo ultimo que se canto
         switch(queCanto){
             case 0:
                 cantos[end] = "envido";
