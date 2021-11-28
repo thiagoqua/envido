@@ -1021,7 +1021,7 @@ public class Interfaz extends JFrame{
 												    				acumulador = String.valueOf(j.getPuntos());
 												    				pts1.setText(acumulador);
 												    				
-												    				//SI SE LLEGA A 30 DEBERÍA TERMINAR LA PARTIDA
+												    				//SI SE LLEGA A 30 DEBERï¿½A TERMINAR LA PARTIDA
 												    				
 												    			}
 												    			else {
@@ -1030,7 +1030,7 @@ public class Interfaz extends JFrame{
 												    				acumulador = String.valueOf(MAQUINA.getPuntos());
 												    				pts2.setText(acumulador);
 												    				
-												    				//SI SE LLEGA A 30 DEBERÍA TERMINAR LA PARTIDA
+												    				//SI SE LLEGA A 30 DEBERï¿½A TERMINAR LA PARTIDA
 												    				
 												    			}
 											    				
@@ -1040,7 +1040,7 @@ public class Interfaz extends JFrame{
 												    				acumulador = String.valueOf(j.getPuntos());
 												    				pts1.setText(acumulador);
 												    				
-												    				//SI SE LLEGA A 30 DEBERÍA TERMINAR LA PARTIDA
+												    				//SI SE LLEGA A 30 DEBERï¿½A TERMINAR LA PARTIDA
 												    				
 												    			}
 												    			else {
@@ -1049,7 +1049,7 @@ public class Interfaz extends JFrame{
 												    				acumulador = String.valueOf(MAQUINA.getPuntos());
 												    				pts2.setText(acumulador);
 												    				
-												    				//SI SE LLEGA A 30 DEBERÍA TERMINAR LA PARTIDA
+												    				//SI SE LLEGA A 30 DEBERï¿½A TERMINAR LA PARTIDA
 												    				
 												    			}
 											    				
@@ -1144,7 +1144,7 @@ public class Interfaz extends JFrame{
 													    				acumulador = String.valueOf(j.getPuntos());
 													    				pts1.setText(acumulador);
 													    				
-													    				//SI SE LLEGA A 30 DEBERÍA TERMINAR LA PARTIDA
+													    				//SI SE LLEGA A 30 DEBERï¿½A TERMINAR LA PARTIDA
 													    				
 													    			}
 													    			else {
@@ -1153,7 +1153,7 @@ public class Interfaz extends JFrame{
 													    				acumulador = String.valueOf(MAQUINA.getPuntos());
 													    				pts2.setText(acumulador);
 													    				
-													    				//SI SE LLEGA A 30 DEBERÍA TERMINAR LA PARTIDA
+													    				//SI SE LLEGA A 30 DEBERï¿½A TERMINAR LA PARTIDA
 													    				
 													    			}
 												    				
@@ -1734,7 +1734,7 @@ public class Interfaz extends JFrame{
 												    			c2.setEnabled(true);
 												    			c3.setEnabled(true);
 												    			
-												    			//acá voy a tener que reciclar codigo y debo estar atento a como crear la funcion
+												    			//acï¿½ voy a tener que reciclar codigo y debo estar atento a como crear la funcion
 											    				
 												    			trucoQuerido();
 												    			texto.setText("<html>"+ "" +"</html>");
@@ -1761,7 +1761,7 @@ public class Interfaz extends JFrame{
 													    			c2.setEnabled(true);
 													    			c3.setEnabled(true);
 													    			
-													    			//acá voy a tener que reciclar codigo y debo estar atento a como crear la funcion
+													    			//acï¿½ voy a tener que reciclar codigo y debo estar atento a como crear la funcion
 												    				
 												    				trucoQuerido();
 												    				texto.setText("<html>"+ "" +"</html>");
@@ -2868,7 +2868,7 @@ public class Interfaz extends JFrame{
 //									    						Thread.sleep(1000);
 									    					}catch(InterruptedException e) {}
 											    			
-									    												//CHEQUEAR SI EFECTIVAMENTE SE TOMÓ LA SEGUNDA CARTA DE LA SEGUNDA TIRADA
+									    												//CHEQUEAR SI EFECTIVAMENTE SE TOMï¿½ LA SEGUNDA CARTA DE LA SEGUNDA TIRADA
 									    					auxJ = queCartaFueTirada();
 									    					
 									    					//LE TOCA A LA IA
@@ -3317,10 +3317,10 @@ public class Interfaz extends JFrame{
 	}	//FIN FUNCION ACTION-LISTENER
 	
 	
-	//FUNCION PARA SABER QUE CARTA TIRÓ EL JUGADOR CUANDO APRETÓ UN BOTON
+	//FUNCION PARA SABER QUE CARTA TIRï¿½ EL JUGADOR CUANDO APRETï¿½ UN BOTON
 	public Carta queCartaFueTirada() {		
 		
-		//OJO CON ESTO, CUANDO YA RETORNO UNA CARTA, ENTONCES CUALQUIER 'C' DEBE ANULARSE, PORQUE YA NO EXISTE MAS NADA AHÍ
+		//OJO CON ESTO, CUANDO YA RETORNO UNA CARTA, ENTONCES CUALQUIER 'C' DEBE ANULARSE, PORQUE YA NO EXISTE MAS NADA AHï¿½
 		
 		if(c1.getIcon()==null && c1.isEnabled() != false) {
 			c1.setEnabled(false);
@@ -4665,7 +4665,7 @@ public class Interfaz extends JFrame{
 	}
 	
 	
-	public int mostrarTirada(Carta tira[], boolean tiraIAnull) {
+	public int mostrarTirada(Carta tira[],boolean tiraIAnull) {
 		
 		int j=0;
 		

@@ -1,14 +1,15 @@
-
 //VER TEMA DE REVIRAR EN VEZ DE CANTAR TRUCO SIEMPRE
 public class IA extends Jugador{
 
     private short nroMano;                              //si se está jugando primera, segunda o tercera
     private boolean tengoPrimera;                       //se activa si la IA hace primera
     private boolean puedoCantarEnvido;                  //la habilito desde main cuando estoy en la primer mano
+    private boolean mentimos;
 
     public IA(){
         nroMano = 1;
         tengoPrimera = false;
+        mentimos = false;
         //super(tag);
     }
 	
@@ -25,38 +26,51 @@ public class IA extends Jugador{
     public Carta[] yourTurn(String cantos[],Carta tirada){      //metodo que se invocaría cada vez que le toca jugar a la IA
         int mato,cartasGood;
         Carta tiro[] = new Carta[2];
-        if(puedoCantarEnvido){    
+        if(puedoCantarEnvido){
             int puntosEnvido = super.getPuntosEnvido();
-            if(super.bandera){
-                if(puntosEnvido > 22 && puntosEnvido < 29){
-                    super.cantoPrimi = true;
-                    cantar(0,cantos);
-//                     try{
-//                         wait();                                 //espero respuesta del jugador desde main
-//                     } catch(InterruptedException e){
-//
-//                     }
-                }
-                else if(puntosEnvido >= 28 && puntosEnvido < 32){
-                    super.cantoPrimi = true;
-                    cantar(1,cantos);
-//                     try{
-//                         wait();                                 //espero respuesta del jugador desde main
-//                     } catch(InterruptedException e){
-//
-//                     }
-                }
-                else if(puntosEnvido >= 32){
-                    super.cantoPrimi = true;
-                    cantar(2,cantos);
-//                     try{
-//                         wait();                                 //espero respuesta del jugador desde main
-//                     } catch(InterruptedException e){
-//
-//                     }
-                }
+            checkIfMentimos();
+            if(puntosEnvido <= 22 && mentimos){                 //si no tengo puntos y puedo mentir
+                System.out.println("SE MIENTE PERRO");
+                super.cantoPrimi = true;
+                cantar(0,cantos);
+    //          try{
+    //              wait();                                 //espero respuesta del jugador desde main
+    //          } catch(InterruptedException e){
+    //
+    //          }
             }
-            puedoCantarEnvido = false;
+            else{
+                if(super.bandera){
+                    if(puntosEnvido > 22 && puntosEnvido < 29){
+                        super.cantoPrimi = true;
+                        cantar(0,cantos);
+    //                     try{
+    //                         wait();                                 //espero respuesta del jugador desde main
+    //                     } catch(InterruptedException e){
+    //
+    //                     }
+                    }
+                    else if(puntosEnvido >= 28 && puntosEnvido < 32){
+                        super.cantoPrimi = true;
+                        cantar(1,cantos);
+    //                     try{
+    //                         wait();                                 //espero respuesta del jugador desde main
+    //                     } catch(InterruptedException e){
+    //
+    //                     }
+                    }
+                    else if(puntosEnvido >= 32){
+                        super.cantoPrimi = true;
+                        cantar(2,cantos);
+    //                     try{
+    //                         wait();                                 //espero respuesta del jugador desde main
+    //                     } catch(InterruptedException e){
+    //
+    //                     }
+                    }
+                }
+                puedoCantarEnvido = false;
+            }
         }
         
         //ACA TERMINA LA PARTE DE ENVIDO
@@ -68,7 +82,8 @@ public class IA extends Jugador{
                 return tiro;
             }
             else{
-                if(tengoPrimera){       
+                if(tengoPrimera){   
+                    checkIfMentimos();    
                     if((cartasGood = manyGoods()) > 0){     //si tengo cartas buenas
                         if(!isCantado("truco",cantos)){     //si no esta cantado el truco
                             cantar(3,cantos);                   //canto truco
@@ -78,6 +93,13 @@ public class IA extends Jugador{
 //
 //                     }
                         }
+                    } else if(mentimos){                    //si no tengo cartas buenas pero puedo mentir
+                        cantar(3,cantos);                   //canto truco
+                        // try{
+                        //     wait();
+                        // } catch(InterruptedException e){
+
+                        // }
                     }
                 }
                 tiro[0] = tirarAlto();                      
@@ -87,7 +109,8 @@ public class IA extends Jugador{
         }
         else{     
             mato = someKillsIt(tirada);
-            if(mato == -1){                             //si no la mato ni empardo tiro una baja
+            checkIfMentimos();
+            if(mato == -1){                                 //si no la mato ni empardo tiro una baja
                 tiro[0] = tirarBajo();
                 ++nroMano;
                 return tiro;
@@ -109,18 +132,30 @@ public class IA extends Jugador{
                     ++nroMano;
                     return tiro;
                 }
+                else if(mentimos){                          //si no tengo cartas buenas pero puedo mentir
+                    cantar(3,cantos);
+                    // try{
+                    //     wait();
+                    // } catch(InterruptedException e){
+                        
+                    // }
+                    tiro[1] = tirarAlto();
+                    ++nroMano;
+                    return tiro;
+                }
                 else{                                       //sino empardo y tiro la mas alta que tenga de todas formas
                     tiro[1] = tirarAlto();                  //y tiro la mas alta
                     ++nroMano;
                     return tiro;
                 }
             }
-            else{
-                tiro[0] = super.tirar(mato);                //si la mato
+            else{                                           //si la mato
+                tiro[0] = super.tirar(mato);                //la mato
                 cartasGood = manyGoods();                   //me fijo cuantas cartas buenas tengo despues de matar
+                checkIfMentimos();
                 if(nroMano == 1)                            //si estoy en la primer mano y hago primera
                     tengoPrimera = true;
-                if(cartasGood > 0){                        //si tengo cartas buenas
+                if(cartasGood > 0){                         //si tengo cartas buenas
                     super.cantoPrimi = true;
                     if(!isCantado("truco",cantos)){         //si no esta cantado el truco
                         cantar(3,cantos);                   //canto truco
@@ -133,6 +168,17 @@ public class IA extends Jugador{
                     tiro[1] = tirarAlto();                  //y reviento
                     ++nroMano;
                     return tiro;               
+                }
+                else if(mentimos){                          //si no tengo cartas buenas pero puedo mentir
+                    cantar(3,cantos);
+                    // try{
+                    //     wait();
+                    // } catch(InterruptedException e){
+                        
+                    // }
+                    tiro[1] = tirarBajo();
+                    ++nroMano;
+                    return tiro;
                 }
                 else{
                     tiro[1] = tirarBajo();
@@ -147,9 +193,10 @@ public class IA extends Jugador{
         int end = 0,puntosEnvido,cartasGood;
         puntosEnvido = getPuntosEnvido();
         cartasGood = manyGoods();
+        checkIfMentimos();
         while(cantos[end+1] != null){++end;}                    //accedo a lo ultimo que se canto
-        if(cantos[end].equals("envido")){
-            if(puntosEnvido > 22 && puntosEnvido < 27){
+        if(end > 0 && cantos[end-1].equals("envido")){          //si se canta envido envido
+            if(puntosEnvido > 25 && puntosEnvido < 28){
                 cantar(6,cantos);           //quiero
                 // try{
                 //     wait();                                 //espero respuesta del jugador desde main
@@ -157,7 +204,50 @@ public class IA extends Jugador{
 
                 // }
             }
-            else if(puntosEnvido >= 27 && puntosEnvido <= 29){
+            else if(puntosEnvido >= 28 && puntosEnvido < 31){
+                cantar(1,cantos);           //quiero
+                // try{
+                //     wait();                                 //espero respuesta del jugador desde main
+                // } catch(InterruptedException e){
+
+                // }
+            }
+            else if(puntosEnvido >= 31){
+                cantar(2,cantos);           //quiero
+                // try{
+                //     wait();                                 //espero respuesta del jugador desde main
+                // } catch(InterruptedException e){
+
+                // }
+            }
+            else if(puntosEnvido < 25 && mentimos){
+                System.out.println("SE MIENTE PERRO");
+                cantar(1,cantos);           //quiero
+                // try{
+                //     wait();                                 //espero respuesta del jugador desde main
+                // } catch(InterruptedException e){
+
+                // }
+            }
+            else{
+                cantar(7,cantos);           //quiero
+                // try{
+                //     wait();                                 //espero respuesta del jugador desde main
+                // } catch(InterruptedException e){
+
+                // }
+            }
+        }
+        else if(cantos[end].equals("envido")){
+            if(puntosEnvido > 24 && puntosEnvido <= 27){
+                cantar(6,cantos);           //quiero
+                // try{
+                //     wait();                                 //espero respuesta del jugador desde main
+                // } catch(InterruptedException e){
+
+                // }
+            }
+            else if(puntosEnvido > 27 && puntosEnvido <= 31){
                 cantar(1,cantos);           //le canto real envido
                 // try{
                 //     wait();                                 //espero respuesta del jugador desde main
@@ -165,12 +255,21 @@ public class IA extends Jugador{
 
                 // }
             }
-            else if(puntosEnvido > 29){
+            else if(puntosEnvido > 31){
                 cantar(2,cantos);           //le canto falta envido
                 // try{
                 //     wait();                                 //espero respuesta del jugador desde main
                 // } catch(InterruptedException e){
 
+                // }
+            }
+            else if(puntosEnvido <= 24 && mentimos){            //si no tengo puntos y puedo mentir
+                System.out.println("SE MIENTE PERRO");
+                cantar(1,cantos);                               //canto el real envido
+                // try{
+                //     wait();
+                // } catch(InterruptedException e){
+                    
                 // }
             }
             else{
@@ -183,7 +282,7 @@ public class IA extends Jugador{
             }
         }
         else if(cantos[end].equals("real envido")){
-            if(puntosEnvido >= 27 && puntosEnvido <= 29){
+            if(puntosEnvido > 27 && puntosEnvido <= 31){
                 cantar(6,cantos);           //quiero
                 // try{
                 //     wait();                                 //espero respuesta del jugador desde main
@@ -191,12 +290,21 @@ public class IA extends Jugador{
 
                 // }
             }
-            else if(puntosEnvido > 29){
+            else if(puntosEnvido > 31){
                 cantar(2,cantos);           //le canto falta envido
                 // try{
                 //     wait();                                 //espero respuesta del jugador desde main
                 // } catch(InterruptedException e){
 
+                // }
+            }
+            else if(puntosEnvido <= 27 && mentimos){            //si no tengo puntos y puedo mentir
+                System.out.println("SE MIENTE PERRO");
+                cantar(2,cantos);                              //canto la falta envido
+                // try{
+                //     wait();
+                // } catch(InterruptedException e){
+                    
                 // }
             }
             else{
@@ -209,7 +317,7 @@ public class IA extends Jugador{
             }
         }
         else if(cantos[end].equals("falta envido")){
-            if(puntosEnvido > 29){
+            if(puntosEnvido > 31){
                 cantar(6,cantos);           //quiero
                 // try{
                 //     wait();                                 //espero respuesta del jugador desde main
@@ -243,6 +351,15 @@ public class IA extends Jugador{
 
                 // }
             }
+            else if(cartasGood < 1 && mentimos){                //si no tengo cartas buenas y puedo mentir
+                System.out.println("SE MIENTE PERRO");
+                cantar(4,cantos);                               //canto el retruco
+                // try{
+                //     wait();
+                // } catch(InterruptedException e){
+                    
+                // }
+            }
             else{
                 cantar(7,cantos);           //no quiero
                 // try{
@@ -267,6 +384,15 @@ public class IA extends Jugador{
                 //     wait();                                 //espero respuesta del jugador desde main
                 // } catch(InterruptedException e){
 
+                // }
+            }
+            else if(cartasGood < 2 && mentimos){                //si no tengo cartas buenas y puedo mentir
+                System.out.println("SE MIENTE PERRO");
+                cantar(5,cantos);                               //canto el vale cuatro
+                // try{
+                //     wait();
+                // } catch(InterruptedException e){
+                    
                 // }
             }
             else{
@@ -527,4 +653,13 @@ public class IA extends Jugador{
                 if(temp != null && temp.isGood())
                     ++many;
     return many;}
+
+    public void checkIfMentimos(){
+        int aVer = (int)(Math.random() * 20);
+        //si se quiere que la IA mienta menos o más hay que modificar el valor con el que se compara aVer
+        if(aVer <= 10)
+            mentimos = true;
+        else
+            mentimos = false;
+    }
 }

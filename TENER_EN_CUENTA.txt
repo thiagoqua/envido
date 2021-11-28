@@ -13,4 +13,6 @@
 	Si el jugador revira, se tiene que completar el arreglo de cantos con el debido canto realizado, se debe despertar a la IA, 
 	llamar a su método yourTurnAccept, donde va a decidir y a completar el arreglo de cantos según corresponda, y luego ver como sigue.
 	
+	Cuando termina una mano, hay que llamar al método reset() de la IA porque sino la mano se va al pingo.
+	
 	
