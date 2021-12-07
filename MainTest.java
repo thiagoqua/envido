@@ -83,6 +83,8 @@ public class MainTest {
         }*/
     }
 
+    /*
+    
     public static void sistPuntuacion(String cantado[],Jugador j1,Jugador j2) throws IllegalArgumentException{ 
         //j1 siempre debe ser el que canta primero segun cantoPrimi
         int index = 0;
@@ -267,7 +269,10 @@ public class MainTest {
         else 
             throw new IllegalArgumentException(cantado[index] + " no matcheado");
     }
-       
+    
+    
+*/
+    
     public static int ronda(Jugador j1, Jugador j2, Mazo m) {
     	/*Se mezcla el mazo*/
     	m.mezclar();

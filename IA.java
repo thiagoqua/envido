@@ -194,7 +194,7 @@ public class IA extends Jugador{
         puntosEnvido = getPuntosEnvido();
         cartasGood = manyGoods();
         checkIfMentimos();
-        while(cantos[end+1] != null){++end;}                    //accedo a lo ultimo que se canto
+        while(cantos[end+1] != null && cantos[end+1] != ""){++end;}                    //accedo a lo ultimo que se canto
         if(end > 0 && cantos[end-1].equals("envido")){          //si se canta envido envido
             if(puntosEnvido > 25 && puntosEnvido < 28){
                 cantar(6,cantos);           //quiero

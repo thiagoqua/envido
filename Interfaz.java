@@ -124,6 +124,7 @@ public class Interfaz extends JFrame{
 	
     private Carta tiraJ;		
     private Carta tiraIA[];		//guarda las cartas que tira la IA
+    private Carta tiratmp[];
 	private boolean accionUsuario;	//permite trabar o destrabar la IA cuando espera la respuesta del jugador
 	private boolean turno;	//para saber cuando le toca a la IA y cuando esta luego debe esperar la respuesta del jugador
     private boolean jugando;
@@ -154,6 +155,8 @@ public class Interfaz extends JFrame{
 	cantadoTruco = new String[5];
     tiraJ = new Carta();
     tiraIA = new Carta[2];
+    tiratmp = new Carta[1];
+    
     accionUsuario = false;
 	turno = true;
 	jugando = true;
@@ -636,7 +639,7 @@ public class Interfaz extends JFrame{
 							public void actionPerformed(ActionEvent e) {
 								int i;
 								for(i=0;i<5;i++) {
-									if(cantadoTruco[i]==null) {
+									if(cantadoTruco[i]==null || cantadoTruco[i]=="") {
 										cantadoTruco[i] = "retruco";
 										break;
 									}
@@ -652,7 +655,7 @@ public class Interfaz extends JFrame{
 							public void actionPerformed(ActionEvent e) {
 								int i;
 								for(i=0;i<5;i++) {
-									if(cantadoTruco[i]==null) {
+									if(cantadoTruco[i]==null || cantadoTruco[i]=="") {
 										cantadoTruco[i] = "vale cuatro";
 										break;
 									}
@@ -684,7 +687,7 @@ public class Interfaz extends JFrame{
 							public void actionPerformed(ActionEvent e) {
 								int i;
 								for(i=0;i<5;i++) {
-									if(cantado[i]==null) {
+									if(cantado[i]==null || cantado[i]=="") {
 										cantado[i] = "envido";
 										break;
 									}
@@ -702,7 +705,7 @@ public class Interfaz extends JFrame{
 							public void actionPerformed(ActionEvent e) {
 								int i;
 								for(i=0;i<5;i++) {
-									if(cantado[i]==null) {
+									if(cantado[i]==null || cantado[i]=="") {
 										cantado[i] = "real envido";
 										break;
 									}
@@ -719,7 +722,7 @@ public class Interfaz extends JFrame{
 							public void actionPerformed(ActionEvent e) {
 								int i;
 								for(i=0;i<5;i++) {
-									if(cantado[i]==null) {
+									if(cantado[i]==null || cantado[i]=="") {
 										cantado[i] = "falta envido";
 										break;
 									}
@@ -754,18 +757,18 @@ public class Interfaz extends JFrame{
 							@Override
 							public void actionPerformed(ActionEvent e) {
 								
-								if(cantadoTruco[0] != null) {
+								if(cantadoTruco[0] != null && cantadoTruco[0]!="") {		//PARA TRUCO
 									for(int i=0; i<5 ;i++) {
-										if(cantadoTruco[i]==null) {
+										if(cantadoTruco[i]==null || cantadoTruco[i]=="") {
 											cantadoTruco[i] = "quiero";
 											break;
 										}
 									}
 								}
-								else {
+								else {								//PARA ENVIDO
 								
 									for(int i=0; i<5 ;i++) {
-										if(cantado[i]==null) {
+										if(cantado[i]==null || cantado[i]=="") {
 											cantado[i] = "quiero";
 											break;
 										}
@@ -782,17 +785,17 @@ public class Interfaz extends JFrame{
 							@Override
 							public void actionPerformed(ActionEvent e) {
 								
-								if(cantadoTruco[0] != null) {
+								if(cantadoTruco[0] != null && cantadoTruco[0]=="") {			//PARA TRUCO
 									for(int i=0; i<5;i++) {
-										if(cantadoTruco[i]==null) {
+										if(cantadoTruco[i]==null || cantadoTruco[i]=="") {
 											cantadoTruco[i] = "no quiero";
 											break;
 										}
 									}
 								}
-								else {
-									for(int i=0; i<5;i++) {
-										if(cantado[i]==null) {
+								else {	
+									for(int i=0; i<5;i++) {										//PARA ENVIDO
+										if(cantado[i]==null || cantado[i]=="") {
 											cantado[i] = "no quiero";
 											break;
 										}
@@ -809,6 +812,11 @@ public class Interfaz extends JFrame{
 					    
 						acumulador = "";
 						
+			    		for(int i=0;i<5;i++) {
+			        		cantadoTruco[i] = "";
+			        		cantado[i] = "";
+			        	}
+			    		
 						//VARIAR ENTRE IA Y JUGADOR, PORQUE LAS RONDAS IMPARES ARRANCA LA IA Y LAS PARES EL JUGADOR
 						
 				        Thread juego = new Thread() {
@@ -853,13 +861,13 @@ public class Interfaz extends JFrame{
 												System.out.println(tiraIA[0]);
 												
 												System.out.println("\nCantado:");
-										        for(int i = 0;cantado[i] != null;++i) {
+										        for(int i = 0;cantado[i] != "";++i) {
 										            System.out.println(cantado[i]);
 										        }
 												
 										        /* CANTA ENVIDO (SI TIENE) */
 										        
-										        if(cantado[0] != null) {
+										        if(cantado[0] != null && cantado[0]!="") {
 										        	if(cantado[0].equals("envido") || cantado[0].equals("real envido") || cantado[0].equals("falta envido")) {
 														
 										        		if(cantado[0].equals("falta envido")) {
@@ -912,59 +920,30 @@ public class Interfaz extends JFrame{
 											    		
 											    		//SI EL JUGADOR QUIERE
 											    		
-											    		if(cantado[1].equals("quiero") || cantado[1].equals("no quiero")) {
+											    		if(cantado[1].equals("quiero")) {
 											    			//SE SUMAN PUNTOS
 											    			
-											    			if(j.getPuntosEnvido() > MAQUINA.getPuntosEnvido() && cantado[0].equals("envido") && cantado[1].equals("quiero")) {
-											    				j.addPuntos(2);
-											    				acumulador = String.valueOf(j.getPuntos());
-											    				pts1.setText(acumulador);
-											    				
-											    			}
-											    			else {
-											    				MAQUINA.addPuntos(2);
-											    				acumulador = String.valueOf(MAQUINA.getPuntos());
-											    				pts2.setText(acumulador);
-											    			}
+										    				sistPuntuacion(cantado,j,MAQUINA);
+										    				acumulador = String.valueOf(j.getPuntos());
+										    				pts1.setText(acumulador);
+											    			acumulador = "";
+											    			acumulador = String.valueOf(MAQUINA.getPuntos());
+											    			pts2.setText(acumulador);
 											    			
-											    			if(j.getPuntosEnvido() > MAQUINA.getPuntosEnvido() && cantado[0].equals("real envido") && cantado[1].equals("quiero")) {
-											    				j.addPuntos(3);
-											    				acumulador = String.valueOf(j.getPuntos());
-											    				pts1.setText(acumulador);
-											    				
-											    			}
-											    			else {
-											    				MAQUINA.addPuntos(3);
-											    				acumulador = String.valueOf(MAQUINA.getPuntos());
-											    				pts2.setText(acumulador);
-											    			}
+											    			reiniciarMenuCantos();
 											    			
-											    			if(j.getPuntosEnvido() > MAQUINA.getPuntosEnvido() && cantado[0].equals("falta envido") && cantado[1].equals("quiero")) {
-											    				j.addPuntosF(MAQUINA);
-											    				//j.addPuntos(2);
-											    				acumulador = String.valueOf(j.getPuntos());
-											    				pts1.setText(acumulador);
-											    				
-											    			}
-											    			else {
-											    				MAQUINA.addPuntosF(j);
-											    				//MAQUINA.addPuntos(2);
-											    				acumulador = String.valueOf(MAQUINA.getPuntos());
-											    				pts2.setText(acumulador);
-											    			}
+											    		}
+											    		
+											    		/*SI EL JUGADOR NO QUIERE*/
+											    		
+											    		else if(cantado[1].equals("no quiero")) {
 											    			
-											    			if(cantado[1].equals("no quiero")) {
-											    				MAQUINA.addPuntos(1);
-											    				acumulador = String.valueOf(MAQUINA.getPuntos());
-											    				pts2.setText(acumulador);
-											    				
-											    			}
+											    			sistPuntuacion(cantado,j,MAQUINA);
+										    				acumulador = String.valueOf(MAQUINA.getPuntos());
+										    				pts2.setText(acumulador);
 											    			
-											    			cp.remove(menuCantosE);
-															cp.add(menu,BorderLayout.WEST);
-															cp.revalidate();
-															cp.repaint();
-											    			
+										    				reiniciarMenuCantos();
+										    				
 											    		}
 											    		
 											    		/*SI EL JUGADOR REVIRA*/
@@ -973,102 +952,38 @@ public class Interfaz extends JFrame{
 											    			
 											    			MAQUINA.yourTurnAccept(cantado);
 											    			
-											    			//SI LA IA QUIERE/NO QUIERE
+											    			//SI LA IA QUIERE
 											    			
-											    			if(cantado[2].equals("quiero") || cantado[2].equals("no quiero")) {
+											    			if(cantado[2].equals("quiero")) {
 											    				
 											    				/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-											    				
-											    				if(cantado[2].equals("quiero")) {
-											    					System.out.println("la IA quiso");
-											    				}
-											    				else {
-											    					System.out.println("la IA no quiso");
-											    				}
-											    				
+											    				System.out.println("la IA quiso");
 											    				/***/
 											    				
-											    				//SE SUMAN PUNTOS
-											    				//OJO QUE SON MUCHOS CANTOS, TENER EN CUENTA TODAS LAS POSIBILIDADES
+											    				sistPuntuacion(cantado,j,MAQUINA);
+											    				acumulador = String.valueOf(j.getPuntos());
+											    				pts1.setText(acumulador);
+											    				acumulador = "";
+											    				acumulador = String.valueOf(MAQUINA.getPuntos());
+											    				pts2.setText(acumulador);											    				
 											    				
-											    				if(j.getPuntosEnvido() > MAQUINA.getPuntosEnvido() && cantado[0].equals("envido") && cantado[1].equals("envido") && cantado[2].equals("quiero")) {
-												    				j.addPuntos(4);
-												    				acumulador = String.valueOf(j.getPuntos());
-												    				pts1.setText(acumulador);
-												    				
-												    			}
-												    			else {
-												    				MAQUINA.addPuntos(4);
-												    				acumulador = String.valueOf(MAQUINA.getPuntos());
-												    				pts2.setText(acumulador);
-												    			}
-												    			
-											    				if(j.getPuntosEnvido() > MAQUINA.getPuntosEnvido() && cantado[0].equals("envido") && cantado[1].equals("real envido") && cantado[2].equals("quiero")) {
-												    				j.addPuntos(5);
-												    				acumulador = String.valueOf(j.getPuntos());
-												    				pts1.setText(acumulador);
-												    				
-												    			}
-												    			else {
-												    				MAQUINA.addPuntos(5);
-												    				acumulador = String.valueOf(MAQUINA.getPuntos());
-												    				pts2.setText(acumulador);
-												    			}
+											    				reiniciarMenuCantos();
 											    				
-											    				if(j.getPuntosEnvido() > MAQUINA.getPuntosEnvido() && cantado[0].equals("envido") && cantado[1].equals("falta envido") && cantado[2].equals("quiero")) {
-												    				j.addPuntosF(MAQUINA);
-											    					//j.addPuntos();
-												    				acumulador = String.valueOf(j.getPuntos());
-												    				pts1.setText(acumulador);
-												    				
-												    				//SI SE LLEGA A 30 DEBER�A TERMINAR LA PARTIDA
-												    				
-												    			}
-												    			else {
-												    				MAQUINA.addPuntosF(j);
-												    				//MAQUINA.addPuntos();
-												    				acumulador = String.valueOf(MAQUINA.getPuntos());
-												    				pts2.setText(acumulador);
-												    				
-												    				//SI SE LLEGA A 30 DEBER�A TERMINAR LA PARTIDA
-												    				
-												    			}
+											    			}
+											    			
+											    			//SI LA IA NO QUIERE
+											    			
+											    			else if(cantado[2].equals("no quiero")) {
 											    				
-											    				if(j.getPuntosEnvido() > MAQUINA.getPuntosEnvido() && cantado[0].equals("real envido") && cantado[1].equals("falta envido") && cantado[2].equals("quiero")) {
-												    				j.addPuntosF(MAQUINA);
-											    					//j.addPuntos();
-												    				acumulador = String.valueOf(j.getPuntos());
-												    				pts1.setText(acumulador);
-												    				
-												    				//SI SE LLEGA A 30 DEBER�A TERMINAR LA PARTIDA
-												    				
-												    			}
-												    			else {
-												    				MAQUINA.addPuntosF(j);
-												    				//MAQUINA.addPuntos();
-												    				acumulador = String.valueOf(MAQUINA.getPuntos());
-												    				pts2.setText(acumulador);
-												    				
-												    				//SI SE LLEGA A 30 DEBER�A TERMINAR LA PARTIDA
-												    				
-												    			}
+											    				/**PROVISORIO*/
+											    				System.out.println("la IA no quiso");
+											    				/***/
 											    				
-												    			if(cantado[1].equals("envido") && cantado[2].equals("no quiero")) {
-												    				j.addPuntos(2);
-												    				acumulador = String.valueOf(j.getPuntos());
-												    				pts1.setText(acumulador);
-												    			}
-												    			else if(cantado[0].equals("real envido") && cantado[1].equals("falta envido") && cantado[2].equals("no quiero")) {
-												    				j.addPuntos(3);
-												    				acumulador = String.valueOf(j.getPuntos());
-												    				pts1.setText(acumulador);
-												    			}
+											    				sistPuntuacion(cantado,j,MAQUINA);
+											    				acumulador = String.valueOf(j.getPuntos());
+											    				pts1.setText(acumulador);
 											    				
-											    				
-											    				cp.remove(menuCantosE);
-																cp.add(menu,BorderLayout.WEST);
-																cp.revalidate();
-																cp.repaint();
+											    				reiniciarMenuCantos();
 											    				
 											    			}
 											    			
@@ -1122,51 +1037,30 @@ public class Interfaz extends JFrame{
 													    		
 																//SI EL JUGADOR QUIERE
 																
-																if(cantado[3].equals("quiero") || cantado[3].equals("no quiero")) {
+																if(cantado[3].equals("quiero")) {
 																	
 																	//SE SUMAN PUNTOS
 														
-																	if(j.getPuntosEnvido() > MAQUINA.getPuntosEnvido() && cantado[1].equals("envido") && cantado[2].equals("real envido") && cantado[3].equals("quiero")) {
-													    				j.addPuntos(7);
-													    				acumulador = String.valueOf(j.getPuntos());
-													    				pts1.setText(acumulador);
-													    				
-													    			}
-													    			else {
-													    				MAQUINA.addPuntos(7);
-													    				acumulador = String.valueOf(MAQUINA.getPuntos());
-													    				pts2.setText(acumulador);
-													    			}
-												    				
-												    				if(j.getPuntosEnvido() > MAQUINA.getPuntosEnvido() && cantado[1].equals("envido") && cantado[2].equals("falta envido") && cantado[3].equals("quiero")) {
-													    				j.addPuntosF(MAQUINA);
-												    					//j.addPuntos();
-													    				acumulador = String.valueOf(j.getPuntos());
-													    				pts1.setText(acumulador);
-													    				
-													    				//SI SE LLEGA A 30 DEBER�A TERMINAR LA PARTIDA
-													    				
-													    			}
-													    			else {
-													    				MAQUINA.addPuntosF(j);
-													    				//MAQUINA.addPuntos();
-													    				acumulador = String.valueOf(MAQUINA.getPuntos());
-													    				pts2.setText(acumulador);
-													    				
-													    				//SI SE LLEGA A 30 DEBER�A TERMINAR LA PARTIDA
-													    				
-													    			}
-												    				
-													    			if(cantado[3].equals("no quiero")) {
-													    				MAQUINA.addPuntos(4);
-													    				acumulador = String.valueOf(MAQUINA.getPuntos());
-													    				pts2.setText(acumulador);
-													    			}
+																	sistPuntuacion(cantado,j,MAQUINA);
+																	acumulador = String.valueOf(j.getPuntos());
+																	pts1.setText(acumulador);
+																	acumulador = "";
+																	acumulador = String.valueOf(MAQUINA.getPuntos());
+																	pts2.setText(acumulador);
 																	
-																	cp.remove(menuCantosE);
-																	cp.add(menu,BorderLayout.WEST);
-																	cp.revalidate();
-																	cp.repaint();
+																	reiniciarMenuCantos();
+																	
+																}
+																
+																//SI EL JUGADOR NO QUIERE
+																
+																else if(cantado[3].equals("no quiero")) {
+																	
+																	sistPuntuacion(cantado,j,MAQUINA);
+																	acumulador = String.valueOf(MAQUINA.getPuntos());
+																	pts2.setText(acumulador);
+																	
+																	reiniciarMenuCantos();
 																	
 																}
 																
@@ -1176,42 +1070,38 @@ public class Interfaz extends JFrame{
 																	
 																	MAQUINA.yourTurnAccept(cantado);
 																	
-																	//SI LA IA QUISO/NO QUISO
+																	//SI LA IA QUIERE
 																	
-																	/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-												    				
-																	if(cantado[2].equals("quiero")) {
-												    					System.out.println("la IA quiso");
-												    				}
-												    				else {
-												    					System.out.println("la IA no quiso");
-												    				}
-												    		
-												    				/***/
-																	
-																	if(cantado[4].equals("quiero") || cantado[4].equals("no quiero")) {
+																	if(cantado[4].equals("quiero")) {
 																		
-																		//SE SUMAN PUNTOS
-																		if(j.getPuntosEnvido() > MAQUINA.getPuntosEnvido() && cantado[2].equals("real envido") && cantado[3].equals("falta envido") && cantado[4].equals("quiero")) {
-																			j.addPuntosF(MAQUINA);
-																			//j.addPuntos(7);
-														    				acumulador = String.valueOf(j.getPuntos());
-														    				pts1.setText(acumulador);
-														    				
-														    			}
-														    			else {
-														    				MAQUINA.addPuntosF(j);
-																			//j.addPuntos(7);
-														    				acumulador = String.valueOf(MAQUINA.getPuntos());
-														    				pts2.setText(acumulador);
-														    			}
+																		/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
+																		System.out.println("la IA quiso");
+																		/***/
 																		
-																		cp.remove(menuCantosE);
-																		cp.add(menu,BorderLayout.WEST);
-																		cp.revalidate();
-																		cp.repaint();
+																		sistPuntuacion(cantado,j,MAQUINA);
+																		acumulador = String.valueOf(j.getPuntos());
+																		pts1.setText(acumulador);
+																		acumulador = "";
+																		acumulador = String.valueOf(MAQUINA.getPuntos());
+																		pts2.setText(acumulador);
+																		
+																		reiniciarMenuCantos();
 																		
 																	}
+																	
+																	else {
+																		
+																		/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
+																		System.out.println("la IA no quiso");
+																		/***/
+																		
+																		sistPuntuacion(cantado,j,MAQUINA);
+																		acumulador = String.valueOf(j.getPuntos());
+																		pts1.setText(acumulador);
+																		
+																	}
+																	
+																	reiniciarMenuCantos();
 																	
 																}
 																
@@ -1229,7 +1119,7 @@ public class Interfaz extends JFrame{
 										        	texto.setText("<html>"+ "" +"</html>");
 										        	
 										        	for(int i=0;i<5;i++) {
-										        		cantado[i] = null;
+										        		cantado[i] = "";
 										        	}
 										        										        	
 										        	mostrarTirada(tiraIA,tiraIAnull);
@@ -1249,11 +1139,11 @@ public class Interfaz extends JFrame{
 											        
 										        }	//FIN IF DEL CANTO DE ENVIDO
 										        
+										        for(int i=0;i<5;i++) {
+									        		cantado[i] = "";
+									        	}
 										        
-										        /*SI NO TIENE PARA EL ENVIDO TIRA LA CARTA DIRECTAMENTE*/
-										        
-										        
-//										        else {
+										        /*SI LA IA CANTO ENVIDO ENTONCES SE DESACTIVA EL BOTON, SINO SE MANTIENE ACTIVO*/
 											        
 									        	if(cantoEnvido == true) {
 									        		envido.setEnabled(false);
@@ -1262,6 +1152,8 @@ public class Interfaz extends JFrame{
 									        		envido.setEnabled(true);
 									        	}
 									        
+									        	/*SI NO TIENE PARA EL ENVIDO TIRA LA CARTA DIRECTAMENTE*/
+									        	
 									        	mostrarTirada(tiraIA,tiraIAnull);
 									        	auxIA = tiraIA[0];					//esto me sirve para comparar las cartas cuando el jugador tire sin cantar (en la primera)
 										        truco.setEnabled(true);
@@ -1270,44 +1162,45 @@ public class Interfaz extends JFrame{
 										        c3.setEnabled(true);
 										        quiero.setEnabled(false);
 										        noQuiero.setEnabled(false);
-										        accionUsuario = false;
 											        
-											        //MAQUINA.setBandera(false);
+											    //MAQUINA.setBandera(false);
 											        
-											      //tengo que realizar otro hilo de espera por si el jugador canta truco/envido / o tira carta
+										        //tengo que realizar otro hilo de espera por si el jugador canta truco/envido / o tira carta
 											        
-											        Thread espero3 = new Thread() {
-										    			
-										    			@Override
-										    			public void run() {
-												    		
-										    				System.out.print("\nEspero que el jugador tire carta / me cante truco/envido y concluya su turno ");
-										    				while(accionUsuario == false) {
-										    					try {
-													    			System.out.print(". ");
-													    			Thread.sleep(1000);
-																} catch (InterruptedException e) {
-																	e.printStackTrace();
-																}
-												    		}
-												    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-										    			}
-										    			
-										    		};
+									        	accionUsuario = false;
+										        Thread espero3 = new Thread() {
 									    			
-										    		espero3.start();	
-										    		
-										    		try {
-														espero3.join();					
+									    			@Override
+									    			public void run() {
+											    		
+									    				System.out.print("\nEspero que el jugador tire carta / me cante truco/envido y concluya su turno ");
+									    				while(accionUsuario == false) {
+									    					try {
+												    			System.out.print(". ");
+												    			Thread.sleep(1000);
+															} catch (InterruptedException e) {
+																e.printStackTrace();
+															}
+											    		}
+											    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+									    			}
+									    			
+									    		};
+								    			
+									    		espero3.start();	
+									    		
+									    		try {
+													espero3.join();					
 //														Thread.sleep(1000);
-													}catch(InterruptedException e) {}
+												}catch(InterruptedException e) {}
+									    		
 										    		
 										    		
-										    		/*EL JUGADOR PUEDE CANTAR ENVIDO (SI NO SE CANTO PREVIAMENTE)*/
-										    		//NOTA: la IA nunca va a querer cuando arranca ella, pero si puede querer cuando arranca la ronda el jugador
-										    		//este codigo nunca se va a ejecutar si la IA empieza, pero puede servir para cuando el jugador inicie la ronda
-										    		if(envidoNo == false) {
-										    		
+									    		/*EL JUGADOR PUEDE CANTAR ENVIDO (SI NO SE CANTO PREVIAMENTE)*/
+									    		//NOTA: la IA nunca va a querer cuando arranca ella, pero si puede querer cuando arranca la ronda el jugador
+									    		//este codigo nunca se va a ejecutar si la IA empieza, pero puede servir para cuando el jugador inicie la ronda
+										    	//IMPORTANTE: ahora que se implemento la mentira, puede servir.
+									    		
 										    		if(cantado[0].equals("envido") || cantado[0].equals("real envido") || cantado[0].equals("falta envido")) {
 										    			
 										    			texto.setText("<html>"+ cantado[0] +"</html>");
@@ -1318,46 +1211,51 @@ public class Interfaz extends JFrame{
 											    		c2.setEnabled(false);
 											    		c3.setEnabled(false);
 											    		truco.setEnabled(false);
-											    		
+											    		flecha.setEnabled(false);
 											    		
 											    		MAQUINA.yourTurnAccept(cantado);
 											    		
 											    		accionUsuario = false;
 											    		
-											    		/*SI LA IA QUIERE/NO QUIERE*/
+											    		/*SI LA IA QUIERE*/
 											    		
-											    		if(cantado[1].equals("quiero") || cantado[1].equals("no quiero")) {
+											    		if(cantado[1].equals("quiero")) {
 											    			
 											    			/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-										    				
-															if(cantado[1].equals("quiero")) {
-										    					System.out.println("la IA quiso");
-										    				}
-										    				else {
-										    					System.out.println("la IA no quiso");
-										    				}
-										    		
+										    				System.out.println("la IA quiso");
 										    				/***/
 											    			
 											    			//SE SUMAN PUNTOS
 											    			
-															if(cantado[1].equals("no quiero")) {
+										    				sistPuntuacion(cantado,j,MAQUINA);
+										    				acumulador = String.valueOf(j.getPuntos());
+										    				pts1.setText(acumulador);
+										    				acumulador = "";
+										    				acumulador = String.valueOf(MAQUINA.getPuntos());
+										    				pts2.setText(acumulador);
 															
-																j.addPuntosF(MAQUINA);
-																//j.addPuntos(7);
-											    				acumulador = String.valueOf(j.getPuntos());
-											    				pts1.setText(acumulador);
-															}
-															
-											    			cp.remove(menuCantosE);
-															cp.add(menu,BorderLayout.WEST);
-															cp.revalidate();
-															cp.repaint();
+											    			reiniciarMenuCantos();
 															
 															envido.setEnabled(false);
 															
+											    		}
+											    		
+											    		/*SI LA IA NO QUIERE*/
+											    		
+											    		else if(cantado[1].equals("no quiero")) {
+											    			
+											    			/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
+										    				System.out.println("la IA no quiso");
+										    				/***/
+										    				
+										    				sistPuntuacion(cantado,j,MAQUINA);
+										    				acumulador = String.valueOf(j.getPuntos());
+										    				pts1.setText(acumulador);
+										    				
+										    				reiniciarMenuCantos();
 															
-														
+															envido.setEnabled(false);
+										    				
 											    		}
 											    		
 											    		/*SI LA IA REVIRA*/
@@ -1374,6 +1272,7 @@ public class Interfaz extends JFrame{
 											    				
 											    				quiero.setEnabled(true);
 											    				noQuiero.setEnabled(true);
+											    				cantarEnvido.setEnabled(false);
 											    				
 											    				Thread espero4 = new Thread() {
 													    			
@@ -1401,23 +1300,44 @@ public class Interfaz extends JFrame{
 //																	Thread.sleep(1000);
 																}catch(InterruptedException e) {}
 											    				
-													    		/* SI EL JUGADOR QUIERE/NO QUIERE */
+													    		/* SI EL JUGADOR QUIERE */
 													    		
-													    		if(cantado[2].equals("quiero") || cantado[2].equals("no quiero")) {
+													    		if(cantado[2].equals("quiero")) {
 													    			//SE SUMAN PUNTOS
 													    			
-													    			cp.remove(menuCantosE);
-																	cp.add(menu,BorderLayout.WEST);
-																	cp.revalidate();
-																	cp.repaint();
+													    			sistPuntuacion(cantado,j,MAQUINA);
+													    			acumulador = String.valueOf(j.getPuntos());
+													    			pts1.setText(acumulador);
+													    			acumulador = "";
+													    			acumulador = String.valueOf(MAQUINA.getPuntos());
+													    			pts2.setText(acumulador);
+													    			
+													    			reiniciarMenuCantos();
 																	
 																	envido.setEnabled(false);
 																	
 													    		}
 													    		
+													    		/*SI EL JUGADOR NO QUIERE*/
+													    		
+													    		else if(cantado[2].equals("no quiero")) {
+													    			//SE SUMAN PUNTOS
+													    			
+													    			sistPuntuacion(cantado,j,MAQUINA);
+													    			acumulador = String.valueOf(MAQUINA.getPuntos());
+													    			pts2.setText(acumulador);
+													    			
+													    			reiniciarMenuCantos();
+													    			
+													    			envido.setEnabled(false);
+													    		}
+													    		
 													    		/* SI EL JUGADOR REVIRA */
 													    		
 													    		else if(cantado[2].equals("real envido") || cantado[2].equals("falta envido")) {
+													    			
+													    			real_envido.setEnabled(false);
+													    			falta_envido.setEnabled(false);
 													    			
 													    			MAQUINA.yourTurnAccept(cantado);
 													    			
@@ -1425,28 +1345,44 @@ public class Interfaz extends JFrame{
 													    			
 													    			//SI LA IA QUIERE
 														    		
-														    		if(cantado[3].equals("quiero") || cantado[3].equals("no quiero")) {
+														    		if(cantado[3].equals("quiero")) {
 														    			
 																		/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-													    				
-																		if(cantado[3].equals("quiero")) {
-													    					System.out.println("la IA quiso");
-													    				}
-													    				else {
-													    					System.out.println("la IA no quiso");
-													    				}
-													    		
+													    				System.out.println("la IA quiso");
 													    				/***/
 														    			
 														    			//SE SUMAN PUNTOS
 														    			
-														    			cp.remove(menuCantosE);
-																		cp.add(menu,BorderLayout.WEST);
-																		cp.revalidate();
-																		cp.repaint();
+													    				sistPuntuacion(cantado,j,MAQUINA);
+													    				acumulador = String.valueOf(j.getPuntos());
+													    				pts1.setText(acumulador);
+													    				acumulador = "";
+													    				acumulador = String.valueOf(MAQUINA.getPuntos());
+													    				pts2.setText(acumulador);
+																		
+																		reiniciarMenuCantos();
 																		
 																		envido.setEnabled(false);
 																		
+														    		}
+														    		
+														    		/*SI LA IA NO QUIERE*/
+														    		
+														    		else if(cantado[3].equals("no quiero")) {
+														    			
+														    			/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
+													    				System.out.println("la IA quiso");
+													    				/***/
+														    			
+														    			//SE SUMAN PUNTOS
+														    			
+													    				sistPuntuacion(cantado,j,MAQUINA);
+													    				acumulador = String.valueOf(j.getPuntos());
+													    				pts1.setText(acumulador);
+														    			
+														    			reiniciarMenuCantos();
+														    			
+														    			envido.setEnabled(false);
 														    		}
 														    		
 														    		/*SI LA IA REVIRA*/
@@ -1488,19 +1424,36 @@ public class Interfaz extends JFrame{
 //																			Thread.sleep(1000);
 																		}catch(InterruptedException e) {}
 														    			
-															    		/* SI EL JUGADOR QUIERE/NO QUIERE */
+															    		/* SI EL JUGADOR QUIERE */
 															    		
-															    		if(cantado[4].equals("quiero") || cantado[4].equals("no quiero")) {
-															    			
+															    		if(cantado[4].equals("quiero")) {
 															    			//SE SUMAN PUNTOS
 															    			
-															    			cp.remove(menuCantosE);
-																			cp.add(menu,BorderLayout.WEST);
-																			cp.revalidate();
-																			cp.repaint();
+															    			sistPuntuacion(cantado,j,MAQUINA);
+															    			acumulador = String.valueOf(j.getPuntos());
+															    			pts1.setText(acumulador);
+															    			acumulador = "";
+															    			acumulador = String.valueOf(MAQUINA.getPuntos());
+															    			pts2.setText(acumulador);
+															    			
+															    			reiniciarMenuCantos();
 																			
 																			envido.setEnabled(false);
 																			
+															    		}
+															    		
+															    		/*SI EL JUGADOR NO QUIERE*/
+															    		
+															    		else {
+															    			//SE SUMAN PUNTOS
+															    			
+															    			sistPuntuacion(cantado,j,MAQUINA);
+															    			acumulador = String.valueOf(MAQUINA.getPuntos());
+															    			pts2.setText(acumulador);
+															    			
+															    			reiniciarMenuCantos();
+															    			
+															    			envido.setEnabled(false);
 															    		}
 															    		
 														    		}
@@ -1512,7 +1465,9 @@ public class Interfaz extends JFrame{
 											    				
 											    				quiero.setEnabled(true);
 											    				noQuiero.setEnabled(true);
-											    				
+											    				cantarEnvido.setEnabled(false);
+											    				real_envido.setEnabled(false);
+											    															    				
 											    				accionUsuario = false;
 											    				
 											    					//nota: si se complica, cambiar a nombre diferente
@@ -1544,1626 +1499,211 @@ public class Interfaz extends JFrame{
 											    				
 													    		/* SI EL JUGADOR QUIERE */
 													    		
-													    		if(cantado[2].equals("quiero") || cantado[2].equals("no quiero")) {
+													    		if(cantado[2].equals("quiero")) {
 													    			//SE SUMAN PUNTOS
 													    			
-													    			cp.remove(menuCantosE);
-																	cp.add(menu,BorderLayout.WEST);
-																	cp.revalidate();
-																	cp.repaint();
+													    			sistPuntuacion(cantado,j,MAQUINA);
+													    			acumulador = String.valueOf(j.getPuntos());
+													    			pts1.setText(acumulador);
+													    			acumulador = "";
+													    			acumulador = String.valueOf(MAQUINA.getPuntos());
+													    			pts2.setText(acumulador);
+													    			
+													    			reiniciarMenuCantos();
 																	
 																	envido.setEnabled(false);
+													    		}
+													    		
+													    		/*SI EL JUGADOR NO QUIERE*/
+													    		
+													    		else if(cantado[2].equals("no quiero")) {
+													    			//SE SUMAN PUNTOS
+													    			
+													    			sistPuntuacion(cantado,j,MAQUINA);
+													    			acumulador = String.valueOf(MAQUINA.getPuntos());
+													    			pts2.setText(acumulador);
+													    			
+													    			reiniciarMenuCantos();
+													    			envido.setEnabled(false);
 													    		}
 													    		
 													    		/* SI EL JUGADOR REVIRA */
 													    			
 													    		else if(cantado[2].equals("falta envido")) {
 													    			
+													    			falta_envido.setEnabled(false);
+													    			
 													    			MAQUINA.yourTurnAccept(cantado);
 													    			
-													    			/* SI LA MAQUINA QUIERE/NO QUIERE */
+													    			/* SI LA MAQUINA QUIERE */
 													    			
-													    			if(cantado[3].equals("quiero") || cantado[3].equals("no quiero")) {
+													    			if(cantado[3].equals("quiero")) {
 														    			
 																		/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-													    				
-																		if(cantado[3].equals("quiero")) {
-													    					System.out.println("la IA quiso");
-													    				}
-													    				else {
-													    					System.out.println("la IA no quiso");
-													    				}
-													    		
+													    				System.out.println("la IA quiso");
 													    				/***/
 													    				
 													    				//SE SUMAN PUNTOS
 														    			
-														    			cp.remove(menuCantosE);
-																		cp.add(menu,BorderLayout.WEST);
-																		cp.revalidate();
-																		cp.repaint();
+													    				sistPuntuacion(cantado,j,MAQUINA);
+													    				acumulador = String.valueOf(j.getPuntos());
+													    				pts1.setText(acumulador);
+													    				acumulador = "";
+													    				acumulador = String.valueOf(MAQUINA.getPuntos());
+													    				pts2.setText(acumulador);
 																		
+														    			reiniciarMenuCantos();
 																		envido.setEnabled(false);
 																		
 														    		}
 													    			
+													    			/*SI LA MAQUINA NO QUIERE*/
+													    			
+													    			else {
+													    				
+													    				/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
+													    				System.out.println("la IA no quiso");
+													    				/***/
+													    				
+													    				//SE SUMAN PUNTOS
+													    				
+													    				sistPuntuacion(cantado,j,MAQUINA);
+													    				acumulador = String.valueOf(j.getPuntos());
+													    				pts1.setText(acumulador);
+													    				
+													    				reiniciarMenuCantos();
+													    				
+													    				envido.setEnabled(false);
+													    				
+													    			}
+													    			
 													    		}
 													    		
 											    			}
+											    			
 											    			else {
+											    				
+											    				cantarEnvido.setEnabled(false);
+											    				real_envido.setEnabled(false);
+											    				falta_envido.setEnabled(false);
 											    				
 											    				quiero.setEnabled(true);
 											    				noQuiero.setEnabled(true);
 											    				
-											    				/* SI EL JUGADOR QUIERE / NO QUIERE */
+											    				/* SI EL JUGADOR QUIERE */
 											    				
-											    				if(cantado[2].equals("quiero") || cantado[2].equals("no quiero")) {
+											    				if(cantado[2].equals("quiero")) {
 													    			//SE SUMAN PUNTOS
 													    			
-													    			cp.remove(menuCantosE);
-																	cp.add(menu,BorderLayout.WEST);
-																	cp.revalidate();
-																	cp.repaint();
+											    					sistPuntuacion(cantado,j,MAQUINA);
+											    					acumulador = String.valueOf(j.getPuntos());
+											    					pts1.setText(acumulador);
+											    					acumulador = "";
+											    					acumulador = String.valueOf(MAQUINA.getPuntos());
+											    					pts2.setText(acumulador);
+											    					
+													    			reiniciarMenuCantos();
 																	
 																	envido.setEnabled(false);
 													    		}
+											    				
+											    				/*SI EL JUGADOR NO QUIERE*/
+											    				
+											    				else if(cantado[2].equals("no quiero")) {
+											    					//SE SUMAN PUNTOS
+											    					
+											    					sistPuntuacion(cantado,j,MAQUINA);
+											    					acumulador = String.valueOf(MAQUINA.getPuntos());
+											    					pts2.setText(acumulador);
+											    					
+											    					reiniciarMenuCantos();
+																	envido.setEnabled(false);
+											    					
+											    				}
 											    				
 											    			}
 											    			
 											    		}
 											    		
-										    		}	//FIN ENVIDO JUGADOR
+											    		/*SI TERMINA DE CANTAR ENVIDO, LUEGO PUEDE CANTAR TRUCO O TIRAR CARTA DIRECTAMENTE*/
+											    		
+											    		/*EL ARREGLO DE CANTADOS VUELVE A NULL POR SI SE CANTA TRUCO*/
+											    		
+											    		for(int i=0;i<5;i++) {
+											        		cantado[i] = "";
+											        		cantadoTruco[i] = "";
+											        	}
+											    		
+											    		texto.setText("<html>"+ "" +"</html>");
+											    		
+											    		truco.setEnabled(true);
+											    		c1.setEnabled(true);
+											    		c2.setEnabled(true);
+											    		c3.setEnabled(true);
+											    		
+											    		accionUsuario = false;
+											    		Thread espero6 = new Thread() {
+											    			
+											    			@Override
+											    			public void run() {
+													    		
+											    				System.out.print("\nEspero que el jugador cante truco / tire carta y concluya su turno ");
+											    				while(accionUsuario == false) {
+											    					try {
+														    			System.out.print(". ");
+														    			Thread.sleep(1000);
+																	} catch (InterruptedException e) {
+																		e.printStackTrace();
+																	}
+													    		}
+													    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+											    			}
+											    			
+											    		};
+										    			
+											    		espero6.start();	
+											    		
+											    		try {
+															espero6.join();					
+	//														Thread.sleep(1000);
+														}catch(InterruptedException e) {}
+											    		
+											    		/*SE REALIZA TRUCO/TIRAR DIR MEDIANTE LA LLAMADA A FUNCION*/
+											    		
+											    		if(cantadoTruco[0].equals("truco")) {
+											    			
+											    			truco();
+											    			
+											    		}
+											    		
+											    		else {
+											    			
+											    			tirarDir();
+											    			
+											    		}
+											    		
 										    		}
-										    		
-										    		/*EL ARREGLO DE CANTADOS VUELVE A NULL POR SI SE CANTA TRUCO*/
-										    		
-										    		for(int i=0;i<5;i++) {
-										        		cantado[i] = null;
-										        		cantadoTruco[i] = "";
-										        	}
-										    		
-										    		texto.setText("<html>"+ "" +"</html>");
-										    		
-										    		truco.setEnabled(true);
-										    		c1.setEnabled(true);
-										    		c2.setEnabled(true);
-										    		c3.setEnabled(true);
-										    		
-										    		Thread espero6 = new Thread() {
-										    			
-										    			@Override
-										    			public void run() {
-												    		
-										    				System.out.print("\nEspero que el jugador cante truco / tire carta y concluya su turno ");
-										    				while(accionUsuario == false) {
-										    					try {
-													    			System.out.print(". ");
-													    			Thread.sleep(1000);
-																} catch (InterruptedException e) {
-																	e.printStackTrace();
-																}
-												    		}
-												    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-										    			}
-										    			
-										    		};
-									    			
-										    		espero6.start();	
-										    		
-										    		try {
-														espero6.join();					
-//														Thread.sleep(1000);
-													}catch(InterruptedException e) {}
-										    		
 										    		
 										    		
 										    		/*EL JUGADOR PUEDE CANTAR TRUCO*/
-											        
-										    		System.out.println(cantadoTruco[0] + " chequeando");
 										    		
-										    		if(cantadoTruco[0].equals("truco")) {
+										    		else if(cantadoTruco[0].equals("truco")) {
 										    			
-										    			c1.setEnabled(false);
-										    			c2.setEnabled(false);
-										    			c3.setEnabled(false);
-										    			quiero.setEnabled(false);
-										    			noQuiero.setEnabled(false);
+										    			truco();
 										    			
-										    			MAQUINA.yourTurnAccept(cantadoTruco);
-										    			
-										    			/*SI LA IA QUIERE*/
-										    			
-										    			if(cantadoTruco[1].equals("quiero")) {
-										    				
-
-															/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-										    					System.out.println("la IA quiso");
-										    				/***/
-										    				
-										    				c1.setEnabled(true);
-											    			c2.setEnabled(true);
-											    			c3.setEnabled(true);
-										    				
-										    				//TENER EN CUENTA VARIABLES COMO CANTADO[] / LAS AUX Y OTRAS (EN RELACION A SU VALOR)
-										    				trucoQuerido();
-										    				texto.setText("<html>"+ "" +"</html>");
-										    			}
-										    			
-										    			/*SI LA IA REVIRA*/
-										    			
-										    			else if(cantadoTruco[1].equals("retruco")){
-
-															/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-										    					System.out.println("la IA revira");
-										    				/***/
-										    				
-										    				quiero.setEnabled(true);
-											    			noQuiero.setEnabled(true);
-										    				
-										    				Thread espero13 = new Thread() {
-												    			
-												    			@Override
-												    			public void run() {
-														    		
-												    				System.out.print("\nEspero que el jugador quiera/no quiera - revire ");
-												    				while(accionUsuario == false) {
-												    					try {
-															    			System.out.print(". ");
-															    			Thread.sleep(1000);
-																		} catch (InterruptedException e) {
-																			e.printStackTrace();
-																		}
-														    		}
-														    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-												    			}
-												    			
-												    		};
-											    			
-												    		espero13.start();	
-												    		
-												    		try {
-																espero13.join();					
-//																Thread.sleep(1000);
-															}catch(InterruptedException e) {}
-										    				
-												    		/*SI EL JUGADOR QUIERE*/
-												    		
-												    		if(cantadoTruco[2].equals("quiero")) {
-												    			
-												    			c1.setEnabled(true);
-												    			c2.setEnabled(true);
-												    			c3.setEnabled(true);
-												    			
-												    			//ac� voy a tener que reciclar codigo y debo estar atento a como crear la funcion
-											    				
-												    			trucoQuerido();
-												    			texto.setText("<html>"+ "" +"</html>");
-												    		}
-												    		
-												    		/*SI EL JUGADOR REVIRA*/
-												    		
-												    		else if(cantadoTruco[2].equals("vale cuatro")) {
-												    			
-												    			quiero.setEnabled(false);
-												    			noQuiero.setEnabled(false);
-												    			
-												    			MAQUINA.yourTurnAccept(cantadoTruco);
-												    			
-												    			/*SI LA IA QUIERE*/
-												    			
-												    			if(cantadoTruco[3].equals("quiero")) {
-												    				
-																	/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-												    					System.out.println("la IA quiso");
-												    				/***/
-												    				
-												    				c1.setEnabled(true);
-													    			c2.setEnabled(true);
-													    			c3.setEnabled(true);
-													    			
-													    			//ac� voy a tener que reciclar codigo y debo estar atento a como crear la funcion
-												    				
-												    				trucoQuerido();
-												    				texto.setText("<html>"+ "" +"</html>");
-												    			}
-												    			
-												    			/*SI LA IA NO QUIERE*/
-												    			
-												    			else {
-																	
-												    				/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-												    					System.out.println("la IA no quiso");
-												    				/***/
-												    				
-												    				texto.setText("<html>"+ "" +"</html>");
-												    				//EL JUGADOR GANA
-													    			//SE SUMAN PUNTOS
-												    				
-												    				j.addPuntos(3);
-												    				
-													    			//SIGUIENTE RONDA
-												    			}
-												    			
-												    		}
-												    		
-												    		/*SI EL JUGADOR NO QUIERE*/
-												    		
-												    		else {
-												    			texto.setText("<html>"+ "" +"</html>");
-												    			//LA IA GANA
-												    			//SE SUMAN PUNTOS
-												    			
-												    			MAQUINA.addPuntos(2);
-												    			
-												    			//SIGUIENTE RONDA
-												    		}
-										    				
-										    			}
-										    			
-										    			/*SI LA IA NO QUIERE*/
-										    			
-										    			else if(cantadoTruco[1].equals("no quiero")) {
-															
-										    				/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-										    					System.out.println("la IA no quiso");
-										    				/***/
-										    				
-										    				texto.setText("<html>"+ "" +"</html>");
-										    				//EL JUGADOR GANA
-										    				//SE SUMAN PUNTOS
-										    				
-										    				j.addPuntos(1);
-										    				
-										    				//SIGUIENTE RONDA
-										    				
-										    			}
-										    			
-										    		}
+										    		} 
 											        
-										    		
 										    		
 											        /*EL JUGADOR PUEDE TIRAR CARTA DIRECTAMENTE*/
 											        
 										    		else {
 										    			
-										    			auxJ = queCartaFueTirada();
-											    		
-										    			/* SI EL JUGADOR NO LA MATA */
-										    			
-										    			if(aux.returnOrden(auxJ) > aux.returnOrden(auxIA)) {
-										    				
-										    				c1.setEnabled(false);
-										    				c2.setEnabled(false);
-										    				c3.setEnabled(false);
-										    				truco.setEnabled(false);
-										    				quiero.setEnabled(false);
-										    				noQuiero.setEnabled(false);
-										    				
-										    				tiraIA = null;
-										    				tiraIA = MAQUINA.yourTurn(cantadoTruco, null);
-										    				
-										    				/*LA IA PUEDE CANTAR TRUCO*/
-										    				
-										    				if(cantadoTruco[0].equals("truco")) {
-										    						
-										    						quiero.setEnabled(true);
-										    						noQuiero.setEnabled(true);
-										    					
-										    						accionUsuario = false;
-										    						Thread espero15 = new Thread() {
-											    	    			
-											    	    			@Override
-											    	    			public void run() {
-											    			    		
-											    	    				System.out.print("\nEspero que el jugador quiera/no quiera el truco ");
-											    	    				while(accionUsuario == false) {
-											    	    					try {
-											    				    			System.out.print(". ");
-											    				    			Thread.sleep(1000);
-											    							} catch (InterruptedException e) {
-											    								e.printStackTrace();
-											    							}
-											    			    		}
-											    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-											    	    			}
-											    	    			
-											    	    		};
-											        			
-											    	    		espero15.start();	
-											    	    		
-											    	    		try {
-											    					espero15.join();					
-//											    					Thread.sleep(1000);
-											    				}catch(InterruptedException e) {}
-										    					
-										    					/*SI EL JUGADOR QUIERE*/
-										    					
-										    					if(cantadoTruco[1].equals("quiero")) {		//BLOQUE 1
-										    						
-										    						trucoQueridoBloque1();
-										    						
-										    					}
-										    					
-										    					/*SI EL JUGADOR NO QUIERE*/
-										    					
-										    					else if(cantadoTruco[1].equals("no quiero")) {
-										    						//LA IA GANA
-										    						//SE SUMAN PUNTOS
-										    																    						
-										    						//SIGUIENTE RONDA
-										    					}
-										    					
-										    					/*SI EL JUGADOR REVIRA*/
-										    					
-										    					else if(cantadoTruco[1].equals("retruco")){
-										    						
-										    						MAQUINA.yourTurnAccept(cantadoTruco);
-										    						
-										    						/* SI LA IA QUIERE*/
-										    						
-										    						if(cantadoTruco[2].equals("quiero")) {	//BLOQUE 1
-										    							
-										    							trucoQueridoBloque1();
-										    							
-										    						}
-										    						
-										    						/*SI LA IA NO QUIERE*/
-										    						
-										    						else if(cantadoTruco[2].equals("no quiero")) {
-										    							//EL JUGADOR GANA
-										    							//SE SUMAN PUNTOS
-										    							//SIGUIENTE RONDA
-										    						}
-										    						
-										    						/*SI LA IA REVIRA*/
-										    						
-										    						else if(cantadoTruco[2].equals("vale cuatro")){
-										    							
-										    							/*SI EL JUGADOR QUIERE*/
-										    							
-										    							if(cantadoTruco[3].equals("quiero")) {	//BLOQUE 1
-										    								
-										    								trucoQueridoBloque1();
-										    								
-										    							}
-										    							
-										    							/*SI EL JUGADOR NO QUIERE*/
-										    							
-										    							else {
-										    								//LA IA GANA
-											    							//SE SUMAN PUNTOS
-											    							//SIGUIENTE RONDA
-										    							}
-										    							
-										    						}
-										    						
-										    					}
-										    					
-										    				}
-										    				
-										    				/*LA IA PUEDE TIRAR CARTA DIRECTAMENTE*/
-										    				
-										    	    		else {
-										    					
-										    	    			tiraIA = null;
-											    				tiraIA = MAQUINA.yourTurn(cantado, null);
-											    				tiraIAnull = true;
-											    				mostrarTirada(tiraIA,tiraIAnull);
-											    				auxIA = tiraIA[0];
-											    				
-											    	    		c1.setEnabled(true);
-											    				c2.setEnabled(true);
-											    				c3.setEnabled(true);
-											    				truco.setEnabled(true);
-											    				quiero.setEnabled(false);
-											    				noQuiero.setEnabled(false);
-											    				
-											    				accionUsuario = false;
-											    				Thread espero13 = new Thread() {
-											    	    			
-											    	    			@Override
-											    	    			public void run() {
-											    			    		
-											    	    				System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
-											    	    				while(accionUsuario == false) {
-											    	    					try {
-											    				    			System.out.print(". ");
-											    				    			Thread.sleep(1000);
-											    							} catch (InterruptedException e) {
-											    								e.printStackTrace();
-											    							}
-											    			    		}
-											    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-											    	    			}
-											    	    			
-											    	    		};
-											        			
-											    	    		espero13.start();	
-											    	    		
-											    	    		try {
-											    					espero13.join();					
-//											    					Thread.sleep(1000);
-											    				}catch(InterruptedException e) {}
-										    	    			
-										    					/*EL JUGADOR PUEDE CANTAR TRUCO*/
-										    					
-										    					if(cantadoTruco[0].equals("truco")) {
-										    						
-										    						//apagar todos los botones
-										    						
-										    						MAQUINA.yourTurnAccept(cantadoTruco);
-										    						
-										    						/*SI LA IA QUIERE*/
-										    						
-										    						if(cantadoTruco[1].equals("quiero")) {		//BLOQUE 2
-										    							
-										    							trucoQueridoBloque2();
-										    							
-										    						}
-										    						
-										    						/*SI NO QUIERE*/
-										    						
-										    						else if(cantadoTruco[1].equals("no quiero")) {
-										    							//EL JUGADOR GANA
-										    							//SE SUMAN PUNTOS
-										    							//SIGUIENTE RONDA
-										    						}
-										    						
-										    						/*SI LA IA REVIRA*/
-										    						
-										    						else if(cantadoTruco[1].equals("retruco")){
-										    							
-										    							/*SI EL JUGADOR QUIERE*/
-										    							
-										    							if(cantadoTruco[2].equals("quiero")) {		//BLOQUE 2
-										    								
-										    								trucoQueridoBloque2();
-										    								
-										    							}
-										    							
-										    							/*SI EL JUGADOR NO QUIERE*/
-										    							
-										    							else if(cantadoTruco[2].equals("no quiero")) {
-										    								//LA IA GANA
-										    								//SE SUMAN PUNTOS
-										    								//SIGUIENTE RONDA
-										    							}
-										    							
-										    							/*SI EL JUGADOR REVIRA*/
-										    							
-										    							else if(cantadoTruco[2].equals("vale cuatro")){
-										    								
-										    								MAQUINA.yourTurnAccept(cantadoTruco);
-										    								
-										    								/*SI LA IA QUIERE*/
-										    								
-										    								if(cantadoTruco[3].equals("quiero")) {		//BLOQUE 2
-										    									
-										    									trucoQueridoBloque2();
-										    									
-										    								}
-										    								
-										    								/*SI LA IA NO QUIERE*/
-										    								
-										    								else {
-										    									//EL JUGADOR GANA
-										    									//SE SUMAN PUNTOS
-										    									//SIGUIENTE RONDA
-										    								}
-										    								
-										    							}
-										    							
-										    						}
-										    						
-										    						
-										    					}
-										    					
-										    					/*EL JUGADOR PUEDE TIRAR CARTA DIRECTAMENTE*/
-										    					
-										    					else {
-										    						
-										    						auxJ = queCartaFueTirada();
-										    						
-										    						/*SI EL JUGADOR NO LA MATA/EMPARDA*/
-										    						
-										    						if(aux.returnOrden(auxJ) >= aux.returnOrden(auxIA)) {
-										    							//LA IA GANA
-										    							//SE SUMAN PUNTOS
-										    							//SIGUIENTE RONDA
-										    						}
-										    						
-										    						/*SI EL JUGADOR LA MATA*/
-										    						
-										    						else {
-										    							
-										    							accionUsuario = false;
-													    				Thread espero17 = new Thread() {
-													    	    			
-													    	    			@Override
-													    	    			public void run() {
-													    			    		
-													    	    				System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
-													    	    				while(accionUsuario == false) {
-													    	    					try {
-													    				    			System.out.print(". ");
-													    				    			Thread.sleep(1000);
-													    							} catch (InterruptedException e) {
-													    								e.printStackTrace();
-													    							}
-													    			    		}
-													    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-													    	    			}
-													    	    			
-													    	    		};
-													        			
-													    	    		espero17.start();	
-													    	    		
-													    	    		try {
-													    					espero17.join();					
-//													    					Thread.sleep(1000);
-													    				}catch(InterruptedException e) {}
-										    							
-										    							/*EL JUGADOR PUEDE CANTAR TRUCO*/
-										    							
-										    							if(cantadoTruco[0].equals("truco")) {
-										    								
-										    								MAQUINA.yourTurnAccept(cantadoTruco);
-										    								
-										    								/*SI LA IA QUIERE*/
-										    								
-										    								if(cantadoTruco[1].equals("quiero")) {			//BLOQUE 3
-										    									
-										    									trucoQueridoBloque3();
-										    									
-										    								}
-										    								
-										    								/*SI LA IA NO QUIERE*/
-										    								
-										    								else if(cantadoTruco[1].equals("no quiero")) {
-										    									//EL JUGADOR GANA
-										    									//SE SUMAN PUNTOS
-										    									//SIGUIENTE RONDA
-										    								}
-										    								
-										    								/*SI LA IA REVIRA*/
-										    								
-										    								else if(cantadoTruco[1].equals("retruco")){
-										    									
-										    									/*SI EL JUGADOR QUIERE*/
-										    									
-										    									if(cantadoTruco[2].equals("quiero")) {		//BLOQUE 3
-										    										
-										    										trucoQueridoBloque3();
-										    										
-										    									}
-										    									
-										    									/*SI EL JUGADOR NO QUIERE*/
-										    									
-										    									else if(cantadoTruco[2].equals("no quiero")) {
-										    										//LA IA GANA
-										    										//SE SUMAN PUNTOS
-										    										//SIGUIENTE RONDA
-										    									}
-										    									
-										    									/*SI EL JUGADOR REVIRA*/
-										    									
-										    									else if(cantadoTruco[2].equals("vale cuatro")){
-										    										
-										    										MAQUINA.yourTurnAccept(cantadoTruco);
-										    										
-										    										/*SI LA IA QUIERE*/
-										    						
-										    										if(cantadoTruco[3].equals("quiero")) {		//BLOQUE 3
-										    											
-										    											trucoQueridoBloque3();
-										    											
-										    										}
-										    										
-										    										/*SI LA IA NO QUIERE*/
-										    										
-										    										else {
-										    											//EL JUGADOR GANA
-										    											//SE SUMAN PUNTOS
-										    											//SIGUIENTE RONDA
-										    										}
-										    										
-										    									}
-										    									
-										    								}
-										    								
-										    							}
-										    							
-										    							/*EL JUGADOR PUEDE TIRAR CARTA DIRECTAMENTE*/
-										    							
-										    							else {
-										    								
-										    								auxJ = queCartaFueTirada();
-										    								
-										    								/*LA IA PUEDE CANTAR TRUCO*/
-										    								
-										    								if(cantadoTruco[0].equals("truco")) {
-										    									
-										    									accionUsuario = false;
-															    				Thread espero18 = new Thread() {
-															    	    			
-															    	    			@Override
-															    	    			public void run() {
-															    			    		
-															    	    				System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
-															    	    				while(accionUsuario == false) {
-															    	    					try {
-															    				    			System.out.print(". ");
-															    				    			Thread.sleep(1000);
-															    							} catch (InterruptedException e) {
-															    								e.printStackTrace();
-															    							}
-															    			    		}
-															    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-															    	    			}
-															    	    			
-															    	    		};
-															        			
-															    	    		espero18.start();	
-															    	    		
-															    	    		try {
-															    					espero18.join();					
-//															    					Thread.sleep(1000);
-															    				}catch(InterruptedException e) {}
-										    									
-										    									/*SI EL JUGADOR QUIERE*/
-										    									
-										    									if(cantadoTruco[1].equals("quiero")) {	//BLOQUE 4
-										    										
-										    										trucoQueridoBloque4();
-										    										
-										    									}
-										    									
-										    									/*SI EL JUGADOR NO QUIERE*/
-										    									
-										    									else if(cantadoTruco[1].equals("no quiero")) {
-										    									
-										    										//LA IA GANA
-										    										//SE SUMAN PUNTOS
-										    										//SIGUIENTE RONDA
-										    									}
-										    									
-										    									/*SI EL JUGADOR REVIRA*/
-										    									
-										    									else if(cantadoTruco[1].equals("retruco")){
-										    										
-										    										MAQUINA.yourTurnAccept(cantadoTruco);
-										    										
-										    										/*SI LA IA QUIERE*/
-										    										
-										    										if(cantadoTruco[2].equals("quiero")) {	//BLOQUE 4
-										    											
-										    											trucoQueridoBloque4();
-										    											
-										    										}
-										    										
-										    										/*SI LA IA NO QUIERE*/
-										    										
-										    										else if(cantadoTruco[2].equals("no quiero")) {
-										    											//EL JUGADOR GANA
-										    											//SE SUMAN PUNTOS
-										    											//SIGUIENTE RONDA
-										    										}
-										    										
-										    										/*SI LA IA REVIRA*/
-										    										
-										    										else if(cantadoTruco[2].equals("vale cuatro")) {
-										    											
-										    											/*SI EL JUGADOR QUIERE*/
-										    											
-										    											if(cantadoTruco[3].equals("quiero")) {	//BLOQUE 4
-										    												
-										    												trucoQueridoBloque4();
-										    												
-										    											}
-										    											
-										    											/*SI EL JUGADOR NO QUIERE*/
-										    											
-										    											else {
-										    												//LA IA GANA
-										    												//SE SUMAN PUNTOS
-										    												//SIGUIENTE RONDA
-										    											}
-										    											
-										    										}
-										    										
-										    									}
-										    								}
-										    								
-										    								/*LA IA TIRA CARTA DIRECTAMENTE*/
-										    								
-										    								else {
-										    									
-										    									//OJO: CHEQUEAR SI EFECTIVAMENTE PERTENENCE AL BLOQUE 4 O SE HACE APARTE
-										    									trucoQueridoBloque4();
-										    									
-										    								}
-										    								
-										    							}
-										    							
-										    						}
-										    						
-										    					}
-										    					
-										    				}
-										    				
-										    				
-										    			}
-										    			
-										    			
-										    			
-										    			/*SI EL JUGADOR EMPARDA*/
-										    			
-										    			else if(aux.returnOrden(auxJ) == aux.returnOrden(auxIA)){
-										    				
-										    				tiraIA = null;
-										    				tiraIA = MAQUINA.yourTurn(cantadoTruco, null);
-										    				
-										    				/*LA IA CANTA TRUCO*/
-										    				
-										    				if(cantadoTruco[0].equals("truco")) {
-										    					
-										    					accionUsuario = false;
-											    				Thread espero19 = new Thread() {
-											    	    			
-											    	    			@Override
-											    	    			public void run() {
-											    			    		
-											    	    				System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
-											    	    				while(accionUsuario == false) {
-											    	    					try {
-											    				    			System.out.print(". ");
-											    				    			Thread.sleep(1000);
-											    							} catch (InterruptedException e) {
-											    								e.printStackTrace();
-											    							}
-											    			    		}
-											    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-											    	    			}
-											    	    			
-											    	    		};
-											        			
-											    	    		espero19.start();	
-											    	    		
-											    	    		try {
-											    					espero19.join();					
-//											    					Thread.sleep(1000);
-											    				}catch(InterruptedException e) {}
-										    					
-										    					/*EL JUGADOR QUIERE*/
-										    					
-										    					if(cantadoTruco[1].equals("quiero")) {				//BLOQUE 5
-										    						
-										    						trucoQueridoBloque5();
-										    						
-										    					}
-										    					
-										    					/*EL JUGADOR NO QUIERE*/
-										    					
-										    					else if(cantadoTruco[1].equals("no quiero")) {
-										    						//LA IA GANA
-										    						//SE SUMAN PUNTOS
-										    						//SIGUIENTE RONDA
-										    					}
-										    					
-										    					/*EL JUGADOR REVIRA*/
-										    					
-										    					else if(cantadoTruco[1].equals("retruco")) {
-										    						
-										    						MAQUINA.yourTurnAccept(cantadoTruco);
-										    						
-										    						/*SI LA IA QUIERE*/
-										    						
-										    						if(cantadoTruco[2].equals("quiero")) {
-										    							
-										    							trucoQueridoBloque5();							//BLOQUE 5
-										    							
-										    						}
-										    						
-										    						/*SI LA IA NO QUIERE*/
-										    						
-										    						else if(cantadoTruco[2].equals("no quiero")) {
-										    							//EL JUGADOR GANA
-										    							//SE SUMAN PUNTOS
-										    							//SIGUIENTE RONDA
-										    						}
-										    						
-										    						/*SI LA IA REVIRA*/
-										    						
-										    						else if(cantadoTruco[2].equals("vale cuatro")){
-										    							
-										    							/*SI EL JUGADOR QUIERE*/
-										    							
-										    							if(cantadoTruco[3].equals("quiero")) {
-										    								
-										    								trucoQueridoBloque5();							//BLOQUE 5
-										    								
-										    							}
-										    							
-										    							/*SI EL JUGADOR NO QUIERE*/
-										    							
-										    							else {
-										    								//LA IA GANA
-										    								//SE SUMAN PUNTOS
-										    								//SIGUIENTE RONDA
-										    							}
-										    							
-										    						}
-										    						
-										    					}
-										    				
-										    					
-										    				}
-										    				
-										    				/*LA IA TIRA DIRECTAMENTE*/
-										    				
-										    				else {
-										    					
-										    					tiraIAnull = true;
-											    				mostrarTirada(tiraIA,tiraIAnull);
-											    				auxIA = tiraIA[0];
-											    				
-											    				accionUsuario = false;
-											    				Thread espero24 = new Thread() {
-											    	    			
-											    	    			@Override
-											    	    			public void run() {
-											    			    		
-											    	    				System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
-											    	    				while(accionUsuario == false) {
-											    	    					try {
-											    				    			System.out.print(". ");
-											    				    			Thread.sleep(1000);
-											    							} catch (InterruptedException e) {
-											    								e.printStackTrace();
-											    							}
-											    			    		}
-											    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-											    	    			}
-											    	    			
-											    	    		};
-											        			
-											    	    		espero24.start();	
-											    	    		
-											    	    		try {
-											    					espero24.join();					
-//											    					Thread.sleep(1000);
-											    				}catch(InterruptedException e) {}
-											    				
-											    				/*EL JUGADOR CANTA TRUCO*/
-											    				
-											    				if(cantadoTruco[0].equals("truco")) {
-											    					
-											    					MAQUINA.yourTurnAccept(cantadoTruco);
-											    					
-											    					/*SI LA IA QUIERE*/
-											    					
-											    					if(cantadoTruco[1].equals("quiero")) {				//BLOQUE 6
-											    						
-											    						trucoQueridoBloque6();
-											    			    		
-											    					}
-											    					
-											    					/*SI LA IA NO QUIERE*/
-											    					
-											    					else if(cantadoTruco[1].equals("no quiero")) {
-											    						//EL JUGADOR GANA
-											    						//SE SUMAN PUNTOS
-											    						//SIGUIENTE RONDA
-											    					}
-											    					
-											    					/*SI LA IA REVIRA*/
-											    					
-											    					else if(cantadoTruco[1].equals("retruco")){
-											    						
-											    						accionUsuario = false;
-													    				Thread espero25 = new Thread() {
-													    	    			
-													    	    			@Override
-													    	    			public void run() {
-													    			    		
-													    	    				System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
-													    	    				while(accionUsuario == false) {
-													    	    					try {
-													    				    			System.out.print(". ");
-													    				    			Thread.sleep(1000);
-													    							} catch (InterruptedException e) {
-													    								e.printStackTrace();
-													    							}
-													    			    		}
-													    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-													    	    			}
-													    	    			
-													    	    		};
-													        			
-													    	    		espero25.start();	
-													    	    		
-													    	    		try {
-													    					espero25.join();					
-//													    					Thread.sleep(1000);
-													    				}catch(InterruptedException e) {}
-											    						
-											    						/*SI EL JUGADOR QUIERE*/
-											    						
-											    						if(cantadoTruco[2].equals("quiero")) {
-											    						
-											    							trucoQueridoBloque6();								//BLOQUE 6
-											    							
-											    						}
-											    						
-											    						/*SI EL JUGADOR NO QUIERE*/
-											    						
-											    						else if(cantadoTruco[2].equals("no quiero")) {
-											    							//LA IA GANA
-											    							//SE SUMAN PUNTOS
-											    							//SIGUIENTE RONDA
-											    						}
-											    						
-											    						/*SI EL JUGADOR REVIRA*/
-											    						
-											    						else if(cantadoTruco[2].equals("vale cuatro")) {
-											    							
-											    							/*SI LA IA QUIERE*/
-											    							
-											    							if(cantadoTruco[3].equals("quiero")) {
-											    								
-											    								trucoQueridoBloque6();							//BLOQUE 6
-											    								
-											    							}
-											    							
-											    							/*SI LA IA NO QUIERE*/
-											    							
-											    							else if(cantadoTruco[3].equals("no quiero")) {
-											    								//EL JUGADOR GANA
-											    								//SE SUMAN PUNTOS
-											    								//SIGUIENTE RONDA
-											    							}
-											    							
-											    						}
-											    						
-											    					}
-											    					
-											    				}
-											    				
-											    				/*EL JUGADOR TIRA CARTA DIRECTAMENTE*/
-											    				
-											    				else {
-											    					
-											    					auxJ = queCartaFueTirada();
-											    					
-											    					/*SI EL JUGADOR MATA*/
-											    					
-											    					if(aux.returnOrden(auxJ) < aux.returnOrden(auxIA)) {
-											    						//EL JUGADOR GANA
-											    						//SE SUMAN PUNTOS
-											    						//SIGUIENTE RONDA
-											    					}
-											    					
-											    					/*SI EL JUGADOR NO MATA*/
-											    					
-											    					else if(aux.returnOrden(auxJ) > aux.returnOrden(auxIA)) {
-											    						//LA IA GANA
-											    						//SE SUMAN PUNTOS
-											    						//SIGUIENTE RONDA
-											    					}
-											    					
-											    					/*SI EL JUGADOR EMPARDA*/
-											    					
-											    					else {
-											    						
-											    						tiraIA = null;
-													    				tiraIA = MAQUINA.yourTurn(cantadoTruco, null);
-											    						
-													    				/*LA IA CANTA TRUCO*/
-													    				
-													    				if(cantadoTruco[0].equals("truco")) {
-													    					
-													    					accionUsuario = false;
-														    				Thread espero26 = new Thread() {
-														    	    			
-														    	    			@Override
-														    	    			public void run() {
-														    			    		
-														    	    				System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
-														    	    				while(accionUsuario == false) {
-														    	    					try {
-														    				    			System.out.print(". ");
-														    				    			Thread.sleep(1000);
-														    							} catch (InterruptedException e) {
-														    								e.printStackTrace();
-														    							}
-														    			    		}
-														    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-														    	    			}
-														    	    			
-														    	    		};
-														        			
-														    	    		espero26.start();	
-														    	    		
-														    	    		try {
-														    					espero26.join();					
-//														    					Thread.sleep(1000);
-														    				}catch(InterruptedException e) {}
-													    					
-
-														    				/*SI EL JUGADOR QUIERE*/
-														    				
-														    				if(cantadoTruco[1].equals("quiero")) {			//BLOQUE 7
-														    					
-														    					trucoQueridoBloque7();
-															    	    		
-														    				}
-														    				
-														    				/*SI EL JUGADOR NO QUIERE*/
-														    				
-														    				else if(cantadoTruco[1].equals("no quiero")) {
-														    					//LA IA GANA
-														    					//SE SUMAN PUNTOS
-														    					//SIGUIENTE RONDA
-														    				}
-														    				
-														    				/*SI EL JUGADOR REVIRA*/
-														    				
-														    				else if(cantadoTruco[1].equals("retruco")) {
-														    					
-														    					MAQUINA.yourTurnAccept(cantadoTruco);
-														    					
-														    					/*SI LA IA QUIERE*/
-														    					
-														    					if(cantadoTruco[2].equals("quiero")) {
-														    						
-														    						trucoQueridoBloque7();									//BLOQUE 7
-														    						
-														    					}
-														    					
-														    					/*SI LA IA NO QUIERE*/
-														    					
-														    					else if(cantadoTruco[2].equals("no quiero")) {
-														    						//EL JUGADOR GANA
-														    						//SE SUMAN PUNTOS
-														    						//SIGUIENTE RONDA
-														    					}
-														    					
-														    					/*SI LA IA REVIRA*/
-														    					
-														    					else if(cantadoTruco[2].equals("vale cuatro")) {
-														    						
-														    						accionUsuario = false;
-																    				Thread espero28 = new Thread() {
-																    	    			
-																    	    			@Override
-																    	    			public void run() {
-																    			    		
-																    	    				System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
-																    	    				while(accionUsuario == false) {
-																    	    					try {
-																    				    			System.out.print(". ");
-																    				    			Thread.sleep(1000);
-																    							} catch (InterruptedException e) {
-																    								e.printStackTrace();
-																    							}
-																    			    		}
-																    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-																    	    			}
-																    	    			
-																    	    		};
-																        			
-																    	    		espero28.start();	
-																    	    		
-																    	    		try {
-																    					espero28.join();					
-//																    					Thread.sleep(1000);
-																    				}catch(InterruptedException e) {}
-														    						
-														    						/*SI EL JUGADOR QUIERE*/
-														    						
-														    						if(cantadoTruco[3].equals("quiero")) {
-														    							
-														    							trucoQueridoBloque7();								//BLOQUE 7
-														    							
-														    						}
-														    						
-														    						/*SI EL JUGADOR NO QUIERE*/
-														    						
-														    						else {
-														    							//LA IA GANA
-														    							//SE SUMAN PUNTOS
-														    							//SIGUIENTE RONDA
-														    						}
-														    						
-														    					}
-														    					
-														    					
-														    				}
-
-													    				}
-											    						
-													    				/*LA IA TIRA CARTA DIRECTAMENTE*/
-													    				
-													    				else {
-													    					
-													    					tiraIAnull = true;
-													    					mostrarTirada(tiraIA,tiraIAnull);
-													    					auxIA = tiraIA[0];
-													    					
-													    					accionUsuario = false;
-													    					Thread espero28 = new Thread() {
-													    						
-													    						@Override
-													    						public void run() {
-													    				    		
-													    							System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
-													    							while(accionUsuario == false) {
-													    								try {
-													    					    			System.out.print(". ");
-													    					    			Thread.sleep(1000);
-													    								} catch (InterruptedException e) {
-													    									e.printStackTrace();
-													    								}
-													    				    		}
-													    				    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-													    						}
-													    						
-													    					};
-													    					
-													    					espero28.start();	
-													    					
-													    					try {
-													    						espero28.join();					
-//													    						Thread.sleep(1000);
-													    					}catch(InterruptedException e) {}
-													    					
-													    					/*SI EL JUGADOR CANTA TRUCO*/
-													    					
-													    					if(cantadoTruco[0].equals("truco")) {
-													    						
-													    						MAQUINA.yourTurnAccept(cantadoTruco);
-													    						
-													    						/*SI LA IA QUIERE*/
-													    						
-													    						if(cantadoTruco[1].equals("quiero")) {			//BLOQUE 8
-													    							
-													    							trucoQueridoBloque8();
-															    					
-													    						}
-													    						
-													    						/*SI LA IA NO QUIERE*/
-													    						
-													    						else if(cantadoTruco[1].equals("no quiero")) {
-													    							//EL JUGADOR GANA
-													    							//SE SUMAN PUNTOS
-													    							//SIGUIENTE RONDA
-													    						}
-													    						
-													    						/*SI LA IA REVIRA*/
-													    						
-													    						else if(cantadoTruco[1].equals("retruco")) {
-													    							
-													    							accionUsuario = false;
-															    					Thread espero29 = new Thread() {
-															    						
-															    						@Override
-															    						public void run() {
-															    				    		
-															    							System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
-															    							while(accionUsuario == false) {
-															    								try {
-															    					    			System.out.print(". ");
-															    					    			Thread.sleep(1000);
-															    								} catch (InterruptedException e) {
-															    									e.printStackTrace();
-															    								}
-															    				    		}
-															    				    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-															    						}
-															    						
-															    					};
-															    					
-															    					espero29.start();	
-															    					
-															    					try {
-															    						espero29.join();					
-//															    						Thread.sleep(1000);
-															    					}catch(InterruptedException e) {}
-													    							
-													    							
-															    					/*SI EL JUGADOR QUIERE*/
-															    					
-															    					if(cantadoTruco[2].equals("quiero")) {
-															    						
-															    						trucoQueridoBloque8();								//BLOQUE 8
-															    						
-															    					}
-															    					
-															    					/*SI EL JUGADOR NO QUIERE*/
-															    					
-															    					else if(cantadoTruco[2].equals("no quiero")) {
-															    						//LA IA GANA
-															    						//SE SUMAN PUNTOS
-															    						//SIGUIENTE RONDA
-															    					}
-															    					
-															    					/*SI EL JUGADOR REVIRA*/
-															    					
-															    					else if(cantadoTruco[2].equals("vale cuatro")) {
-															    						
-															    						MAQUINA.yourTurnAccept(cantadoTruco);
-															    						
-															    						/*SI LA IA QUIERE*/
-															    						
-															    						if(cantadoTruco[3].equals("quiero")) {
-															    							
-															    							trucoQueridoBloque8();					//BLOQUE 8
-															    							
-															    						}
-															    						
-															    						/*SI LA IA NO QUIERE*/
-															    						
-															    						else {
-															    							//EL JUGADOR GANA
-															    							//SE SUMAN PUNTOS
-															    							//SIGUIENTE RONDA
-															    						}
-															    						
-															    					}
-															    					
-													    						}
-													    						
-													    					}
-													    					
-													    					/*SI EL JUGADOR TIRA CARTA DIRECTAMENTE*/
-													    					
-													    					else {
-													    						
-													    						trucoQueridoBloque8();
-													    						
-													    					}
-													    					
-													    				}
-											    						
-											    					}
-											    					
-											    				}
-										    					
-										    				}
-										    				
-										    			}
-										    			
-										    			
-										    			
-											    		/*SI EL JUGADOR LA MATA */
-											    		
-											    		else if(aux.returnOrden(auxJ) < aux.returnOrden(auxIA)) {
-											    			
-										    				//la IA vuelve a esperar porque el jugador tiene que tirar otra carta
-											    			
-											    			accionUsuario = false;
-									    					Thread espero30 = new Thread() {
-									    						
-									    						@Override
-									    						public void run() {
-									    				    		
-									    							System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
-									    							while(accionUsuario == false) {
-									    								try {
-									    					    			System.out.print(". ");
-									    					    			Thread.sleep(1000);
-									    								} catch (InterruptedException e) {
-									    									e.printStackTrace();
-									    								}
-									    				    		}
-									    				    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-									    						}
-									    						
-									    					};
-									    					
-									    					espero30.start();	
-									    					
-									    					try {
-									    						espero30.join();					
-//									    						Thread.sleep(1000);
-									    					}catch(InterruptedException e) {}
-											    			
-									    												//CHEQUEAR SI EFECTIVAMENTE SE TOM� LA SEGUNDA CARTA DE LA SEGUNDA TIRADA
-									    					auxJ = queCartaFueTirada();
-									    					
-									    					//LE TOCA A LA IA
-									    					
-									    					tiraIA = null;
-										    				tiraIA = MAQUINA.yourTurn(cantadoTruco, auxJ);
-										    				auxIA = tiraIA[0];
-										    				
-										    				/*LA IA PUEDE CANTAR TRUCO*/
-										    				
-										    				if(cantadoTruco[0].equals("truco")) {
-										    					
-										    					accionUsuario = false;
-										    					Thread espero32 = new Thread() {
-										    						
-										    						@Override
-										    						public void run() {
-										    				    		
-										    							System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
-										    							while(accionUsuario == false) {
-										    								try {
-										    					    			System.out.print(". ");
-										    					    			Thread.sleep(1000);
-										    								} catch (InterruptedException e) {
-										    									e.printStackTrace();
-										    								}
-										    				    		}
-										    				    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-										    						}
-										    						
-										    					};
-										    					
-										    					espero32.start();	
-										    					
-										    					try {
-										    						espero32.join();					
-//										    						Thread.sleep(1000);
-										    					}catch(InterruptedException e) {}
-										    					
-										    					/*SI EL JUGADOR QUIERE*/
-										    					
-										    					if(cantadoTruco[1].equals("quiero")) {			//BLOQUE 9
-										    						
-										    						trucoQueridoBloque9();
-										    						
-										    					}
-										    					
-										    					/*SI EL JUGADOR NO QUIERE*/
-										    					
-										    					else if(cantadoTruco[1].equals("no quiero")) {
-										    						//LA IA GANA
-										    						//SE SUMAN PUNTOS
-										    						//SIGUIENTE RONDA
-										    					}
-										    					
-										    					/*SI EL JUGADOR REVIRA*/
-										    					
-										    					else if(cantadoTruco[1].equals("retruco")) {
-										    						
-										    						MAQUINA.yourTurnAccept(cantadoTruco);
-										    						
-										    						/*SI LA IA QUIERE*/
-										    						
-										    						if(cantadoTruco[2].equals("quiero")) {		//BLOQUE 9
-										    							
-										    							trucoQueridoBloque9();
-										    							
-										    						}
-										    						
-										    						/*SI LA IA NO QUIERE*/
-										    						
-										    						else if(cantadoTruco[2].equals("no quiero")) {
-										    							//EL JUGADOR GANA
-										    							//SE SUMAN PUNTOS
-										    							//SIGUIENTE RONDA
-										    						}
-										    						
-										    						/*SI LA IA REVIRA*/
-										    						
-										    						else if(cantadoTruco[2].equals("vale cuatro")) {
-										    							
-										    							accionUsuario = false;
-												    					Thread espero33 = new Thread() {
-												    						
-												    						@Override
-												    						public void run() {
-												    				    		
-												    							System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
-												    							while(accionUsuario == false) {
-												    								try {
-												    					    			System.out.print(". ");
-												    					    			Thread.sleep(1000);
-												    								} catch (InterruptedException e) {
-												    									e.printStackTrace();
-												    								}
-												    				    		}
-												    				    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-												    						}
-												    						
-												    					};
-												    					
-												    					espero33.start();	
-												    					
-												    					try {
-												    						espero33.join();					
-//												    						Thread.sleep(1000);
-												    					}catch(InterruptedException e) {}
-										    							
-										    							/*SI EL JUGADOR QUIERE*/
-												    					
-												    					if(cantadoTruco[3].equals("quiero")) {			//BLOQUE 9
-												    						
-												    						trucoQueridoBloque9();
-												    						
-												    					}
-												    					
-												    					/*SI EL JUGADOR NO QUIERE*/
-												    					
-												    					else {
-												    						//LA IA GANA
-												    						//SE SUMAN PUNTOS
-												    						//SIGUIENTE RONDA
-												    					}
-										    							
-										    						}
-										    						
-										    					}
-										    					
-										    				}
-										    				
-										    				/*LA IA TIRA CARTA DIRECTAMENTE*/    	
-										    				
-										    				else {									/**ACA SE OBVIA LA POSIBILIDAD DE QUE LA IA, DESPUES DE TIRAR SEGUNDA, CANTE TRUCO*/
-										    					
-										    					/*SI LA IA MATA*/
-										    					
-										    					if(aux.returnOrden(auxIA) < aux.returnOrden(auxJ)) {
-										    						
-										    						//CHEQUEAR, PORQUE SI TIRA BAJA ENTONCES NO PUEDE VOLVER A TIRAR, PORQUE EL JUGADOR LE GANO DOS TIRADAS
-										    						//OJO CON PONERLO A FALSO
-											    					tiraIAnull = true;
-											    					mostrarTirada(tiraIA,tiraIAnull);
-										    						
-											    					accionUsuario = false;
-											    					Thread espero31 = new Thread() {
-											    						
-											    						@Override
-											    						public void run() {
-											    				    		
-											    							System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
-											    							while(accionUsuario == false) {
-											    								try {
-											    					    			System.out.print(". ");
-											    					    			Thread.sleep(1000);
-											    								} catch (InterruptedException e) {
-											    									e.printStackTrace();
-											    								}
-											    				    		}
-											    				    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-											    						}
-											    						
-											    					};
-											    					
-											    					espero31.start();	
-											    					
-											    					try {
-											    						espero31.join();					
-//											    						Thread.sleep(1000);
-											    					}catch(InterruptedException e) {}
-											    					
-											    					/*EL JUGADOR PUEDE CANTAR TRUCO*/
-											    					
-											    					if(cantadoTruco[0].equals("truco")) {		/**ACA SE OBVIA LA POSIBILIDAD DE QUE LA IA REVIRE*/
-											    						
-											    						MAQUINA.yourTurnAccept(cantadoTruco);
-											    						
-											    						/*SI LA IA QUIERE*/
-											    						
-											    						if(cantadoTruco[1].equals("quiero")) {			//BLOQUE A
-											    							
-											    							//ESPERO QUE EL JUGADOR TIRE CARTA O SE VAYA AL MAZO (SOLO ESAS DOS OPCIONES)
-											    							accionUsuario = false;
-													    					Thread espero32 = new Thread() {
-													    						
-													    						@Override
-													    						public void run() {
-													    				    		
-													    							System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
-													    							while(accionUsuario == false) {
-													    								try {
-													    					    			System.out.print(". ");
-													    					    			Thread.sleep(1000);
-													    								} catch (InterruptedException e) {
-													    									e.printStackTrace();
-													    								}
-													    				    		}
-													    				    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-													    						}
-													    						
-													    					};
-													    					
-													    					espero32.start();	
-													    					
-													    					try {
-													    						espero32.join();					
-//													    						Thread.sleep(1000);
-													    					}catch(InterruptedException e) {}
-											    							
-											    							auxIA = tiraIA[1];
-												    						auxJ = queCartaFueTirada();
-												    						
-												    						/*SI EL JUGADOR MATA*/
-												    						
-												    						if(aux.returnOrden(auxJ) <= aux.returnOrden(auxIA)) {
-												    							//EL JUGADOR GANA
-												    							//SE SUMAN PUNTOS
-												    							//SIGUIENTE RONDA
-												    						}
-												    						
-												    						/*SI EL JUGADOR NO MATA*/
-												    						
-												    						else {
-												    							//LA IA GANA
-												    							//SE SUMAN PUNTOS
-												    							//SIGUIENTE RONDA
-												    						}
-												    						
-											    							
-											    						}
-											    						
-											    						/*SI LA IA NO QUIERE*/
-											    						
-											    						else {
-											    							//EL JUGADOR GANA
-											    							//SE SUMAN PUNTOS
-											    							//SIGUIENTE RONDA											    							
-											    						}
-											    						
-											    					}
-											    					
-											    					/*EL JUGADOR PUEDE TIRAR CARTA DIRECTAMENTE*/
-											    					
-											    					else {						//BLOQUE A
-											    						
-											    						auxIA = tiraIA[1];
-											    						auxJ = queCartaFueTirada();
-											    						
-											    						/*SI EL JUGADOR MATA*/
-											    						
-											    						if(aux.returnOrden(auxJ) <= aux.returnOrden(auxIA)) {
-											    							//EL JUGADOR GANA
-											    							//SE SUMAN PUNTOS
-											    							//SIGUIENTE RONDA
-											    						}
-											    						
-											    						/*SI EL JUGADOR NO MATA*/
-											    						
-											    						else {
-											    							//LA IA GANA
-											    							//SE SUMAN PUNTOS
-											    							//SIGUIENTE RONDA
-											    						}
-											    						
-											    					}
-											    					
-										    					}
-										    					
-										    					/*SI LA IA NO MATA O EMPARDA*/
-										    					
-										    					else {
-										    						
-										    						tiraIAnull = false;
-											    					mostrarTirada(tiraIA,tiraIAnull);
-											    					
-											    					//EL JUGADOR GANA
-											    					//SE SUMAN PUNTOS
-											    					//SIGUIENTE RONDA
-										    						
-										    					}
-										    					
-										    					
-										    				}
-										    				
-										    														    			
-											    		}
+										    			tirarDir();
 										    			
 										    		}
 										    		
-
-											        
-										    		
-											       
-										    		//nota: variable para saber si se canto envido if(seCantoEnvido == false) then ... else ...	(no es necesaria si el boton esta desactivado)
-											        //nota: posiblemente (salvo q lo haya hecho tiki) tenga que llevar un conteo de si el jugador esta ganando tiradas (primera, segunda, etc.) o no
-//										        }
+										    		texto.setText("<html>"+ "" +"</html>");
+										    		//reiniciarMenuCantos();
 									        
 										        turno = false;
 											
@@ -3317,6 +1857,2376 @@ public class Interfaz extends JFrame{
 	}	//FIN FUNCION ACTION-LISTENER
 	
 	
+	
+	//FUNCION TRUCO
+	
+	public void truco() {
+		
+		flecha2.setEnabled(false);
+		cantarTruco.setEnabled(false);
+		retruco.setEnabled(false);
+		vale_4.setEnabled(false);
+		c1.setEnabled(false);
+		c2.setEnabled(false);
+		c3.setEnabled(false);
+		quiero.setEnabled(false);
+		noQuiero.setEnabled(false);
+		
+		MAQUINA.yourTurnAccept(cantadoTruco);
+		
+		/*SI LA IA QUIERE*/
+		
+		if(cantadoTruco[1].equals("quiero")) {
+			
+
+			/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
+			System.out.println("la IA quiso");
+			/***/
+			
+			flecha2.setEnabled(true);
+			c1.setEnabled(true);
+			c2.setEnabled(true);
+			c3.setEnabled(true);
+			
+			//TENER EN CUENTA VARIABLES COMO CANTADO[] / LAS AUX Y OTRAS (EN RELACION A SU VALOR)
+			trucoQuerido();
+		
+		}
+		
+		/*SI LA IA REVIRA*/
+		
+		else if(cantadoTruco[1].equals("retruco")){
+
+			texto.setText("<html>"+ cantadoTruco[1] +"</html>");
+			quiero.setEnabled(true);
+			noQuiero.setEnabled(true);
+			
+			vale_4.setEnabled(true);
+			
+			Thread espero13 = new Thread() {
+    			
+    			@Override
+    			public void run() {
+		    		
+    				System.out.print("\nEspero que el jugador quiera/no quiera retruco - revire ");
+    				while(accionUsuario == false) {
+    					try {
+			    			System.out.print(". ");
+			    			Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+		    		}
+		    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+    			}
+    			
+    		};
+			
+    		espero13.start();	
+    		
+    		try {
+				espero13.join();					
+//				Thread.sleep(1000);
+			}catch(InterruptedException e) {}
+			
+    		/*SI EL JUGADOR QUIERE*/
+    		
+    		if(cantadoTruco[2].equals("quiero")) {
+    			
+    			c1.setEnabled(true);
+    			c2.setEnabled(true);
+    			c3.setEnabled(true);
+    			
+    			trucoQuerido();
+    		}
+    		
+    		/*SI EL JUGADOR REVIRA*/
+    		
+    		else if(cantadoTruco[2].equals("vale cuatro")) {
+    			
+    			texto.setText("<html>"+ cantadoTruco[2] +"</html>");
+				quiero.setEnabled(false);
+				noQuiero.setEnabled(false);
+				
+				vale_4.setEnabled(false);
+	    		c1.setEnabled(false);
+	    		c2.setEnabled(false);
+	    		c3.setEnabled(false);
+    			
+    			MAQUINA.yourTurnAccept(cantadoTruco);
+    			
+    			/*SI LA IA QUIERE*/
+    			
+    			if(cantadoTruco[3].equals("quiero")) {
+    				
+					/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
+    					System.out.println("la IA quiso");
+    				/***/
+    				
+    				c1.setEnabled(true);
+	    			c2.setEnabled(true);
+	    			c3.setEnabled(true);
+	    			
+    				trucoQuerido();
+    			}
+    			
+    			/*SI LA IA NO QUIERE*/
+    			
+    			else {
+					
+    				/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
+    					System.out.println("la IA no quiso");
+    				/***/
+    					
+    				//EL JUGADOR GANA
+	    			
+					sistPuntuacion(cantadoTruco,j,MAQUINA);
+					acumulador = String.valueOf(j.getPuntos());
+					pts1.setText(acumulador);
+    				
+	    			//SIGUIENTE RONDA
+    			}
+    			
+    		}
+    		
+    		/*SI EL JUGADOR NO QUIERE*/
+    		
+    		else {
+    			//LA IA GANA
+    			
+    			sistPuntuacion(cantadoTruco,j,MAQUINA);
+    			acumulador = String.valueOf(MAQUINA.getPuntos());
+    			pts2.setText(acumulador);
+    			
+    			//SIGUIENTE RONDA
+    		}
+			
+		}
+		
+		/*SI LA IA NO QUIERE*/
+		
+		else if(cantadoTruco[1].equals("no quiero")) {
+			
+			/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
+				System.out.println("la IA no quiso");
+			/***/
+			
+			//EL JUGADOR GANA
+
+			sistPuntuacion(cantadoTruco,j,MAQUINA);
+			acumulador = String.valueOf(j.getPuntos());
+			pts1.setText(acumulador);
+			
+			//SIGUIENTE RONDA
+			
+		}
+		
+	}
+	
+	
+	//FUNCION TIRAR DIRECTAMENTE
+	
+	public void tirarDir() {
+		
+		auxJ = queCartaFueTirada();
+		
+		/* SI EL JUGADOR NO LA MATA */
+		
+		if(aux.returnOrden(auxJ) > aux.returnOrden(auxIA)) {
+			
+			c1.setEnabled(false);
+			c2.setEnabled(false);
+			c3.setEnabled(false);
+			truco.setEnabled(false);
+			quiero.setEnabled(false);
+			noQuiero.setEnabled(false);
+			
+			tiraIA = null;
+			tiraIA = MAQUINA.yourTurn(cantadoTruco, null);
+			
+			/*LA IA PUEDE CANTAR TRUCO*/
+			
+			if(cantadoTruco[0].equals("truco")) {
+					
+					texto.setText("<html>"+ cantadoTruco[0] +"</html>");
+					quiero.setEnabled(true);
+					noQuiero.setEnabled(true);
+
+		    		c1.setEnabled(false);
+		    		c2.setEnabled(false);
+		    		c3.setEnabled(false);
+					
+					accionUsuario = false;
+					Thread espero15 = new Thread() {
+	    			
+	    			@Override
+	    			public void run() {
+			    		
+	    				System.out.print("\nEspero que el jugador quiera/no quiera el truco ");
+	    				while(accionUsuario == false) {
+	    					try {
+				    			System.out.print(". ");
+				    			Thread.sleep(1000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+			    		}
+			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+	    			}
+	    			
+	    		};
+    			
+	    		espero15.start();	
+	    		
+	    		try {
+					espero15.join();					
+//					Thread.sleep(1000);
+				}catch(InterruptedException e) {}
+				
+				/*SI EL JUGADOR QUIERE*/
+				
+				if(cantadoTruco[1].equals("quiero")) {		//BLOQUE 1
+					
+					trucoQueridoBloque1();
+					
+				}
+				
+				/*SI EL JUGADOR NO QUIERE*/
+				
+				else if(cantadoTruco[1].equals("no quiero")) {
+					//LA IA GANA
+
+					sistPuntuacion(cantadoTruco,j,MAQUINA);
+					acumulador = String.valueOf(MAQUINA.getPuntos());
+					pts2.setText(acumulador);
+					
+					//SIGUIENTE RONDA
+				}
+				
+				/*SI EL JUGADOR REVIRA*/
+				
+				else if(cantadoTruco[1].equals("retruco")){
+					
+					MAQUINA.yourTurnAccept(cantadoTruco);
+					
+					/* SI LA IA QUIERE*/
+					
+					if(cantadoTruco[2].equals("quiero")) {	//BLOQUE 1
+						
+						/**PROVISORIO*/
+						System.out.println("la IA quiso");
+						/***/
+						
+						trucoQueridoBloque1();
+						
+					}
+					
+					/*SI LA IA NO QUIERE*/
+					
+					else if(cantadoTruco[2].equals("no quiero")) {
+						
+						/**PROVISORIO*/
+						System.out.println("la IA no quiso");
+						/***/
+						
+						//EL JUGADOR GANA
+
+						sistPuntuacion(cantadoTruco,j,MAQUINA);
+						acumulador = String.valueOf(j.getPuntos());
+						pts1.setText(acumulador);
+						
+						//SIGUIENTE RONDA
+					}
+					
+					/*SI LA IA REVIRA*/
+					
+					else if(cantadoTruco[2].equals("vale cuatro")){
+						
+						/**PROVISORIO*/
+						System.out.println("la IA revira");
+						/***/
+						
+						texto.setText("<html>"+ cantadoTruco[2] +"</html>");
+						quiero.setEnabled(true);
+						noQuiero.setEnabled(true);
+
+			    		c1.setEnabled(false);
+			    		c2.setEnabled(false);
+			    		c3.setEnabled(false);
+			    		
+			    		accionUsuario = false;
+						Thread espero32 = new Thread() {
+    	    			
+    	    			@Override
+    	    			public void run() {
+    			    		
+    	    				System.out.print("\nEspero que el jugador quiera/no quiera el vale cuatro ");
+    	    				while(accionUsuario == false) {
+    	    					try {
+    				    			System.out.print(". ");
+    				    			Thread.sleep(1000);
+    							} catch (InterruptedException e) {
+    								e.printStackTrace();
+    							}
+    			    		}
+    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+    	    			}
+    	    			
+						};
+        			
+	    	    		espero32.start();	
+	    	    		
+	    	    		try {
+	    					espero32.join();					
+//												    					Thread.sleep(1000);
+	    				}catch(InterruptedException e) {}
+						
+						/*SI EL JUGADOR QUIERE*/
+						
+						if(cantadoTruco[3].equals("quiero")) {	//BLOQUE 1
+							
+							trucoQueridoBloque1();
+							
+						}
+						
+						/*SI EL JUGADOR NO QUIERE*/
+						
+						else {
+							//LA IA GANA
+
+							sistPuntuacion(cantadoTruco,j,MAQUINA);
+							acumulador = String.valueOf(MAQUINA.getPuntos());
+							pts2.setText(acumulador);
+							
+							//SIGUIENTE RONDA
+						}
+						
+					}
+					
+				}
+				
+			}
+			
+			/*LA IA PUEDE TIRAR CARTA DIRECTAMENTE*/
+			
+    		else {
+				
+    			tiraIA = null;
+				tiraIA = MAQUINA.yourTurn(cantado, null);
+				tiraIAnull = true;
+				mostrarTirada(tiraIA,tiraIAnull);
+				auxIA = tiraIA[0];
+				
+	    		c1.setEnabled(true);
+				c2.setEnabled(true);
+				c3.setEnabled(true);
+				truco.setEnabled(true);
+				quiero.setEnabled(false);
+				noQuiero.setEnabled(false);
+				
+				accionUsuario = false;
+				Thread espero13 = new Thread() {
+	    			
+	    			@Override
+	    			public void run() {
+			    		
+	    				System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
+	    				while(accionUsuario == false) {
+	    					try {
+				    			System.out.print(". ");
+				    			Thread.sleep(1000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+			    		}
+			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+	    			}
+	    			
+	    		};
+    			
+	    		espero13.start();	
+	    		
+	    		try {
+					espero13.join();					
+//					Thread.sleep(1000);
+				}catch(InterruptedException e) {}
+    			
+				/*EL JUGADOR PUEDE CANTAR TRUCO*/
+				
+				if(cantadoTruco[0].equals("truco")) {
+					
+					//apagar todos los botones
+					
+					MAQUINA.yourTurnAccept(cantadoTruco);
+					
+					/*SI LA IA QUIERE*/
+					
+					if(cantadoTruco[1].equals("quiero")) {		//BLOQUE 2
+						
+						/**PROVISORIO*/
+						System.out.println("la IA quiso");
+						/***/
+						
+						trucoQueridoBloque2();
+						
+					}
+					
+					/*SI LA IA NO QUIERE*/
+					
+					else if(cantadoTruco[1].equals("no quiero")) {
+						
+						/**PROVISORIO*/
+						System.out.println("la IA no quiso");
+						/***/
+						
+						//EL JUGADOR GANA
+
+						sistPuntuacion(cantadoTruco,j,MAQUINA);
+						acumulador = String.valueOf(j.getPuntos());
+						pts1.setText(acumulador);
+						
+						//SIGUIENTE RONDA
+					}
+					
+					/*SI LA IA REVIRA*/
+					
+					else if(cantadoTruco[1].equals("retruco")){
+						
+						texto.setText("<html>"+ cantadoTruco[1] +"</html>");
+						quiero.setEnabled(true);
+						noQuiero.setEnabled(true);
+
+			    		c1.setEnabled(false);
+			    		c2.setEnabled(false);
+			    		c3.setEnabled(false);
+						
+						accionUsuario = false;
+	    				Thread espero33 = new Thread() {
+	    	    			
+	    	    			@Override
+	    	    			public void run() {
+	    			    		
+	    	    				System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
+	    	    				while(accionUsuario == false) {
+	    	    					try {
+	    				    			System.out.print(". ");
+	    				    			Thread.sleep(1000);
+	    							} catch (InterruptedException e) {
+	    								e.printStackTrace();
+	    							}
+	    			    		}
+	    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+	    	    			}
+	    	    			
+	    	    		};
+	        			
+	    	    		espero33.start();	
+	    	    		
+	    	    		try {
+	    					espero33.join();					
+//	    					Thread.sleep(1000);
+	    				}catch(InterruptedException e) {}
+						
+						/*SI EL JUGADOR QUIERE*/
+						
+						if(cantadoTruco[2].equals("quiero")) {		//BLOQUE 2
+							
+							trucoQueridoBloque2();
+							
+						}
+						
+						/*SI EL JUGADOR NO QUIERE*/
+						
+						else if(cantadoTruco[2].equals("no quiero")) {
+							//LA IA GANA
+
+							sistPuntuacion(cantadoTruco,j,MAQUINA);
+							acumulador = String.valueOf(MAQUINA.getPuntos());
+							pts2.setText(acumulador);
+							
+							//SIGUIENTE RONDA
+						}
+						
+						/*SI EL JUGADOR REVIRA*/
+						
+						else if(cantadoTruco[2].equals("vale cuatro")){
+							
+							MAQUINA.yourTurnAccept(cantadoTruco);
+							
+							/*SI LA IA QUIERE*/
+							
+							if(cantadoTruco[3].equals("quiero")) {		//BLOQUE 2
+								
+								/**PROVISORIO*/
+    							System.out.println("la IA quiso");
+    							/***/
+								
+								trucoQueridoBloque2();
+								
+							}
+							
+							/*SI LA IA NO QUIERE*/
+							
+							else {
+								
+								/**PROVISORIO*/
+    							System.out.println("la IA no quiso");
+    							/***/
+								
+								//EL JUGADOR GANA
+
+    							sistPuntuacion(cantadoTruco,j,MAQUINA);
+    							acumulador = String.valueOf(j.getPuntos());
+    							pts1.setText(acumulador);
+    							
+								//SIGUIENTE RONDA
+							}
+							
+						}
+						
+					}
+					
+					
+				}
+				
+				/*EL JUGADOR PUEDE TIRAR CARTA DIRECTAMENTE*/
+				
+				else {
+					
+					auxJ = queCartaFueTirada();
+					
+					/*SI EL JUGADOR NO LA MATA/EMPARDA*/
+					
+					if(aux.returnOrden(auxJ) >= aux.returnOrden(auxIA)) {
+						//LA IA GANA
+
+						sistPuntuacion(cantadoTruco,j,MAQUINA);
+						acumulador = String.valueOf(MAQUINA.getPuntos());
+						pts2.setText(acumulador);
+						
+						//SIGUIENTE RONDA
+					}
+					
+					/*SI EL JUGADOR LA MATA*/
+					
+					else {
+						
+						accionUsuario = false;
+	    				Thread espero17 = new Thread() {
+	    	    			
+	    	    			@Override
+	    	    			public void run() {
+	    			    		
+	    	    				System.out.print("\nEspero que el jugador tire en tercera (le gane primera y me gano en segunda) ");
+	    	    				while(accionUsuario == false) {
+	    	    					try {
+	    				    			System.out.print(". ");
+	    				    			Thread.sleep(1000);
+	    							} catch (InterruptedException e) {
+	    								e.printStackTrace();
+	    							}
+	    			    		}
+	    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+	    	    			}
+	    	    			
+	    	    		};
+	        			
+	    	    		espero17.start();	
+	    	    		
+	    	    		try {
+	    					espero17.join();					
+//	    					Thread.sleep(1000);
+	    				}catch(InterruptedException e) {}
+						
+						/*EL JUGADOR PUEDE CANTAR TRUCO*/
+						
+						if(cantadoTruco[0].equals("truco")) {
+							
+							MAQUINA.yourTurnAccept(cantadoTruco);
+							
+							/*SI LA IA QUIERE*/
+							
+							if(cantadoTruco[1].equals("quiero")) {			//BLOQUE 3
+								
+								/**PROVISORIO*/
+    							System.out.println("la IA quiso");
+    							/***/
+								
+								trucoQueridoBloque3();
+								
+							}
+							
+							/*SI LA IA NO QUIERE*/
+							
+							else if(cantadoTruco[1].equals("no quiero")) {
+								
+								/**PROVISORIO*/
+    							System.out.println("la IA no quiso");
+    							/***/
+								
+								//EL JUGADOR GANA
+								
+    							sistPuntuacion(cantadoTruco,j,MAQUINA);
+    							acumulador = String.valueOf(j.getPuntos());
+    							pts1.setText(acumulador);
+    							
+    							//SIGUIENTE RONDA
+							}
+							
+							/*SI LA IA REVIRA*/
+							
+							else if(cantadoTruco[1].equals("retruco")){
+								
+								texto.setText("<html>"+ cantadoTruco[1] +"</html>");
+	    						quiero.setEnabled(true);
+	    						noQuiero.setEnabled(true);
+
+					    		c1.setEnabled(false);
+					    		c2.setEnabled(false);
+					    		c3.setEnabled(false);
+								
+								accionUsuario = false;
+			    				Thread espero34 = new Thread() {
+			    	    			
+			    	    			@Override
+			    	    			public void run() {
+			    			    		
+			    	    				System.out.print("\nEspero que el jugador acepte o no el retruco ");
+			    	    				while(accionUsuario == false) {
+			    	    					try {
+			    				    			System.out.print(". ");
+			    				    			Thread.sleep(1000);
+			    							} catch (InterruptedException e) {
+			    								e.printStackTrace();
+			    							}
+			    			    		}
+			    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+			    	    			}
+			    	    			
+			    	    		};
+			        			
+			    	    		espero34.start();	
+			    	    		
+			    	    		try {
+			    					espero34.join();					
+//			    					Thread.sleep(1000);
+			    				}catch(InterruptedException e) {}
+								
+								/*SI EL JUGADOR QUIERE*/
+								
+								if(cantadoTruco[2].equals("quiero")) {		//BLOQUE 3
+									
+									trucoQueridoBloque3();
+									
+								}
+								
+								/*SI EL JUGADOR NO QUIERE*/
+								
+								else if(cantadoTruco[2].equals("no quiero")) {
+									//LA IA GANA
+
+									sistPuntuacion(cantadoTruco,j,MAQUINA);
+									acumulador = String.valueOf(MAQUINA.getPuntos());
+									pts2.setText(acumulador);
+									
+									//SIGUIENTE RONDA
+								}
+								
+								/*SI EL JUGADOR REVIRA*/
+								
+								else if(cantadoTruco[2].equals("vale cuatro")){
+									
+									MAQUINA.yourTurnAccept(cantadoTruco);
+									
+									/*SI LA IA QUIERE*/
+					
+									if(cantadoTruco[3].equals("quiero")) {		//BLOQUE 3
+										
+										/**PROVISORIO*/
+		    							System.out.println("la IA quiso");
+		    							/***/
+										
+										trucoQueridoBloque3();
+										
+									}
+									
+									/*SI LA IA NO QUIERE*/
+									
+									else {
+										
+										/**PROVISORIO*/
+		    							System.out.println("la IA no quiso");
+		    							/***/
+										
+										//EL JUGADOR GANA
+
+		    							sistPuntuacion(cantadoTruco,j,MAQUINA);
+		    							acumulador = String.valueOf(j.getPuntos());
+		    							pts1.setText(acumulador);
+		    							
+										//SIGUIENTE RONDA
+									}
+									
+								}
+								
+							}
+							
+						}
+						
+						/*EL JUGADOR PUEDE TIRAR CARTA DIRECTAMENTE*/
+						
+						else {
+							
+							auxJ = queCartaFueTirada();
+							
+							/*LA IA PUEDE CANTAR TRUCO*/
+							
+							if(cantadoTruco[0].equals("truco")) {
+								
+								texto.setText("<html>"+ cantadoTruco[0] +"</html>");
+	    						quiero.setEnabled(true);
+	    						noQuiero.setEnabled(true);
+
+					    		c1.setEnabled(false);
+					    		c2.setEnabled(false);
+					    		c3.setEnabled(false);
+								
+								accionUsuario = false;
+			    				Thread espero18 = new Thread() {
+			    	    			
+			    	    			@Override
+			    	    			public void run() {
+			    			    		
+			    	    				System.out.print("\nEspero que el jugador quiera/no quiera truco (estamos en tercera) ");
+			    	    				while(accionUsuario == false) {
+			    	    					try {
+			    				    			System.out.print(". ");
+			    				    			Thread.sleep(1000);
+			    							} catch (InterruptedException e) {
+			    								e.printStackTrace();
+			    							}
+			    			    		}
+			    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+			    	    			}
+			    	    			
+			    	    		};
+			        			
+			    	    		espero18.start();	
+			    	    		
+			    	    		try {
+			    					espero18.join();					
+//			    					Thread.sleep(1000);
+			    				}catch(InterruptedException e) {}
+								
+								/*SI EL JUGADOR QUIERE*/
+								
+								if(cantadoTruco[1].equals("quiero")) {	//BLOQUE 4
+									
+									trucoQueridoBloque4();
+									
+								}
+								
+								/*SI EL JUGADOR NO QUIERE*/
+								
+								else if(cantadoTruco[1].equals("no quiero")) {
+								
+									//LA IA GANA
+
+									sistPuntuacion(cantadoTruco,j,MAQUINA);
+									acumulador = String.valueOf(MAQUINA.getPuntos());
+									pts2.setText(acumulador);
+									
+									//SIGUIENTE RONDA
+								}
+								
+								/*SI EL JUGADOR REVIRA*/
+								
+								else if(cantadoTruco[1].equals("retruco")){
+									
+									MAQUINA.yourTurnAccept(cantadoTruco);
+									
+									/*SI LA IA QUIERE*/
+									
+									if(cantadoTruco[2].equals("quiero")) {	//BLOQUE 4
+										
+										/**PROVISORIO*/
+		    							System.out.println("la IA quiso");
+		    							/***/
+										
+										trucoQueridoBloque4();
+										
+									}
+									
+									/*SI LA IA NO QUIERE*/
+									
+									else if(cantadoTruco[2].equals("no quiero")) {
+										
+										/**PROVISORIO*/
+		    							System.out.println("la IA no quiso");
+		    							/***/
+										
+										//EL JUGADOR GANA
+
+		    							sistPuntuacion(cantadoTruco,j,MAQUINA);
+		    							acumulador = String.valueOf(j.getPuntos());
+		    							pts1.setText(acumulador);
+		    							
+										//SIGUIENTE RONDA
+									}
+									
+									/*SI LA IA REVIRA*/
+									
+									else if(cantadoTruco[2].equals("vale cuatro")) {
+										
+										texto.setText("<html>"+ cantadoTruco[2] +"</html>");
+			    						quiero.setEnabled(true);
+			    						noQuiero.setEnabled(true);
+
+							    		c1.setEnabled(false);
+							    		c2.setEnabled(false);
+							    		c3.setEnabled(false);
+    									
+    									accionUsuario = false;
+					    				Thread espero35 = new Thread() {
+					    	    			
+					    	    			@Override
+					    	    			public void run() {
+					    			    		
+					    	    				System.out.print("\nEspero que el jugador quiera/no quiera vale cuatro (estamos en tercera) ");
+					    	    				while(accionUsuario == false) {
+					    	    					try {
+					    				    			System.out.print(". ");
+					    				    			Thread.sleep(1000);
+					    							} catch (InterruptedException e) {
+					    								e.printStackTrace();
+					    							}
+					    			    		}
+					    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+					    	    			}
+					    	    			
+					    	    		};
+					        			
+					    	    		espero35.start();	
+					    	    		
+					    	    		try {
+					    					espero35.join();					
+//					    					Thread.sleep(1000);
+					    				}catch(InterruptedException e) {}
+										
+										/*SI EL JUGADOR QUIERE*/
+										
+										if(cantadoTruco[3].equals("quiero")) {	//BLOQUE 4
+											
+											trucoQueridoBloque4();
+											
+										}
+										
+										/*SI EL JUGADOR NO QUIERE*/
+										
+										else {
+											//LA IA GANA
+
+											sistPuntuacion(cantadoTruco,j,MAQUINA);
+											acumulador = String.valueOf(MAQUINA.getPuntos());
+											pts2.setText(acumulador);
+											
+											//SIGUIENTE RONDA
+										}
+										
+									}
+									
+								}
+							}
+							
+							/*LA IA TIRA CARTA DIRECTAMENTE*/
+							
+							else {
+								
+								//OJO: CHEQUEAR SI EFECTIVAMENTE PERTENENCE AL BLOQUE 4 O SE HACE APARTE
+								trucoQueridoBloque4();
+								
+							}
+							
+						}
+						
+					}
+					
+				}
+				
+			}
+			
+			
+		}
+		
+		
+		
+		/*SI EL JUGADOR EMPARDA*/
+		
+		else if(aux.returnOrden(auxJ) == aux.returnOrden(auxIA)){
+			
+			tiraIA = null;
+			tiraIA = MAQUINA.yourTurn(cantadoTruco, null);
+			
+			/*LA IA CANTA TRUCO*/
+			
+			if(cantadoTruco[0].equals("truco")) {
+				
+				texto.setText("<html>"+ cantadoTruco[0] +"</html>");
+				quiero.setEnabled(true);
+				noQuiero.setEnabled(true);
+
+	    		c1.setEnabled(false);
+	    		c2.setEnabled(false);
+	    		c3.setEnabled(false);
+				
+				accionUsuario = false;
+				Thread espero19 = new Thread() {
+	    			
+	    			@Override
+	    			public void run() {
+			    		
+	    				System.out.print("\nEspero que el jugador quiera el truco (empardamos primera) ");
+	    				while(accionUsuario == false) {
+	    					try {
+				    			System.out.print(". ");
+				    			Thread.sleep(1000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+			    		}
+			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+	    			}
+	    			
+	    		};
+    			
+	    		espero19.start();	
+	    		
+	    		try {
+					espero19.join();					
+//					Thread.sleep(1000);
+				}catch(InterruptedException e) {}
+				
+				/*EL JUGADOR QUIERE*/
+				
+				if(cantadoTruco[1].equals("quiero")) {				//BLOQUE 5
+					
+					trucoQueridoBloque5();
+					
+				}
+				
+				/*EL JUGADOR NO QUIERE*/
+				
+				else if(cantadoTruco[1].equals("no quiero")) {
+					//LA IA GANA
+
+					sistPuntuacion(cantadoTruco,j,MAQUINA);
+					acumulador = String.valueOf(MAQUINA.getPuntos());
+					pts2.setText(acumulador);
+					
+					//SIGUIENTE RONDA
+				}
+				
+				/*EL JUGADOR REVIRA*/
+				
+				else if(cantadoTruco[1].equals("retruco")) {
+					
+					MAQUINA.yourTurnAccept(cantadoTruco);
+					
+					/*SI LA IA QUIERE*/
+					
+					if(cantadoTruco[2].equals("quiero")) {
+						
+						/**PROVISORIO*/
+						System.out.println("la IA quiso");
+						/***/
+						
+						trucoQueridoBloque5();							//BLOQUE 5
+						
+					}
+					
+					/*SI LA IA NO QUIERE*/
+					
+					else if(cantadoTruco[2].equals("no quiero")) {
+						
+						/**PROVISORIO*/
+						System.out.println("la IA no quiso");
+						/***/
+						
+						//EL JUGADOR GANA
+
+						sistPuntuacion(cantadoTruco,j,MAQUINA);
+						acumulador = String.valueOf(j.getPuntos());
+						pts1.setText(acumulador);
+						
+						//SIGUIENTE RONDA
+					}
+					
+					/*SI LA IA REVIRA*/
+					
+					else if(cantadoTruco[2].equals("vale cuatro")){
+						
+						texto.setText("<html>"+ cantadoTruco[2] +"</html>");
+						quiero.setEnabled(true);
+						noQuiero.setEnabled(true);
+
+			    		c1.setEnabled(false);
+			    		c2.setEnabled(false);
+			    		c3.setEnabled(false);
+						
+    					accionUsuario = false;
+	    				Thread espero36 = new Thread() {
+	    	    			
+	    	    			@Override
+	    	    			public void run() {
+	    			    		
+	    	    				System.out.print("\nEspero que el jugador quiera el vale cuatro (empardamos primera) ");
+	    	    				while(accionUsuario == false) {
+	    	    					try {
+	    				    			System.out.print(". ");
+	    				    			Thread.sleep(1000);
+	    							} catch (InterruptedException e) {
+	    								e.printStackTrace();
+	    							}
+	    			    		}
+	    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+	    	    			}
+	    	    			
+	    	    		};
+	        			
+	    	    		espero36.start();	
+	    	    		
+	    	    		try {
+	    					espero36.join();					
+//	    					Thread.sleep(1000);
+	    				}catch(InterruptedException e) {}
+																    							
+						/*SI EL JUGADOR QUIERE*/
+						
+						if(cantadoTruco[3].equals("quiero")) {
+							
+							trucoQueridoBloque5();							//BLOQUE 5
+							
+						}
+						
+						/*SI EL JUGADOR NO QUIERE*/
+						
+						else {
+							//LA IA GANA
+
+							sistPuntuacion(cantadoTruco,j,MAQUINA);
+							acumulador = String.valueOf(MAQUINA.getPuntos());
+							pts2.setText(acumulador);
+							
+							//SIGUIENTE RONDA
+						}
+						
+					}
+					
+				}
+			
+				
+			}
+			
+			/*LA IA TIRA DIRECTAMENTE*/
+			
+			else {
+				
+				tiraIAnull = true;
+				mostrarTirada(tiraIA,tiraIAnull);
+				auxIA = tiraIA[0];
+				
+				accionUsuario = false;
+				Thread espero24 = new Thread() {
+	    			
+	    			@Override
+	    			public void run() {
+			    		
+	    				System.out.print("\nEspero que el jugador tire en segunda (empardamos primera) ");
+	    				while(accionUsuario == false) {
+	    					try {
+				    			System.out.print(". ");
+				    			Thread.sleep(1000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+			    		}
+			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+	    			}
+	    			
+	    		};
+    			
+	    		espero24.start();	
+	    		
+	    		try {
+					espero24.join();					
+//					Thread.sleep(1000);
+				}catch(InterruptedException e) {}
+				
+				/*EL JUGADOR CANTA TRUCO*/
+				
+				if(cantadoTruco[0].equals("truco")) {
+					
+					MAQUINA.yourTurnAccept(cantadoTruco);
+					
+					/*SI LA IA QUIERE*/
+					
+					if(cantadoTruco[1].equals("quiero")) {				//BLOQUE 6
+						
+						/**PROVISORIO*/
+						System.out.println("la IA quiso");
+						/***/
+						
+						trucoQueridoBloque6();
+			    		
+					}
+					
+					/*SI LA IA NO QUIERE*/
+					
+					else if(cantadoTruco[1].equals("no quiero")) {
+						
+						/**PROVISORIO*/
+						System.out.println("la IA no quiso");
+						/***/
+						
+						//EL JUGADOR GANA
+
+						sistPuntuacion(cantadoTruco,j,MAQUINA);
+						acumulador = String.valueOf(j.getPuntos());
+						pts1.setText(acumulador);
+						
+						//SIGUIENTE RONDA
+					}
+					
+					/*SI LA IA REVIRA*/
+					
+					else if(cantadoTruco[1].equals("retruco")){
+						
+						texto.setText("<html>"+ cantadoTruco[1] +"</html>");
+						quiero.setEnabled(true);
+						noQuiero.setEnabled(true);
+
+			    		c1.setEnabled(false);
+			    		c2.setEnabled(false);
+			    		c3.setEnabled(false);
+						
+						accionUsuario = false;
+	    				Thread espero25 = new Thread() {
+	    	    			
+	    	    			@Override
+	    	    			public void run() {
+	    			    		
+	    	    				System.out.print("\nEspero que el jugador quiera retruco (empardamos primera) ");
+	    	    				while(accionUsuario == false) {
+	    	    					try {
+	    				    			System.out.print(". ");
+	    				    			Thread.sleep(1000);
+	    							} catch (InterruptedException e) {
+	    								e.printStackTrace();
+	    							}
+	    			    		}
+	    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+	    	    			}
+	    	    			
+	    	    		};
+	        			
+	    	    		espero25.start();	
+	    	    		
+	    	    		try {
+	    					espero25.join();					
+//	    					Thread.sleep(1000);
+	    				}catch(InterruptedException e) {}
+						
+						/*SI EL JUGADOR QUIERE*/
+						
+						if(cantadoTruco[2].equals("quiero")) {
+						
+							trucoQueridoBloque6();								//BLOQUE 6
+							
+						}
+						
+						/*SI EL JUGADOR NO QUIERE*/
+						
+						else if(cantadoTruco[2].equals("no quiero")) {
+							//LA IA GANA
+
+							sistPuntuacion(cantadoTruco,j,MAQUINA);
+							acumulador = String.valueOf(MAQUINA.getPuntos());
+							pts2.setText(acumulador);
+							
+							//SIGUIENTE RONDA
+						}
+						
+						/*SI EL JUGADOR REVIRA*/
+						
+						else if(cantadoTruco[2].equals("vale cuatro")) {
+							
+							/*SI LA IA QUIERE*/
+							
+							if(cantadoTruco[3].equals("quiero")) {
+								
+								/**PROVISORIO*/
+    							System.out.println("la IA quiso");
+    							/***/
+								
+								trucoQueridoBloque6();							//BLOQUE 6
+								
+							}
+							
+							/*SI LA IA NO QUIERE*/
+							
+							else if(cantadoTruco[3].equals("no quiero")) {
+								
+								/**PROVISORIO*/
+    							System.out.println("la IA no quiso");
+    							/***/
+								
+								//EL JUGADOR GANA
+
+    							sistPuntuacion(cantadoTruco,j,MAQUINA);
+    							acumulador = String.valueOf(j.getPuntos());
+    							pts1.setText(acumulador);
+    							
+								//SIGUIENTE RONDA
+							}
+							
+						}
+						
+					}
+					
+				}
+				
+				/*EL JUGADOR TIRA CARTA DIRECTAMENTE*/
+				
+				else {
+					
+					auxJ = queCartaFueTirada();
+					
+					/*SI EL JUGADOR MATA*/
+					
+					if(aux.returnOrden(auxJ) < aux.returnOrden(auxIA)) {
+						//EL JUGADOR GANA
+
+						sistPuntuacion(cantadoTruco,j,MAQUINA);
+						acumulador = String.valueOf(j.getPuntos());
+						pts1.setText(acumulador);
+						
+						//SIGUIENTE RONDA
+					}
+					
+					/*SI EL JUGADOR NO MATA*/
+					
+					else if(aux.returnOrden(auxJ) > aux.returnOrden(auxIA)) {
+						//LA IA GANA
+
+						sistPuntuacion(cantadoTruco,j,MAQUINA);
+						acumulador = String.valueOf(MAQUINA.getPuntos());
+						pts2.setText(acumulador);
+						
+						//SIGUIENTE RONDA
+					}
+					
+					/*SI EL JUGADOR EMPARDA*/
+					
+					else {
+						
+						tiraIA = null;
+	    				tiraIA = MAQUINA.yourTurn(cantadoTruco, null);
+						
+	    				/*LA IA CANTA TRUCO*/
+	    				
+	    				if(cantadoTruco[0].equals("truco")) {
+	    					
+	    					texto.setText("<html>"+ cantadoTruco[0] +"</html>");
+    						quiero.setEnabled(true);
+    						noQuiero.setEnabled(true);
+
+				    		c1.setEnabled(false);
+				    		c2.setEnabled(false);
+				    		c3.setEnabled(false);
+	    					
+	    					accionUsuario = false;
+		    				Thread espero26 = new Thread() {
+		    	    			
+		    	    			@Override
+		    	    			public void run() {
+		    			    		
+		    	    				System.out.print("\nEspero que el jugador quiera/no quiera el truco (empardamos segunda) ");
+		    	    				while(accionUsuario == false) {
+		    	    					try {
+		    				    			System.out.print(". ");
+		    				    			Thread.sleep(1000);
+		    							} catch (InterruptedException e) {
+		    								e.printStackTrace();
+		    							}
+		    			    		}
+		    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+		    	    			}
+		    	    			
+		    	    		};
+		        			
+		    	    		espero26.start();	
+		    	    		
+		    	    		try {
+		    					espero26.join();					
+//		    					Thread.sleep(1000);
+		    				}catch(InterruptedException e) {}
+	    					
+
+		    				/*SI EL JUGADOR QUIERE*/
+		    				
+		    				if(cantadoTruco[1].equals("quiero")) {			//BLOQUE 7
+		    					
+		    					trucoQueridoBloque7();
+			    	    		
+		    				}
+		    				
+		    				/*SI EL JUGADOR NO QUIERE*/
+		    				
+		    				else if(cantadoTruco[1].equals("no quiero")) {
+		    					//LA IA GANA
+
+		    					sistPuntuacion(cantadoTruco,j,MAQUINA);
+		    					acumulador = String.valueOf(MAQUINA.getPuntos());
+		    					pts2.setText(acumulador);
+		    					
+		    					//SIGUIENTE RONDA
+		    				}
+		    				
+		    				/*SI EL JUGADOR REVIRA*/
+		    				
+		    				else if(cantadoTruco[1].equals("retruco")) {
+		    					
+		    					MAQUINA.yourTurnAccept(cantadoTruco);
+		    					
+		    					/*SI LA IA QUIERE*/
+		    					
+		    					if(cantadoTruco[2].equals("quiero")) {
+		    						
+		    						/**PROVISORIO*/
+	    							System.out.println("la IA quiso");
+	    							/***/
+		    						
+		    						trucoQueridoBloque7();									//BLOQUE 7
+		    						
+		    					}
+		    					
+		    					/*SI LA IA NO QUIERE*/
+		    					
+		    					else if(cantadoTruco[2].equals("no quiero")) {
+		    						
+		    						/**PROVISORIO*/
+	    							System.out.println("la IA no quiso");
+	    							/***/
+		    						
+		    						//EL JUGADOR GANA
+
+	    							sistPuntuacion(cantadoTruco,j,MAQUINA);
+	    							acumulador = String.valueOf(j.getPuntos());
+	    							pts1.setText(acumulador);
+	    							
+		    						//SIGUIENTE RONDA
+		    					}
+		    					
+		    					/*SI LA IA REVIRA*/
+		    					
+		    					else if(cantadoTruco[2].equals("vale cuatro")) {
+		    						
+		    						texto.setText("<html>"+ cantadoTruco[2] +"</html>");
+		    						quiero.setEnabled(true);
+		    						noQuiero.setEnabled(true);
+
+						    		c1.setEnabled(false);
+						    		c2.setEnabled(false);
+						    		c3.setEnabled(false);
+		    						
+		    						accionUsuario = false;
+				    				Thread espero28 = new Thread() {
+				    	    			
+				    	    			@Override
+				    	    			public void run() {
+				    			    		
+				    	    				System.out.print("\nEspero que el jugador quiera/no quiera vale cuatro (empardamos segunda) ");
+				    	    				while(accionUsuario == false) {
+				    	    					try {
+				    				    			System.out.print(". ");
+				    				    			Thread.sleep(1000);
+				    							} catch (InterruptedException e) {
+				    								e.printStackTrace();
+				    							}
+				    			    		}
+				    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+				    	    			}
+				    	    			
+				    	    		};
+				        			
+				    	    		espero28.start();	
+				    	    		
+				    	    		try {
+				    					espero28.join();					
+//				    					Thread.sleep(1000);
+				    				}catch(InterruptedException e) {}
+		    						
+		    						/*SI EL JUGADOR QUIERE*/
+		    						
+		    						if(cantadoTruco[3].equals("quiero")) {
+		    							
+		    							trucoQueridoBloque7();								//BLOQUE 7
+		    							
+		    						}
+		    						
+		    						/*SI EL JUGADOR NO QUIERE*/
+		    						
+		    						else {
+		    							//LA IA GANA
+
+		    							sistPuntuacion(cantadoTruco,j,MAQUINA);
+		    							acumulador = String.valueOf(MAQUINA.getPuntos());
+		    							pts2.setText(acumulador);
+		    							
+		    							//SIGUIENTE RONDA
+		    						}
+		    						
+		    					}
+		    					
+		    					
+		    				}
+
+	    				}
+						
+	    				/*LA IA TIRA CARTA DIRECTAMENTE*/
+	    				
+	    				else {
+	    					
+	    					tiraIAnull = true;
+	    					mostrarTirada(tiraIA,tiraIAnull);
+	    					auxIA = tiraIA[0];
+	    					
+	    					accionUsuario = false;
+	    					Thread espero28 = new Thread() {
+	    						
+	    						@Override
+	    						public void run() {
+	    				    		
+	    							System.out.print("\nEspero que el jugador tire en tercera (empardamos segunda y tire en tercera) ");
+	    							while(accionUsuario == false) {
+	    								try {
+	    					    			System.out.print(". ");
+	    					    			Thread.sleep(1000);
+	    								} catch (InterruptedException e) {
+	    									e.printStackTrace();
+	    								}
+	    				    		}
+	    				    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+	    						}
+	    						
+	    					};
+	    					
+	    					espero28.start();	
+	    					
+	    					try {
+	    						espero28.join();					
+//	    						Thread.sleep(1000);
+	    					}catch(InterruptedException e) {}
+	    					
+	    					/*SI EL JUGADOR CANTA TRUCO*/
+	    					
+	    					if(cantadoTruco[0].equals("truco")) {
+	    						
+	    						MAQUINA.yourTurnAccept(cantadoTruco);
+	    						
+	    						/*SI LA IA QUIERE*/
+	    						
+	    						if(cantadoTruco[1].equals("quiero")) {			//BLOQUE 8
+	    							
+	    							/**PROVISORIO*/
+	    							System.out.println("la IA quiso");
+	    							/***/
+	    							
+	    							trucoQueridoBloque8();
+			    					
+	    						}
+	    						
+	    						/*SI LA IA NO QUIERE*/
+	    						
+	    						else if(cantadoTruco[1].equals("no quiero")) {
+	    							
+	    							/**PROVISORIO*/
+	    							System.out.println("la IA no quiso");
+	    							/***/
+	    							
+	    							//EL JUGADOR GANA
+
+	    							sistPuntuacion(cantadoTruco,j,MAQUINA);
+	    							acumulador = String.valueOf(j.getPuntos());
+	    							pts1.setText(acumulador);
+	    							
+	    							//SIGUIENTE RONDA
+	    						}
+	    						
+	    						/*SI LA IA REVIRA*/
+	    						
+	    						else if(cantadoTruco[1].equals("retruco")) {
+	    							
+	    							texto.setText("<html>"+ cantadoTruco[1] +"</html>");
+		    						quiero.setEnabled(true);
+		    						noQuiero.setEnabled(true);
+
+						    		c1.setEnabled(false);
+						    		c2.setEnabled(false);
+						    		c3.setEnabled(false);
+	    							
+	    							accionUsuario = false;
+			    					Thread espero29 = new Thread() {
+			    						
+			    						@Override
+			    						public void run() {
+			    				    		
+			    							System.out.print("\nEspero que el jugador quiera/no quiera retruco (empardamos segunda y tire en tercera) ");
+			    							while(accionUsuario == false) {
+			    								try {
+			    					    			System.out.print(". ");
+			    					    			Thread.sleep(1000);
+			    								} catch (InterruptedException e) {
+			    									e.printStackTrace();
+			    								}
+			    				    		}
+			    				    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+			    						}
+			    						
+			    					};
+			    					
+			    					espero29.start();	
+			    					
+			    					try {
+			    						espero29.join();					
+//			    						Thread.sleep(1000);
+			    					}catch(InterruptedException e) {}
+	    							
+	    							
+			    					/*SI EL JUGADOR QUIERE*/
+			    					
+			    					if(cantadoTruco[2].equals("quiero")) {
+			    						
+			    						trucoQueridoBloque8();								//BLOQUE 8
+			    						
+			    					}
+			    					
+			    					/*SI EL JUGADOR NO QUIERE*/
+			    					
+			    					else if(cantadoTruco[2].equals("no quiero")) {
+			    						//LA IA GANA
+
+			    						sistPuntuacion(cantadoTruco,j,MAQUINA);
+			    						acumulador = String.valueOf(MAQUINA.getPuntos());
+			    						pts2.setText(acumulador);
+			    						
+			    						//SIGUIENTE RONDA
+			    					}
+			    					
+			    					/*SI EL JUGADOR REVIRA*/
+			    					
+			    					else if(cantadoTruco[2].equals("vale cuatro")) {
+			    						
+			    						MAQUINA.yourTurnAccept(cantadoTruco);
+			    						
+			    						/*SI LA IA QUIERE*/
+			    						
+			    						if(cantadoTruco[3].equals("quiero")) {
+			    							
+			    							/**PROVISORIO*/
+			    							System.out.println("la IA quiso");
+			    							/***/
+			    							
+			    							trucoQueridoBloque8();					//BLOQUE 8
+			    							
+			    						}
+			    						
+			    						/*SI LA IA NO QUIERE*/
+			    						
+			    						else {
+			    							
+			    							/**PROVISORIO*/
+			    							System.out.println("la IA no quiso");
+			    							/***/
+			    							
+			    							//EL JUGADOR GANA
+
+			    							sistPuntuacion(cantadoTruco,j,MAQUINA);
+			    							acumulador = String.valueOf(j.getPuntos());
+			    							pts1.setText(acumulador);
+			    							
+			    							//SIGUIENTE RONDA
+			    						}
+			    						
+			    					}
+			    					
+	    						}
+	    						
+	    					}
+	    					
+	    					/*SI EL JUGADOR TIRA CARTA DIRECTAMENTE*/
+	    					
+	    					else {
+	    						
+	    						trucoQueridoBloque8();
+	    						
+	    					}
+	    					
+	    				}
+						
+					}
+					
+				}
+				
+			}
+			
+		}
+		
+		
+		
+		/*SI EL JUGADOR LA MATA */
+		
+		else if(aux.returnOrden(auxJ) < aux.returnOrden(auxIA)) {
+			
+			accionUsuario = false;
+			Thread espero30 = new Thread() {
+				
+				@Override
+				public void run() {
+		    		
+					System.out.print("\nEspero que el jugador tire en segunda (me gano primera) ");
+					while(accionUsuario == false) {
+						try {
+			    			System.out.print(". ");
+			    			Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+		    		}
+		    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+				}
+				
+			};
+			
+			espero30.start();	
+			
+			try {
+				espero30.join();					
+//				Thread.sleep(1000);
+			}catch(InterruptedException e) {}
+			
+			/*EL JUGADOR CANTA TRUCO*/
+			
+			if(cantadoTruco[0].equals("truco")) {
+				
+				MAQUINA.yourTurnAccept(cantadoTruco);
+				
+				/*SI LA IA QUIERE*/
+				
+				if(cantadoTruco[1].equals("quiero")) {					//BLOQUE 12
+					
+					/**PROVISORIO*/
+					System.out.println("la IA quiso");
+					/***/
+					
+					trucoQueridoBloque12();
+					
+				}
+				
+				/*SI LA IA NO QUIERE*/
+				
+				else if(cantadoTruco[1].equals("no quiero")) {
+					
+					/**PROVISORIO*/
+					System.out.println("la IA no quiso");
+					/***/
+					
+					sistPuntuacion(cantadoTruco,j,MAQUINA);
+					acumulador = String.valueOf(j.getPuntos());
+					pts1.setText(acumulador);
+					
+				}
+				
+				/*SI LA IA REVIRA*/
+				
+				else if(cantadoTruco[1].equals("retruco")) {
+					
+					texto.setText("<html>"+ cantadoTruco[1] +"</html>");
+					quiero.setEnabled(true);
+					noQuiero.setEnabled(true);
+
+					c1.setEnabled(false);
+					c2.setEnabled(false);
+					c3.setEnabled(false);
+
+					accionUsuario = false;
+					Thread espero29 = new Thread() {
+						
+						@Override
+						public void run() {
+							
+							System.out.print("\nEspero que el jugador quiera/no quiera retruco ");
+							while(accionUsuario == false) {
+								try {
+					    			System.out.print(". ");
+					    			Thread.sleep(1000);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
+							}
+							System.out.println("\nRetomo la ejecucion (mi turno)\n");
+						}
+						
+					};
+																				    					
+					espero29.start();	
+																				    					
+					try {
+						espero29.join();					
+						//Thread.sleep(1000);
+					}catch(InterruptedException e) {}
+					
+					/*SI EL JUGADOR QUIERE*/
+					
+					if(cantadoTruco[2].equals("quiero")) {					//BLOQUE 12
+						
+						trucoQueridoBloque12();
+						
+					}
+					
+					/*SI EL JUGADOR NO QUIERE*/
+					
+					else if(cantadoTruco[2].equals("no quiero")) {
+						//LA IA GANA
+						
+						sistPuntuacion(cantadoTruco,j,MAQUINA);
+						acumulador = String.valueOf(MAQUINA.getPuntos());
+						pts2.setText(acumulador);
+						
+						//SIGUIENTE RONDA
+					}
+					
+					/*SI EL JUGADOR REVIRA*/
+					
+					else if(cantadoTruco[2].equals("vale cuatro")) {
+						
+						MAQUINA.yourTurnAccept(cantadoTruco);
+						
+						/*SI LA IA QUIERE*/
+						
+						if(cantadoTruco[3].equals("quiero")) {					//BLOQUE 12
+							
+							/**PROVISORIO*/
+							System.out.println("la IA quiso");
+							/***/
+							
+							trucoQueridoBloque12();
+							
+						}
+						
+						/*SI LA IA NO QUIERE*/
+						
+						else {
+							
+							/**PROVISORIO*/
+							System.out.println("la IA no quiso");
+							/***/
+							
+							//EL JUGADOR GANA
+							
+							sistPuntuacion(cantadoTruco,j,MAQUINA);
+							acumulador = String.valueOf(j.getPuntos());
+							pts1.setText(acumulador);
+							
+							//SIGUIENTE RONDA
+						}
+						
+					}
+					
+				}
+				
+			}
+			
+			/*EL JUGADOR TIRA DIRECTAMENTE*/
+			
+			else {
+				
+				//CHEQUEAR SI EFECTIVAMENTE SE TOMO LA SEGUNDA CARTA DE LA SEGUNDA TIRADA
+				auxJ = queCartaFueTirada();
+				
+				//LE TOCA A LA IA
+				
+				tiraIA = null;
+				tiraIA = MAQUINA.yourTurn(cantadoTruco, auxJ);
+				auxIA = tiraIA[0];
+				
+				/*LA IA PUEDE CANTAR TRUCO*/
+				
+				if(cantadoTruco[0].equals("truco")) {
+					
+					texto.setText("<html>"+ cantadoTruco[0] +"</html>");
+					quiero.setEnabled(true);
+					noQuiero.setEnabled(true);
+	
+		    		c1.setEnabled(false);
+		    		c2.setEnabled(false);
+		    		c3.setEnabled(false);
+					
+					accionUsuario = false;
+					Thread espero32 = new Thread() {
+						
+						@Override
+						public void run() {
+				    		
+							System.out.print("\nEspero que el jugador quiera/no quiera truco (me gano primera) ");
+							while(accionUsuario == false) {
+								try {
+					    			System.out.print(". ");
+					    			Thread.sleep(1000);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
+				    		}
+				    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+						}
+						
+					};
+					
+					espero32.start();	
+					
+					try {
+						espero32.join();					
+	//					Thread.sleep(1000);
+					}catch(InterruptedException e) {}
+					
+					/*SI EL JUGADOR QUIERE*/
+					
+					if(cantadoTruco[1].equals("quiero")) {			//BLOQUE 9
+						
+						trucoQueridoBloque9();
+						
+					}
+					
+					/*SI EL JUGADOR NO QUIERE*/
+					
+					else if(cantadoTruco[1].equals("no quiero")) {
+						//LA IA GANA
+	
+						sistPuntuacion(cantadoTruco,j,MAQUINA);
+						acumulador = String.valueOf(MAQUINA.getPuntos());
+						pts2.setText(acumulador);
+						
+						//SIGUIENTE RONDA
+					}
+					
+					/*SI EL JUGADOR REVIRA*/
+					
+					else if(cantadoTruco[1].equals("retruco")) {
+						
+						MAQUINA.yourTurnAccept(cantadoTruco);
+						
+						/*SI LA IA QUIERE*/
+						
+						if(cantadoTruco[2].equals("quiero")) {		//BLOQUE 9
+							
+							/**PROVISORIO*/
+							System.out.println("la IA quiso");
+							/***/
+							
+							trucoQueridoBloque9();
+							
+						}
+						
+						/*SI LA IA NO QUIERE*/
+						
+						else if(cantadoTruco[2].equals("no quiero")) {
+							
+							/**PROVISORIO*/
+							System.out.println("la IA no quiso");
+							/***/
+							
+							//EL JUGADOR GANA
+	
+							sistPuntuacion(cantadoTruco,j,MAQUINA);
+							acumulador = String.valueOf(j.getPuntos());
+							pts1.setText(acumulador);
+							
+							//SIGUIENTE RONDA
+						}
+						
+						/*SI LA IA REVIRA*/
+						
+						else if(cantadoTruco[2].equals("vale cuatro")) {
+							
+							texto.setText("<html>"+ cantadoTruco[2] +"</html>");
+							quiero.setEnabled(true);
+							noQuiero.setEnabled(true);
+	
+				    		c1.setEnabled(false);
+				    		c2.setEnabled(false);
+				    		c3.setEnabled(false);
+							
+							accionUsuario = false;
+	    					Thread espero33 = new Thread() {
+	    						
+	    						@Override
+	    						public void run() {
+	    				    		
+	    							System.out.print("\nEspero que el jugador quiera/no quiera retruco (me gano primera) ");
+	    							while(accionUsuario == false) {
+	    								try {
+	    					    			System.out.print(". ");
+	    					    			Thread.sleep(1000);
+	    								} catch (InterruptedException e) {
+	    									e.printStackTrace();
+	    								}
+	    				    		}
+	    				    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+	    						}
+	    						
+	    					};
+	    					
+	    					espero33.start();	
+	    					
+	    					try {
+	    						espero33.join();					
+	//    						Thread.sleep(1000);
+	    					}catch(InterruptedException e) {}
+							
+							/*SI EL JUGADOR QUIERE*/
+	    					
+	    					if(cantadoTruco[3].equals("quiero")) {			//BLOQUE 9
+	    						
+	    						trucoQueridoBloque9();
+	    						
+	    					}
+	    					
+	    					/*SI EL JUGADOR NO QUIERE*/
+	    					
+	    					else {
+	    						//LA IA GANA
+	
+	    						sistPuntuacion(cantadoTruco,j,MAQUINA);
+	    						acumulador = String.valueOf(MAQUINA.getPuntos());
+	    						pts2.setText(acumulador);
+	    						
+	    						//SIGUIENTE RONDA
+	    					}
+							
+						}
+						
+					}
+					
+				}
+				
+				/*LA IA TIRA CARTA DIRECTAMENTE*/    	
+				
+				else {						
+					
+					tiratmp[0] = auxIA;
+					tiraIAnull = true;						//CHEQUEAR ESTO
+					mostrarTirada(tiratmp,tiraIAnull);
+					
+					/*SI LA IA MATA*/
+					
+					if(aux.returnOrden(auxIA) < aux.returnOrden(auxJ)) {
+						
+						tiraIA = null;
+						tiraIA = MAQUINA.yourTurn(cantadoTruco, null);
+						
+						//cantadoTruco[0] = "truco";
+						
+						/*LA IA CANTA TRUCO*/
+						
+						if(cantadoTruco[0].equals("truco")) {
+							
+							texto.setText("<html>"+ cantadoTruco[0] +"</html>");
+							quiero.setEnabled(true);
+							noQuiero.setEnabled(true);
+
+							c1.setEnabled(false);
+							c2.setEnabled(false);
+							c3.setEnabled(false);
+
+							accionUsuario = false;
+							Thread espero38 = new Thread() {
+								
+								@Override
+								public void run() {
+									
+									System.out.print("\nEspero que el jugador quiera/no quiera truco (me gano primera y gane segunda, pero antes de tirar, canto) ");
+									while(accionUsuario == false) {
+										try {
+							    			System.out.print(". ");
+							    			Thread.sleep(1000);
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
+									}
+									System.out.println("\nRetomo la ejecucion (mi turno)\n");
+								}
+								
+							};
+																						    					
+							espero38.start();	
+																						    					
+							try {
+								espero38.join();					
+								//Thread.sleep(1000);
+							}catch(InterruptedException e) {}
+							
+							/*SI EL JUGADOR QUIERE*/
+							
+							if(cantadoTruco[1].equals("quiero")) {							//BLOQUE 11
+								
+								trucoQueridoBloque11();
+								
+							}
+							
+							/*SI EL JUGADOR NO QUIERE*/
+							
+							else if(cantadoTruco[1].equals("no quiero")) {
+								//LA IA GANA
+								
+								sistPuntuacion(cantadoTruco,j,MAQUINA);
+								acumulador = String.valueOf(MAQUINA.getPuntos());
+								pts2.setText(acumulador);
+								
+								//SIGUIENTE RONDA
+								
+							}
+							
+							/*SI EL JUGADOR REVIRA*/
+							
+							else if(cantadoTruco[1].equals("retruco")) {
+								
+								MAQUINA.yourTurnAccept(cantadoTruco);
+								
+								/*SI LA IA QUIERE*/
+								
+								if(cantadoTruco[2].equals("quiero")) {				//BLOQUE 11
+									
+									/**PROVISORIO*/
+									System.out.println("la IA quiso");
+									/***/
+									
+									trucoQueridoBloque11();
+									
+								}
+								
+								/*SI LA IA NO QUIERE*/
+								
+								else if(cantadoTruco[2].equals("no quiero")) {
+									
+									/**PROVISORIO*/
+									System.out.println("la IA no quiso");
+									/***/
+									
+									//EL JUGADOR GANA
+									
+									sistPuntuacion(cantadoTruco,j,MAQUINA);
+									acumulador = String.valueOf(MAQUINA.getPuntos());
+									pts2.setText(acumulador);
+									
+									//SIGUIENTE RONDA
+									
+								}
+								
+								/*SI LA IA REVIRA*/
+								
+								else if(cantadoTruco[2].equals("vale cuatro")) {
+									
+									texto.setText("<html>"+ cantadoTruco[2] +"</html>");
+									quiero.setEnabled(true);
+									noQuiero.setEnabled(true);
+
+									c1.setEnabled(false);
+									c2.setEnabled(false);
+									c3.setEnabled(false);
+
+									accionUsuario = false;
+									Thread espero39 = new Thread() {
+										
+										@Override
+										public void run() {
+											
+											System.out.print("\nEspero que el jugador quiera/no quiera vale cuatro ");
+											while(accionUsuario == false) {
+												try {
+									    			System.out.print(". ");
+									    			Thread.sleep(1000);
+												} catch (InterruptedException e) {
+													e.printStackTrace();
+												}
+											}
+											System.out.println("\nRetomo la ejecucion (mi turno)\n");
+										}
+										
+									};
+																								    					
+									espero39.start();	
+																								    					
+									try {
+										espero39.join();					
+										//Thread.sleep(1000);
+									}catch(InterruptedException e) {}
+									
+									/*SI EL JUGADOR QUIERE*/
+									
+									if(cantadoTruco[3].equals("quiero")) {				//BLOQUE 11
+										
+										trucoQueridoBloque11();
+										
+									}
+									
+									/*SI EL JUGADOR NO QUIERE*/
+									
+									else {
+										//LA IA GANA
+										
+										sistPuntuacion(cantadoTruco,j,MAQUINA);
+										acumulador = String.valueOf(MAQUINA.getPuntos());
+										pts2.setText(acumulador);
+										
+										//SIGUIENTE RONDA
+									}
+									
+								}
+								
+							}
+							
+						}
+						
+						/*LA IA TIRA DIRECTAMENTE*/
+						
+						else {
+					
+							//CHEQUEAR, PORQUE SI TIRA BAJA ENTONCES NO PUEDE VOLVER A TIRAR, PORQUE EL JUGADOR LE GANO DOS TIRADAS
+							//OJO CON PONERLO A FALSO
+							tiraIAnull = true;
+							mostrarTirada(tiraIA,tiraIAnull);
+							
+							accionUsuario = false;
+							Thread espero31 = new Thread() {
+								
+								@Override
+								public void run() {
+						    		
+									System.out.print("\nEspero que el jugador tire en tercera (me gano primera y le gane segunda) ");
+									while(accionUsuario == false) {
+										try {
+							    			System.out.print(". ");
+							    			Thread.sleep(1000);
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
+						    		}
+						    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+								}
+								
+							};
+							
+							espero31.start();	
+							
+							try {
+								espero31.join();					
+		//						Thread.sleep(1000);
+							}catch(InterruptedException e) {}
+							
+							/*EL JUGADOR PUEDE CANTAR TRUCO*/
+							
+							if(cantadoTruco[0].equals("truco")) {
+								
+								MAQUINA.yourTurnAccept(cantadoTruco);
+								
+								/*SI LA IA QUIERE*/
+								
+								if(cantadoTruco[1].equals("quiero")) {					//BLOQUE 10
+									
+									trucoQueridoBloque10();
+								}
+								
+								/*SI LA IA NO QUIERE*/
+								
+								else if(cantadoTruco[1].equals("no quiero")) {
+									
+									/**PROVISORIO*/
+									System.out.println("la IA no quiso");
+									/***/
+									
+									//EL JUGADOR GANA
+		
+									sistPuntuacion(cantadoTruco,j,MAQUINA);
+									acumulador = String.valueOf(j.getPuntos());
+									pts1.setText(acumulador);
+									
+									//SIGUIENTE RONDA											    							
+								}
+								
+								/*SI LA IA REVIRA*/
+								
+								else if(cantadoTruco[1].equals("retruco")) {
+									
+									texto.setText("<html>"+ cantadoTruco[1] +"</html>");
+									quiero.setEnabled(true);
+									noQuiero.setEnabled(true);
+
+						    		c1.setEnabled(false);
+						    		c2.setEnabled(false);
+						    		c3.setEnabled(false);
+						    		
+						    		accionUsuario = false;
+									Thread espero38 = new Thread() {
+			    	    			
+			    	    			@Override
+			    	    			public void run() {
+			    			    		
+			    	    				System.out.print("\nEspero que el jugador quiera/no quiera el retruco ");
+			    	    				while(accionUsuario == false) {
+			    	    					try {
+			    				    			System.out.print(". ");
+			    				    			Thread.sleep(1000);
+			    							} catch (InterruptedException e) {
+			    								e.printStackTrace();
+			    							}
+			    			    		}
+			    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+			    	    			}
+			    	    			
+									};
+			        			
+				    	    		espero38.start();	
+				    	    		
+				    	    		try {
+				    					espero38.join();					
+//															    					Thread.sleep(1000);
+				    				}catch(InterruptedException e) {}
+									
+									
+				    	    		/*SI EL JUGADOR QUIERE*/
+				    	    		
+				    	    		if(cantadoTruco[2].equals("quiero")) {							//BLOQUE 10
+				    	    			
+				    	    			trucoQueridoBloque10();
+				    	    			
+				    	    		}
+				    	    		
+				    	    		/*SI EL JUGADOR NO QUIERE*/
+				    	    		
+				    	    		else if(cantadoTruco[2].equals("no quiero")) {
+				    	    			//EL JUGADOR GANA
+				    	    			
+				    	    			sistPuntuacion(cantadoTruco,j,MAQUINA);
+										acumulador = String.valueOf(MAQUINA.getPuntos());
+										pts2.setText(acumulador);
+										
+				    	    			//SIGUIENTE RONDA
+				    	    			
+				    	    		}
+				    	    		
+				    	    		/*SI EL JUGADOR REVIRA*/
+				    	    		
+				    	    		else if(cantadoTruco[2].equals("vale cuatro")) {
+				    	    			
+				    	    			MAQUINA.yourTurnAccept(cantadoTruco);
+				    	    			
+				    	    			/*SI LA IA QUIERE*/
+				    	    			
+				    	    			if(cantadoTruco[3].equals("quiero")) {									//BLOQUE 10
+				    	    				
+				    	    				trucoQueridoBloque10();
+				    	    				
+				    	    			}
+				    	    			
+				    	    			/*SI LA IA NO QUIERE*/
+				    	    			
+				    	    			else {
+				    	    				
+				    	    				/**PROVISORIO*/
+											System.out.println("la IA no quiso");
+											/***/
+											
+											sistPuntuacion(cantadoTruco,j,MAQUINA);
+											acumulador = String.valueOf(j.getPuntos());
+											pts1.setText(acumulador);
+				    	    				
+				    	    			}
+				    	    			
+				    	    		}
+				    	    		
+				    	    		
+								}
+							
+								
+							}
+							
+							/*EL JUGADOR PUEDE TIRAR CARTA DIRECTAMENTE*/
+							
+							else {													//PARTE DEL BLOQUE 10, PERO SE DEJA ASI
+								
+								auxIA = tiraIA[1];
+								auxJ = queCartaFueTirada();
+								
+								/*SI EL JUGADOR MATA*/
+								
+								if(aux.returnOrden(auxJ) <= aux.returnOrden(auxIA)) {
+									//EL JUGADOR GANA
+		
+									sistPuntuacion(cantadoTruco,j,MAQUINA);
+									acumulador = String.valueOf(j.getPuntos());
+									pts1.setText(acumulador);
+									
+									//SIGUIENTE RONDA
+								}
+								
+								/*SI EL JUGADOR NO MATA*/
+								
+								else {
+									//LA IA GANA
+		
+									sistPuntuacion(cantadoTruco,j,MAQUINA);
+									acumulador = String.valueOf(MAQUINA.getPuntos());
+									pts2.setText(acumulador);
+									
+									//SIGUIENTE RONDA
+								}
+								
+							}
+						
+						
+						}
+						
+						
+					}
+					
+					/*SI LA IA NO MATA O EMPARDA*/
+					
+					else {
+						
+						tiraIAnull = false;
+						mostrarTirada(tiraIA,tiraIAnull);
+						
+						//EL JUGADOR GANA
+	
+						sistPuntuacion(cantadoTruco,j,MAQUINA);
+						acumulador = String.valueOf(j.getPuntos());
+						pts1.setText(acumulador);
+						
+						//SIGUIENTE RONDA
+						
+					}
+					
+					
+				}
+			
+			}
+			
+													    			
+		}
+		
+	}
+	
+	
 	//FUNCION PARA SABER QUE CARTA TIR� EL JUGADOR CUANDO APRET� UN BOTON
 	public Carta queCartaFueTirada() {		
 		
@@ -3354,15 +4264,275 @@ public class Interfaz extends JFrame{
 	}
 	
 	
+	public void trucoQueridoBloque12() {
+		
+		Thread espero41 = new Thread() {
+			
+			@Override
+			public void run() {
+	    		
+				System.out.print("\nEspero que el jugador tire en segunda (me gano primera) ");
+				while(accionUsuario == false) {
+					try {
+		    			System.out.print(". ");
+		    			Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+	    		}
+	    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+			}
+			
+		};
+		
+		espero41.start();	
+		
+		try {
+			espero41.join();					
+//			Thread.sleep(1000);
+		}catch(InterruptedException e) {}
+		
+		
+		//CHEQUEAR SI EFECTIVAMENTE SE TOMO LA SEGUNDA CARTA DE LA SEGUNDA TIRADA
+		auxJ = queCartaFueTirada();
+		
+		//LE TOCA A LA IA
+		
+		tiraIA = null;
+		tiraIA = MAQUINA.yourTurn(cantadoTruco, auxJ);
+		auxIA = tiraIA[0];
+		tiraIAnull = true;
+		mostrarTirada(tiraIA,tiraIAnull);
+		
+		/*SI LA IA MATA*/
+		
+		if(aux.returnOrden(auxIA) < aux.returnOrden(auxJ)) {
+			
+			tiraIA = null;
+			tiraIA = MAQUINA.yourTurn(cantadoTruco, null);
+			auxIA = tiraIA[0];
+			tiraIAnull = true;
+			mostrarTirada(tiraIA,tiraIAnull);
+		
+			accionUsuario = false;
+			Thread espero31 = new Thread() {
+				
+				@Override
+				public void run() {
+		    		
+					System.out.print("\nEspero que el jugador tire en tercera (me gano primera y le gane segunda) ");
+					while(accionUsuario == false) {
+						try {
+			    			System.out.print(". ");
+			    			Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+		    		}
+		    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+				}
+				
+			};
+			
+			espero31.start();	
+			
+			try {
+				espero31.join();					
+//						Thread.sleep(1000);
+			}catch(InterruptedException e) {}
+			
+			//EL JUGADOR TIRA EN TERCERA
+			auxIA = tiraIA[0];
+			auxJ = queCartaFueTirada();
+			
+			/*SI EL JUGADOR MATA*/
+			
+			if(aux.returnOrden(auxJ) <= aux.returnOrden(auxIA)) {
+				//EL JUGADOR GANA
+
+				sistPuntuacion(cantadoTruco,j,MAQUINA);
+				acumulador = String.valueOf(j.getPuntos());
+				pts1.setText(acumulador);
+				
+				//SIGUIENTE RONDA
+			}
+			
+			/*SI EL JUGADOR NO MATA*/
+			
+			else {
+				//LA IA GANA
+
+				sistPuntuacion(cantadoTruco,j,MAQUINA);
+				acumulador = String.valueOf(MAQUINA.getPuntos());
+				pts2.setText(acumulador);
+				
+				//SIGUIENTE RONDA
+			}
+					
+		}
+
+		/*SI LA IA NO MATA O EMPARDA*/
+		
+		else {
+			
+			tiraIAnull = false;
+			mostrarTirada(tiraIA,tiraIAnull);
+			
+			//EL JUGADOR GANA
+
+			sistPuntuacion(cantadoTruco,j,MAQUINA);
+			acumulador = String.valueOf(j.getPuntos());
+			pts1.setText(acumulador);
+			
+			//SIGUIENTE RONDA
+			
+		}
+		
+	}
+	
+	public void trucoQueridoBloque11() {
+		
+		//CHEQUEAR ESTO SI TIRA CORRECTAMENTE LA TERCER CARTA
+		//tiraIAnull = true;
+		//mostrarTirada(tiraIA,tiraIAnull);
+		
+		tiratmp = null;
+		tiratmp[0] = tiraIA[1];
+		tiraIAnull = true;
+		mostrarTirada(tiratmp,tiraIAnull);
+		
+		accionUsuario = false;
+		Thread espero40 = new Thread() {
+			
+			@Override
+			public void run() {
+	    		
+				System.out.print("\nEspero que el jugador tire ");
+				while(accionUsuario == false) {
+					try {
+		    			System.out.print(". ");
+		    			Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+	    		}
+	    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+			}
+			
+		};
+		
+		espero40.start();	
+		
+		try {
+			espero40.join();					
+//						Thread.sleep(1000);
+		}catch(InterruptedException e) {}
+		
+		auxIA = tiraIA[1];
+		auxJ = queCartaFueTirada();
+		
+		/*SI EL JUGADOR MATA*/
+		
+		if(aux.returnOrden(auxJ) <= aux.returnOrden(auxIA)) {
+			//EL JUGADOR GANA
+
+			sistPuntuacion(cantadoTruco,j,MAQUINA);
+			acumulador = String.valueOf(j.getPuntos());
+			pts1.setText(acumulador);
+			
+			//SIGUIENTE RONDA
+		}
+		
+		/*SI EL JUGADOR NO MATA*/
+		
+		else {
+			//LA IA GANA
+
+			sistPuntuacion(cantadoTruco,j,MAQUINA);
+			acumulador = String.valueOf(MAQUINA.getPuntos());
+			pts2.setText(acumulador);
+			
+			//SIGUIENTE RONDA
+		}
+		
+	}
+	
+	public void trucoQueridoBloque10() {
+		
+		/**PROVISORIO*/
+		System.out.println("la IA quiso");
+		/***/
+		
+		//ESPERO QUE EL JUGADOR TIRE CARTA O SE VAYA AL MAZO (SOLO ESAS DOS OPCIONES)
+		accionUsuario = false;
+		Thread espero32 = new Thread() {
+			
+			@Override
+			public void run() {
+	    		
+				System.out.print("\nEspero que el jugador tire en tercera (me gano primera y gane segunda) ");
+				while(accionUsuario == false) {
+					try {
+		    			System.out.print(". ");
+		    			Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+	    		}
+	    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+			}
+			
+		};
+		
+		espero32.start();	
+		
+		try {
+			espero32.join();					
+//	    						Thread.sleep(1000);
+		}catch(InterruptedException e) {}
+		
+		auxIA = tiraIA[1];
+		auxJ = queCartaFueTirada();
+		
+		/*SI EL JUGADOR MATA*/
+		
+		if(aux.returnOrden(auxJ) <= aux.returnOrden(auxIA)) {
+			//EL JUGADOR GANA
+
+			sistPuntuacion(cantadoTruco,j,MAQUINA);
+			acumulador = String.valueOf(j.getPuntos());
+			pts1.setText(acumulador);
+			
+			//SIGUIENTE RONDA
+		}
+		
+		/*SI EL JUGADOR NO MATA*/
+		
+		else {
+			//LA IA GANA
+			sistPuntuacion(cantadoTruco,j,MAQUINA);
+			acumulador = String.valueOf(MAQUINA.getPuntos());
+			pts2.setText(acumulador);
+			//SIGUIENTE RONDA
+		}
+		
+	}
+	
 	public void trucoQueridoBloque9() {
+		
+		tiratmp[0] = auxIA;
+		tiraIAnull = true;						//CHEQUEAR ESTO
+		mostrarTirada(tiratmp,tiraIAnull);
 		
 		/*SI LA IA MATA*/
 		
 		if(aux.returnOrden(auxIA) < aux.returnOrden(auxJ)) {
 			
 			//CHEQUEAR, PORQUE SI TIRA BAJA ENTONCES NO PUEDE VOLVER A TIRAR, PORQUE EL JUGADOR LE GANO DOS TIRADAS
-			tiraIAnull = false;
-			mostrarTirada(tiraIA,tiraIAnull);
+			//tiratmp = null;
+			tiratmp[0] = tiraIA[1];
+			tiraIAnull = true;
+			mostrarTirada(tiratmp,tiraIAnull);
 			
 			accionUsuario = false;
 			Thread espero31 = new Thread() {
@@ -3370,7 +4540,7 @@ public class Interfaz extends JFrame{
 				@Override
 				public void run() {
 		    		
-					System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
+					System.out.print("\nEspero que el jugador tire en tercera (me gano primera y le gane segunda) ");
 					while(accionUsuario == false) {
 						try {
 			    			System.out.print(". ");
@@ -3400,7 +4570,11 @@ public class Interfaz extends JFrame{
 			
 			if(aux.returnOrden(auxJ) <= aux.returnOrden(auxIA)) {
 				//EL JUGADOR GANA
-				//SE SUMAN PUNTOS
+
+				sistPuntuacion(cantadoTruco,j,MAQUINA);
+				acumulador = String.valueOf(j.getPuntos());
+				pts1.setText(acumulador);
+				
 				//SIGUIENTE RONDA
 			}
 			
@@ -3408,7 +4582,11 @@ public class Interfaz extends JFrame{
 			
 			else {
 				//LA IA GANA
-				//SE SUMAN PUNTOS
+
+				sistPuntuacion(cantadoTruco,j,MAQUINA);
+				acumulador = String.valueOf(MAQUINA.getPuntos());
+				pts2.setText(acumulador);
+				
 				//SIGUIENTE RONDA
 			}
 			
@@ -3422,7 +4600,11 @@ public class Interfaz extends JFrame{
 			mostrarTirada(tiraIA,tiraIAnull);
 			
 			//EL JUGADOR GANA
-			//SE SUMAN PUNTOS
+
+			sistPuntuacion(cantadoTruco,j,MAQUINA);
+			acumulador = String.valueOf(j.getPuntos());
+			pts1.setText(acumulador);
+			
 			//SIGUIENTE RONDA
 			
 		}
@@ -3437,7 +4619,7 @@ public class Interfaz extends JFrame{
 			@Override
 			public void run() {
 	    		
-				System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
+				System.out.print("\nEspero que el jugador tire en tercera (empardamos segunda y ya tire todas las cartas) ");
 				while(accionUsuario == false) {
 					try {
 		    			System.out.print(". ");
@@ -3464,15 +4646,23 @@ public class Interfaz extends JFrame{
 		
 		if(aux.returnOrden(auxJ) < aux.returnOrden(auxIA)) {
 			//EL JUGADOR GANA
-			//SE SUMAN PUNTOS
+
+			sistPuntuacion(cantadoTruco,j,MAQUINA);
+			acumulador = String.valueOf(j.getPuntos());
+			pts1.setText(acumulador);
+			
 			//SIGUIENTE RONDA
 		}
 		
 		/*SI EL JUGADOR NO LA MATA*/
 		
 		else {
-			//EL JUGADOR GANA
-			//SE SUMAN PUNTOS
+			//LA IA GANA
+
+			sistPuntuacion(cantadoTruco,j,MAQUINA);
+			acumulador = String.valueOf(MAQUINA.getPuntos());
+			pts2.setText(acumulador);
+			
 			//SIGUIENTE RONDA
 		}
 		
@@ -3490,7 +4680,7 @@ public class Interfaz extends JFrame{
 			@Override
 			public void run() {
 	    		
-				System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
+				System.out.print("\nEspero que el jugador tire en tercera (empardamos segunda) ");
 				while(accionUsuario == false) {
 					try {
 		    			System.out.print(". ");
@@ -3517,7 +4707,11 @@ public class Interfaz extends JFrame{
 		
 		if(aux.returnOrden(auxJ) < aux.returnOrden(auxIA)) {
 			//EL JUGADOR GANA
-			//SE SUMAN PUNTOS
+
+			sistPuntuacion(cantadoTruco,j,MAQUINA);
+			acumulador = String.valueOf(j.getPuntos());
+			pts1.setText(acumulador);
+			
 			//SIGUIENTE RONDA
 		}
 		
@@ -3525,7 +4719,11 @@ public class Interfaz extends JFrame{
 		
 		else {
 			//LA IA GANA
-			//SE SUMAN PUNTOS
+
+			sistPuntuacion(cantadoTruco,j,MAQUINA);
+			acumulador = String.valueOf(MAQUINA.getPuntos());
+			pts2.setText(acumulador);
+			
 			//SIGUIENTE RONDA
 		}
 		
@@ -3539,7 +4737,7 @@ public class Interfaz extends JFrame{
 			@Override
 			public void run() {
 	    		
-				System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
+				System.out.print("\nEspero que el jugador tire en segunda (empardamos primera) ");
 				while(accionUsuario == false) {
 					try {
 		    			System.out.print(". ");
@@ -3566,7 +4764,11 @@ public class Interfaz extends JFrame{
 		
 		if(aux.returnOrden(auxJ) < aux.returnOrden(auxIA)) {
 			//EL JUGADOR GANA
-			//SE SUMAN PUNTOS
+
+			sistPuntuacion(cantadoTruco,j,MAQUINA);
+			acumulador = String.valueOf(j.getPuntos());
+			pts1.setText(acumulador);
+			
 			//SIGUIENTE RONDA
 		}
 		
@@ -3574,7 +4776,11 @@ public class Interfaz extends JFrame{
 		
 		else if(aux.returnOrden(auxJ) > aux.returnOrden(auxIA)) {
 			//LA IA GANA
-			//SE SUMAN PUNTOS
+
+			sistPuntuacion(cantadoTruco,j,MAQUINA);
+			acumulador = String.valueOf(MAQUINA.getPuntos());
+			pts2.setText(acumulador);
+			
 			//SIGUIENTE RONDA
 		}
 		
@@ -3595,7 +4801,7 @@ public class Interfaz extends JFrame{
     			@Override
     			public void run() {
 		    		
-    				System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
+    				System.out.print("\nEspero que el jugador tire en tercera (empardamos segunda) ");
     				while(accionUsuario == false) {
     					try {
 			    			System.out.print(". ");
@@ -3624,7 +4830,11 @@ public class Interfaz extends JFrame{
 			
 			if(aux.returnOrden(auxJ) < aux.returnOrden(auxIA)) {
 				//EL JUGADOR GANA
-				//SE SUMAN PUNTOS
+
+				sistPuntuacion(cantadoTruco,j,MAQUINA);
+				acumulador = String.valueOf(j.getPuntos());
+				pts1.setText(acumulador);
+				
 				//SIGUIENTE RONDA
 			}
 			
@@ -3632,7 +4842,11 @@ public class Interfaz extends JFrame{
 			
 			else {
 				//LA IA GANA
-				//SE SUMAN PUNTOS
+
+				sistPuntuacion(cantadoTruco,j,MAQUINA);
+				acumulador = String.valueOf(MAQUINA.getPuntos());
+				pts2.setText(acumulador);
+				
 				//SIGUIENTE RONDA
 			}
 			
@@ -3654,7 +4868,7 @@ public class Interfaz extends JFrame{
 			@Override
 			public void run() {
 	    		
-				System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
+				System.out.print("\nEspero que el jugador tire en segunda (empardamos primera) ");
 				while(accionUsuario == false) {
 					try {
 		    			System.out.print(". ");
@@ -3683,7 +4897,11 @@ public class Interfaz extends JFrame{
 		
 		if(aux.returnOrden(auxJ) < aux.returnOrden(auxIA)) {
 			//EL JUGADOR GANA
-			//SE SUMAN PUNTOS
+
+			sistPuntuacion(cantadoTruco,j,MAQUINA);
+			acumulador = String.valueOf(j.getPuntos());
+			pts1.setText(acumulador);
+			
 			//SIGUIENTE RONDA
 		}
 		
@@ -3691,7 +4909,11 @@ public class Interfaz extends JFrame{
 		
 		else if(aux.returnOrden(auxJ) > aux.returnOrden(auxIA)) {
 			//LA IA GANA
-			//SE SUMAN PUNTOS
+
+			sistPuntuacion(cantadoTruco,j,MAQUINA);
+			acumulador = String.valueOf(MAQUINA.getPuntos());
+			pts2.setText(acumulador);
+			
 			//SIGUIENTE RONDA
 		}
 		
@@ -3712,7 +4934,7 @@ public class Interfaz extends JFrame{
     			@Override
     			public void run() {
 		    		
-    				System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
+    				System.out.print("\nEspero que el jugador tire en tercera (empardamos segunda) ");
     				while(accionUsuario == false) {
     					try {
 			    			System.out.print(". ");
@@ -3741,7 +4963,11 @@ public class Interfaz extends JFrame{
 			
 			if(aux.returnOrden(auxJ) < aux.returnOrden(auxIA)) {
 				//EL JUGADOR GANA
-				//SE SUMAN PUNTOS
+
+				sistPuntuacion(cantadoTruco,j,MAQUINA);
+				acumulador = String.valueOf(j.getPuntos());
+				pts1.setText(acumulador);
+				
 				//SIGUIENTE RONDA
 			}
 			
@@ -3749,7 +4975,11 @@ public class Interfaz extends JFrame{
 			
 			else {
 				//LA IA GANA
-				//SE SUMAN PUNTOS
+
+				sistPuntuacion(cantadoTruco,j,MAQUINA);
+				acumulador = String.valueOf(MAQUINA.getPuntos());
+				pts2.setText(acumulador);
+				
 				//SIGUIENTE RONDA
 			}
 			
@@ -3769,7 +4999,11 @@ public class Interfaz extends JFrame{
 		
 		if(aux.returnOrden(auxIA) <= aux.returnOrden(auxJ)) {
 			//LA IA GANA
-			//SE SUMAN PUNTOS
+
+			sistPuntuacion(cantadoTruco,j,MAQUINA);
+			acumulador = String.valueOf(MAQUINA.getPuntos());
+			pts2.setText(acumulador);
+			
 			//SIGUIENTE RONDA
 		}
 		
@@ -3777,7 +5011,11 @@ public class Interfaz extends JFrame{
 		
 		else {
 			//LA IA GANA
-			//SE SUMAN PUNTOS
+
+			sistPuntuacion(cantadoTruco,j,MAQUINA);
+			acumulador = String.valueOf(j.getPuntos());
+			pts1.setText(acumulador);
+			
 			//SIGUIENTE RONDA
 		}
 		
@@ -3791,7 +5029,7 @@ public class Interfaz extends JFrame{
 			@Override
 			public void run() {
 	    		
-				System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
+				System.out.print("\nEspero que el jugador tire en tercera (me gano segunda primera) ");
 				while(accionUsuario == false) {
 					try {
 		    			System.out.print(". ");
@@ -3826,7 +5064,11 @@ public class Interfaz extends JFrame{
 		
 		if(aux.returnOrden(auxIA) <= aux.returnOrden(auxJ) ) {
 			//LA IA GANA
-			//SE SUMAN PUNTOS
+
+			sistPuntuacion(cantadoTruco,j,MAQUINA);
+			acumulador = String.valueOf(MAQUINA.getPuntos());
+			pts2.setText(acumulador);
+			
 			//SIGUIENTE RONDA
 		}
 		
@@ -3834,7 +5076,11 @@ public class Interfaz extends JFrame{
 		
 		else {
 			//EL JUGADOR GANA
-			//SE SUMAN PUNTOS
+
+			sistPuntuacion(cantadoTruco,j,MAQUINA);
+			acumulador = String.valueOf(j.getPuntos());
+			pts1.setText(acumulador);
+			
 			//SIGUIENTE RONDA
 		}
 		
@@ -3875,7 +5121,11 @@ public class Interfaz extends JFrame{
 		
 		if(aux.returnOrden(auxJ) >= aux.returnOrden(auxIA)) {
 			//LA IA GANA
-			//SE SUMAN PUNTOS
+
+			sistPuntuacion(cantadoTruco,j,MAQUINA);
+			acumulador = String.valueOf(MAQUINA.getPuntos());
+			pts2.setText(acumulador);
+			
 			//SIGUIENTE RONDA
 		}
 		
@@ -3890,7 +5140,7 @@ public class Interfaz extends JFrame{
     			@Override
     			public void run() {
 		    		
-    				System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
+    				System.out.print("\nEspero que el jugador tire en tercera (me gano segunda) ");
     				while(accionUsuario == false) {
     					try {
 			    			System.out.print(". ");
@@ -3923,7 +5173,11 @@ public class Interfaz extends JFrame{
 			
 			if(aux.returnOrden(auxIA) <= aux.returnOrden(auxJ)) {
 				//LA IA GANA
-				//SE SUMAN PUNTOS
+
+				sistPuntuacion(cantadoTruco,j,MAQUINA);
+				acumulador = String.valueOf(MAQUINA.getPuntos());
+				pts2.setText(acumulador);
+				
 				//SIGUIENTE RONDA
 			}
 			
@@ -3931,7 +5185,11 @@ public class Interfaz extends JFrame{
 			
 			else {
 				//EL JUGADOR GANA
-				//SE SUMAN PUNTOS
+
+				sistPuntuacion(cantadoTruco,j,MAQUINA);
+				acumulador = String.valueOf(j.getPuntos());
+				pts1.setText(acumulador);
+				
 				//SIGUIENTE RONDA
 			}
 			
@@ -3997,7 +5255,7 @@ public class Interfaz extends JFrame{
     			@Override
     			public void run() {
 		    		
-    				System.out.print("\nEspero que el jugador tire en tercera (me gano primera) ");
+    				System.out.print("\nEspero que el jugador tire en tercera (me gano segunda) ");
     				while(accionUsuario == false) {
     					try {
 			    			System.out.print(". ");
@@ -4032,7 +5290,11 @@ public class Interfaz extends JFrame{
 			
 			if(aux.returnOrden(auxIA) <= aux.returnOrden(auxJ)) {
 				//LA IA GANA
-				//SE SUMAN PUNTOS
+
+				sistPuntuacion(cantadoTruco,j,MAQUINA);
+				acumulador = String.valueOf(MAQUINA.getPuntos());
+				pts2.setText(acumulador);
+				
 				//SIGUIENTE RONDA
 			}
 			
@@ -4040,7 +5302,11 @@ public class Interfaz extends JFrame{
 			
 			else {
 				//EL JUGADOR GANA
-				//SE SUMAN PUNTOS
+
+				sistPuntuacion(cantadoTruco,j,MAQUINA);
+				acumulador = String.valueOf(j.getPuntos());
+				pts1.setText(acumulador);
+				
 				//SIGUIENTE RONDA
 			}
 			
@@ -4050,7 +5316,11 @@ public class Interfaz extends JFrame{
 		
 		else {
 			//LA IA GANA
-			//SE SUMAN PUNTOS
+
+			sistPuntuacion(cantadoTruco,j,MAQUINA);
+			acumulador = String.valueOf(MAQUINA.getPuntos());
+			pts2.setText(acumulador);
+			
 			//SIGUIENTE RONDA
 		}
 		
@@ -4141,15 +5411,11 @@ public class Interfaz extends JFrame{
     		if(aux.returnOrden(auxJ) >= aux.returnOrden(auxIA)) {
     			
     			//SE SUMAN PUNTOS
-    			if(cantadoTruco[0].equals("truco") && cantadoTruco[1].equals("quiero")) {
-    				MAQUINA.addPuntos(2);
-    			}
-    			else if(cantadoTruco[1].equals("retruco") && cantadoTruco[2].equals("quiero")) {
-    				MAQUINA.addPuntos(3);
-    			}
-    			else {
-    				MAQUINA.addPuntos(4);
-    			}
+    			
+    			sistPuntuacion(cantadoTruco,j,MAQUINA);
+    			acumulador = String.valueOf(MAQUINA.getPuntos());
+    			pts2.setText(acumulador);
+    			
     			//SE PASA A LA SIGUIENTE RONDA
     			
     		}
@@ -4166,7 +5432,7 @@ public class Interfaz extends JFrame{
 	    			@Override
 	    			public void run() {
 			    		
-	    				System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
+	    				System.out.print("\nEspero que el jugador tire en tercera (le gane primera y me gano segunda) ");
 	    				while(accionUsuario == false) {
 	    					try {
 				    			System.out.print(". ");
@@ -4201,15 +5467,10 @@ public class Interfaz extends JFrame{
     				tiraIAnull = true;
     				mostrarTirada(tiraIA,tiraIAnull);
     				//SE SUMAN PUNTOS
-    				if(cantadoTruco[0].equals("truco") && cantadoTruco[1].equals("quiero")) {
-        				MAQUINA.addPuntos(2);
-        			}
-        			else if(cantadoTruco[1].equals("retruco") && cantadoTruco[2].equals("quiero")) {
-        				MAQUINA.addPuntos(3);
-        			}
-        			else {
-        				MAQUINA.addPuntos(4);
-        			}
+
+    				sistPuntuacion(cantadoTruco,j,MAQUINA);
+    				acumulador = String.valueOf(MAQUINA.getPuntos());
+    				pts2.setText(acumulador);
     				
     				//EL JUGADOR PIERDE
     				//SE PASA LA SIGUIENTE RONDA
@@ -4220,15 +5481,11 @@ public class Interfaz extends JFrame{
     			
     			else {
     				//SE SUMAN PUNTOS
-    				if(cantadoTruco[0].equals("truco") && cantadoTruco[1].equals("quiero")) {
-        				j.addPuntos(2);
-        			}
-        			else if(cantadoTruco[1].equals("retruco") && cantadoTruco[2].equals("quiero")) {
-        				j.addPuntos(3);
-        			}
-        			else {
-        				j.addPuntos(4);
-        			}
+
+    				sistPuntuacion(cantadoTruco,j,MAQUINA);
+    				acumulador = String.valueOf(j.getPuntos());
+    				pts1.setText(acumulador);
+    				
     				//LA IA PIERDE
     				//SE PASA A LA SIGUIENTE RONDA
     				
@@ -4259,7 +5516,7 @@ public class Interfaz extends JFrame{
     			@Override
     			public void run() {
 		    		
-    				System.out.print("\nEspero que el jugador tire en segunda (empardamos primera y yo ya tire en segunda) ");
+    				System.out.print("\nEspero que el jugador tire en segunda (empardamos primera y ya tire en segunda) ");
     				while(accionUsuario == false) {
     					try {
 			    			System.out.print(". ");
@@ -4287,15 +5544,10 @@ public class Interfaz extends JFrame{
     		if(aux.returnOrden(auxJ) > aux.returnOrden(auxIA)) {
     			//LA IA GANA
     			//SE SUMAN PUNTOS
-    			if(cantadoTruco[0].equals("truco") && cantadoTruco[1].equals("quiero")) {
-    				MAQUINA.addPuntos(2);
-    			}
-    			else if(cantadoTruco[1].equals("retruco") && cantadoTruco[2].equals("quiero")) {
-    				MAQUINA.addPuntos(3);
-    			}
-    			else {
-    				MAQUINA.addPuntos(4);
-    			}
+
+    			sistPuntuacion(cantadoTruco,j,MAQUINA);
+    			acumulador = String.valueOf(MAQUINA.getPuntos());
+    			pts2.setText(acumulador);
     			
     			//SIGUIENTE RONDA
     		}
@@ -4305,15 +5557,11 @@ public class Interfaz extends JFrame{
     		else if(aux.returnOrden(auxJ) < aux.returnOrden(auxIA)) {
     			//EL JUGADOR GANA
     			//SE SUMAN PUNTOS
-    			if(cantadoTruco[0].equals("truco") && cantadoTruco[1].equals("quiero")) {
-    				j.addPuntos(2);
-    			}
-    			else if(cantadoTruco[1].equals("retruco") && cantadoTruco[2].equals("quiero")) {
-    				j.addPuntos(3);
-    			}
-    			else {
-    				j.addPuntos(4);
-    			}
+
+    			sistPuntuacion(cantadoTruco,j,MAQUINA);
+    			acumulador = String.valueOf(j.getPuntos());
+    			pts1.setText(acumulador);
+    			
     			//SIGUIENTE RONDA
     		}
     		
@@ -4333,7 +5581,7 @@ public class Interfaz extends JFrame{
 	    			@Override
 	    			public void run() {
 			    		
-	    				System.out.print("\nEspero que el jugador tire en tercera (empardamos dos veces y yo ya tire todas las cartas) ");
+	    				System.out.print("\nEspero que el jugador tire en tercera (empardamos dos veces y ya tire todas las cartas) ");
 	    				while(accionUsuario == false) {
 	    					try {
 				    			System.out.print(". ");
@@ -4361,15 +5609,11 @@ public class Interfaz extends JFrame{
 	    		if(aux.returnOrden(auxJ) < aux.returnOrden(auxIA)) {
 	    			//EL JUGADOR GANA
 	    			//SE SUMAN PUNTOS
-	    			if(cantadoTruco[0].equals("truco") && cantadoTruco[1].equals("quiero")) {
-	    				j.addPuntos(2);
-	    			}
-	    			else if(cantadoTruco[1].equals("retruco") && cantadoTruco[2].equals("quiero")) {
-	    				j.addPuntos(3);
-	    			}
-	    			else {
-	    				j.addPuntos(4);
-	    			}
+
+	    			sistPuntuacion(cantadoTruco,j,MAQUINA);
+	    			acumulador = String.valueOf(j.getPuntos());
+	    			pts1.setText(acumulador);
+	    			
 	    			//SIGUIENTE RONDA
 	    		}
 	    		
@@ -4379,15 +5623,11 @@ public class Interfaz extends JFrame{
 	    			
 	    			//LA IA GANA
 	    			//SE SUMAN PUNTOS
-	    			if(cantadoTruco[0].equals("truco") && cantadoTruco[1].equals("quiero")) {
-	    				MAQUINA.addPuntos(2);
-	    			}
-	    			else if(cantadoTruco[1].equals("retruco") && cantadoTruco[2].equals("quiero")) {
-	    				MAQUINA.addPuntos(3);
-	    			}
-	    			else {
-	    				MAQUINA.addPuntos(4);
-	    			}
+
+	    			sistPuntuacion(cantadoTruco,j,MAQUINA);
+	    			acumulador = String.valueOf(MAQUINA.getPuntos());
+	    			pts2.setText(acumulador);
+	    			
 	    			//SIGUIENTE RONDA
 	    			
 	    		}
@@ -4475,15 +5715,11 @@ public class Interfaz extends JFrame{
 	    		if(aux.returnOrden(auxJ) <= aux.returnOrden(auxIA)) {
 	    			//EL JUGADOR GANA
 	    			//SE SUMAN PUNTOS
-	    			if(cantadoTruco[0].equals("truco") && cantadoTruco[1].equals("quiero")) {
-	    				j.addPuntos(2);
-	    			}
-	    			else if(cantadoTruco[1].equals("retruco") && cantadoTruco[2].equals("quiero")) {
-	    				j.addPuntos(3);
-	    			}
-	    			else {
-	    				j.addPuntos(4);
-	    			}
+
+	    			sistPuntuacion(cantadoTruco,j,MAQUINA);
+	    			acumulador = String.valueOf(j.getPuntos());
+	    			pts1.setText(acumulador);
+	    			
 	    			//SIGUIENTE RONDA
 	    		}
 	    		
@@ -4492,15 +5728,11 @@ public class Interfaz extends JFrame{
 	    		else {
 	    			//LA IA GANA
 	    			//SE SUMAN PUNTOS
-	    			if(cantadoTruco[0].equals("truco") && cantadoTruco[1].equals("quiero")) {
-	    				MAQUINA.addPuntos(2);
-	    			}
-	    			else if(cantadoTruco[1].equals("retruco") && cantadoTruco[2].equals("quiero")) {
-	    				MAQUINA.addPuntos(3);
-	    			}
-	    			else {
-	    				MAQUINA.addPuntos(4);
-	    			}
+
+	    			sistPuntuacion(cantadoTruco,j,MAQUINA);
+	    			acumulador = String.valueOf(MAQUINA.getPuntos());
+	    			pts2.setText(acumulador);
+	    			
 	    			//SIGUIENTE RONDA
 	    		}
 	    		
@@ -4511,15 +5743,11 @@ public class Interfaz extends JFrame{
     		else {
     			//EL JUGADOR GANA
     			//SE SUMAN PUNTOS
-    			if(cantadoTruco[0].equals("truco") && cantadoTruco[1].equals("quiero")) {
-    				j.addPuntos(2);
-    			}
-    			else if(cantadoTruco[1].equals("retruco") && cantadoTruco[2].equals("quiero")) {
-    				j.addPuntos(3);
-    			}
-    			else {
-    				j.addPuntos(4);
-    			}
+
+    			sistPuntuacion(cantadoTruco,j,MAQUINA);
+    			acumulador = String.valueOf(j.getPuntos());
+    			pts1.setText(acumulador);
+    			
     			//SIGUIENTE RONDA
     		}
     		
@@ -4827,15 +6055,215 @@ public class Interfaz extends JFrame{
 
 	        ctemp.setIcon(null);
 	        
-	       
+	        if(tira.length == 1) {						//SIRVE PARA TIRATMP QUE TIENE UNA LONGITUD DE 1
+	        	return 0;
+	        }
 	        
-	       if(i==1) {
+	        
+	        if(i==1) {
 	    	   return 0;
-	       }
+	        }
 	    }
 		
 		return 0;
 	}
 	
 	
+
+    public static void sistPuntuacion(String cantado[],Jugador j1,Jugador j2) throws IllegalArgumentException{ 
+        //j1 siempre debe ser el que canta primero segun cantoPrimi
+        int index = 0;
+        if(cantado[index].equals("envido")){                        //canta j1       
+            if(cantado[++index].equals("quiero")){                  //canta j2
+                if(j1.envido(j2))
+                    j1.addPuntos(2);
+                else
+                    j2.addPuntos(2);
+            }
+            else if(cantado[index].equals("no quiero"))             //canta j2
+                j1.addPuntos(1);
+            else if(cantado[index].equals("envido")){               //canta j2
+
+                if(cantado[++index].equals("quiero")){              //canta j1
+                    if(j1.envido(j2))
+                        j1.addPuntos(4);
+                    else
+                        j2.addPuntos(4);
+                }
+                else if(cantado[index].equals("no quiero"))         //canta j1
+                    j2.addPuntos(2);
+                else if(cantado[index].equals("real envido")){      //canta j1
+    
+                    if(cantado[++index].equals("quiero")){          //canta j2
+                        if(j1.envido(j2))
+                            j1.addPuntos(7);
+                        else
+                            j2.addPuntos(7);
+                    }
+                    else if(cantado[index].equals("no quiero"))     //canta j2
+                        j1.addPuntos(4);
+                    else if(cantado[index].equals("falta envido")){ //canta j2
+        
+                        if(cantado[++index].equals("quiero")){      //canta j1
+                            if(j1.envido(j2))
+                                j1.addPuntosF(j2);   
+                            else
+                                j2.addPuntosF(j1);   
+                        }
+                        else if(cantado[index].equals("no quiero")) //canta j1
+                            j2.addPuntos(7);
+                        else 
+                            throw new IllegalArgumentException(cantado[index] + " no matcheado");
+                    }
+                    else 
+                        throw new IllegalArgumentException(cantado[index] + " no matcheado");
+                }
+                else if(cantado[index].equals("falta envido")){     //canta j1
+    
+                    if(cantado[++index].equals("quiero")){          //canta j2
+                        if(j1.envido(j2))
+                            j1.addPuntosF(j2);   
+                        else
+                            j2.addPuntosF(j1);   
+                    }
+                    else if(cantado[index].equals("no quiero"))     //canta j2
+                        j1.addPuntos(4);
+                    else 
+                        throw new IllegalArgumentException(cantado[index] + " no matcheado");
+                }
+                else 
+                    throw new IllegalArgumentException(cantado[index] + " no matcheado");
+            }
+            else if(cantado[index].equals("real envido")){          //canta j2
+
+                if(cantado[++index].equals("quiero")){              //canta j1
+                    if(j1.envido(j2))
+                        j1.addPuntos(5);
+                    else
+                        j2.addPuntos(5);
+                }
+                else if(cantado[index].equals("no quiero"))         //canta j1
+                    j2.addPuntos(2);
+                else if(cantado[index].equals("falta envido")){     //canta j1
+    
+                    if(cantado[++index].equals("quiero")){          //canta j2
+                        if(j1.envido(j2))
+                            j1.addPuntosF(j2);   
+                        else
+                            j2.addPuntosF(j1);   
+                    }
+                    else if(cantado[index].equals("no quiero"))     //canta j2
+                        j2.addPuntos(5);
+                    else 
+                        throw new IllegalArgumentException(cantado[index] + " no matcheado");
+                }
+                else 
+                    throw new IllegalArgumentException(cantado[index] + " no matcheado");
+            }
+            else if(cantado[index].equals("falta envido")){         //canta j2
+
+                if(cantado[++index].equals("quiero")){              //canta j1
+                    if(j1.envido(j2))
+                        j1.addPuntosF(j2);   
+                    else
+                        j2.addPuntosF(j1);   
+                }
+                else if(cantado[index].equals("no quiero"))         //canta j1
+                    j2.addPuntos(2);
+                else 
+                    throw new IllegalArgumentException(cantado[index] + " no matcheado");
+            }
+            else 
+                throw new IllegalArgumentException(cantado[index] + " no matcheado");
+        }
+        else if(cantado[index].equals("real envido")){              //canta j1
+            if(cantado[++index].equals("quiero")){                  //canta j2
+                if(j1.envido(j2))
+                    j1.addPuntos(3);
+                else
+                    j2.addPuntos(3);
+            }
+            else if(cantado[index].equals("no quiero"))             //canta j2
+                j1.addPuntos(1);
+            else if(cantado[index].equals("falta envido")){         //canta j2
+
+                if(cantado[++index].equals("quiero")){              //canta j1
+                    if(j1.envido(j2))
+                        j1.addPuntosF(j2);   
+                    else
+                        j2.addPuntosF(j1);   
+                }
+                else if(cantado[index].equals("no quiero"))         //canta j1
+                    j2.addPuntos(3);
+                else 
+                    throw new IllegalArgumentException(cantado[index] + " no matcheado");
+            }
+            else 
+                throw new IllegalArgumentException(cantado[index] + " no matcheado");
+        }
+        else if(cantado[index].equals("falta envido")){             //canta j1
+            if(cantado[++index].equals("quiero")){                  //canta j2
+                    if(j1.envido(j2))
+                        j1.addPuntosF(j2);   
+                    else
+                        j2.addPuntosF(j1);   
+            }
+            else if(cantado[index].equals("no quiero"))             //canta j2
+                    j1.addPuntos(1);
+            else 
+                throw new IllegalArgumentException(cantado[index] + " no matcheado");
+        }
+        else if(cantado[index].equals("truco")){                    //se canto el truco por j1
+            if(cantado[++index].equals("quiero")){                  //canta j2
+                if(j1.truco(j2))        
+                    j1.addPuntos(2);
+                else
+                    j2.addPuntos(2);
+            }
+            else if(cantado[index].equals("no quiero"))             //canta j2
+                j1.addPuntos(1);
+            else if(cantado[index].equals("retruco")){              //canta j2
+
+                if(cantado[++index].equals("quiero")){              //canta j1
+                    if(j1.truco(j2))
+                        j1.addPuntos(3);
+                    else
+                        j2.addPuntos(3);
+                }
+                else if(cantado[index].equals("no quiero"))         //canta j1
+                    j2.addPuntos(2);
+                else if(cantado[index].equals("vale cuatro")){      //canta j1
+    
+                    if(cantado[++index].equals("quiero")){          //canta j2
+                        if(j1.truco(j2))
+                            j1.addPuntos(4);
+                        else
+                            j2.addPuntos(4);
+                    }
+                    else if(cantado[index].equals("no quiero"))     //canta j2
+                        j1.addPuntos(3);
+                    else 
+                        throw new IllegalArgumentException(cantado[index] + " no matcheado");
+                }
+                else 
+                    throw new IllegalArgumentException(cantado[index] + " no matcheado");
+            }
+            else 
+                throw new IllegalArgumentException(cantado[index] + " no matcheado");
+        }
+        else 
+            throw new IllegalArgumentException(cantado[index] + " no matcheado");
+    }
+       
+	
+	public void reiniciarMenuCantos() {
+		
+		cp.remove(menuCantosE);
+		cp.add(menu,BorderLayout.WEST);
+		cp.revalidate();
+		cp.repaint();
+		
+	}
+    
+    
 }	//FIN INTERFAZ
