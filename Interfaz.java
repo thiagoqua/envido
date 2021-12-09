@@ -137,6 +137,8 @@ public class Interfaz extends JFrame{
     private boolean envidoNo;
     
     private boolean tiraIAnull;
+    
+    private boolean soloUna;
     //
     
     
@@ -167,7 +169,7 @@ public class Interfaz extends JFrame{
     tiraIAnull = false;
     acumulador = "";
     envidoNo = true;
-	
+	    
 	/*CREACION DE VENTANA BASICA*/
 	setIconImage(new ImageIcon(getClass().getResource("/images/icon.jpg")).getImage());
 	setTitle("TRUCO");
@@ -2112,7 +2114,7 @@ public class Interfaz extends JFrame{
 			
 			tiraIA = null;
 			tiraIA = MAQUINA.yourTurn(cantado, null);
-			
+						
 			/*LA IA PUEDE CANTAR TRUCO*/
 			
 			if(cantado[0].equals("truco")) {
@@ -2280,8 +2282,8 @@ public class Interfaz extends JFrame{
 			
     		else {
 				
-    			tiraIA = null;
-				tiraIA = MAQUINA.yourTurn(cantado, null);
+    			//tiraIA = null;
+				//tiraIA = MAQUINA.yourTurn(cantado, null);
 				tiraIAnull = true;
 				mostrarTirada(tiraIA,tiraIAnull);
 				auxIA = tiraIA[0];
@@ -2690,7 +2692,7 @@ public class Interfaz extends JFrame{
 							
 							//		ESTABA DENTRO DE TRUCOQUERIDOBLOQUE4 - TENER EN CUENTA POR CUALQUIER ERROR
 							tiraIA = null;
-							tiraIA = MAQUINA.yourTurn(cantado, auxJ);
+							tiraIA = MAQUINA.yourTurn(cantado, null);
 							//
 							
 							/*LA IA PUEDE CANTAR TRUCO*/
@@ -2865,7 +2867,39 @@ public class Interfaz extends JFrame{
 							else {
 								
 								//OJO: CHEQUEAR SI EFECTIVAMENTE PERTENENCE AL BLOQUE 4 O SE HACE APARTE
-								trucoQueridoBloque4();
+								//trucoQueridoBloque4();
+								
+								tiraIAnull = true;
+								mostrarTirada(tiraIA,tiraIAnull);
+								auxIA = tiraIA[0];
+								
+								/*SI LA IA MATA*/
+								
+								if(aux.returnOrden(auxIA) <= aux.returnOrden(auxJ)) {
+									//LA IA GANA
+
+									//sistPuntuacion(cantado,MAQUINA,j);
+									MAQUINA.addPuntos(1);
+									acumulador = String.valueOf(MAQUINA.getPuntos());
+									pts2.setText(acumulador);
+									
+									puntosMaximosSuperados();
+									//SIGUIENTE RONDA
+								}
+								
+								/*SI LA IA NO MATA*/
+								
+								else {
+									//EL JUGADOR GANA
+
+									//sistPuntuacion(cantado,MAQUINA,j);
+									j.addPuntos(1);
+									acumulador = String.valueOf(j.getPuntos());
+									pts1.setText(acumulador);
+									
+									puntosMaximosSuperados();
+									//SIGUIENTE RONDA
+								}
 								
 							}
 							
@@ -4453,13 +4487,15 @@ public class Interfaz extends JFrame{
 					/*SI LA IA NO MATA O EMPARDA*/
 					
 					else {
-						
-						tiraIAnull = false;
-						mostrarTirada(tiraIA,tiraIAnull);					
+						//PODEMOS HACER USO DE TIRATMP, EN VEZ DE SOLOUNA
+						//tiraIAnull = true;
+						//tiratmp[0] = tiraIA[0];
+						//mostrarTirada(tiratmp,tiraIAnull);					
 						
 						//EL JUGADOR GANA
 	
-						sistPuntuacion(cantado,j,MAQUINA);
+						//sistPuntuacion(cantado,j,MAQUINA);
+						j.addPuntos(1);
 						acumulador = String.valueOf(j.getPuntos());
 						pts1.setText(acumulador);
 						
@@ -4918,8 +4954,9 @@ public class Interfaz extends JFrame{
 		
 		else {
 			
-			tiraIAnull = false;
-			mostrarTirada(tiraIA,tiraIAnull);				//TIENE QUE TIRAR SOLO UNA
+			//tiraIAnull = true;
+			//tiratmp[0] = tiraIA[0];
+			//mostrarTirada(tiratmp,tiraIAnull);	
 			
 			//EL JUGADOR GANA
 
@@ -5407,7 +5444,7 @@ public class Interfaz extends JFrame{
 		mostrarTirada(tiraIA,tiraIAnull);
 		auxIA = tiraIA[0];
 		
-		/*SI LA IA MATA*/
+		/*SI LA IA MATA O EMPARDA*/
 		
 		if(aux.returnOrden(auxIA) <= aux.returnOrden(auxJ)) {
 			//LA IA GANA
@@ -5423,7 +5460,7 @@ public class Interfaz extends JFrame{
 		/*SI LA IA NO MATA*/
 		
 		else {
-			//LA IA GANA
+			//EL JUGADOR GANA
 
 			sistPuntuacion(cantado,MAQUINA,j);
 			acumulador = String.valueOf(j.getPuntos());
@@ -6587,7 +6624,6 @@ public class Interfaz extends JFrame{
 	        if(tira.length == 1) {						//SIRVE PARA TIRATMP QUE TIENE UNA LONGITUD DE 1
 	        	return 0;
 	        }
-	        
 	        
 	        if(i==1) {
 	    	   return 0;
