@@ -73,7 +73,7 @@ public class IA extends Jugador{
                 }
                 puedoCantarEnvido = false;
             }
-            Arrays.fill(cantos,null);                                   //vaceo el arreglo de cantos
+            
         }
         
         //ACA TERMINA LA PARTE DE ENVIDO
@@ -405,7 +405,9 @@ public class IA extends Jugador{
     private int someEmpardaIt(Carta aEmpardar){             //retorna el indice de la carta que emparda a la de j2
         for(int index = 0;index < 3;++index){
             try{
-                super.cartas[index].mata(aEmpardar);        //invoco a la funcion solamente esperando a la exepcion
+                if(super.cartas[index] != null) {
+                	super.cartas[index].mata(aEmpardar);        //invoco a la funcion solamente esperando a la exepcion
+                }
             } catch(PardaExeption pe){
                 return index;                               //si la emparda, retorna el indice
             }

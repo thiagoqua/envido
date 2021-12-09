@@ -565,6 +565,19 @@ public class Interfaz extends JFrame{
 							}
 						});
 						
+						mazo.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								
+								j.voyMazo(cantado, MAQUINA);
+								
+								//LIMPIAR TODA LA INTERFAZ
+								
+							}
+							
+						});
+						
 						rendirse.addActionListener(new ActionListener() {
 							
 							@Override
@@ -2677,7 +2690,7 @@ public class Interfaz extends JFrame{
 							
 							//		ESTABA DENTRO DE TRUCOQUERIDOBLOQUE4 - TENER EN CUENTA POR CUALQUIER ERROR
 							tiraIA = null;
-							tiraIA = MAQUINA.yourTurn(cantado, null);
+							tiraIA = MAQUINA.yourTurn(cantado, auxJ);
 							//
 							
 							/*LA IA PUEDE CANTAR TRUCO*/
@@ -4442,7 +4455,7 @@ public class Interfaz extends JFrame{
 					else {
 						
 						tiraIAnull = false;
-						mostrarTirada(tiraIA,tiraIAnull);
+						mostrarTirada(tiraIA,tiraIAnull);					
 						
 						//EL JUGADOR GANA
 	
@@ -4906,7 +4919,7 @@ public class Interfaz extends JFrame{
 		else {
 			
 			tiraIAnull = false;
-			mostrarTirada(tiraIA,tiraIAnull);
+			mostrarTirada(tiraIA,tiraIAnull);				//TIENE QUE TIRAR SOLO UNA
 			
 			//EL JUGADOR GANA
 

@@ -20,7 +20,7 @@ public class Main {
         }
 
         try{
-            sistPuntuacion(cantos,j1,j2);
+            //sistPuntuacion(cantos,j1,j2);
         } catch(IllegalArgumentException e){
             e.printStackTrace();
         }
@@ -68,6 +68,8 @@ public class Main {
             sistPuntuacion(cantos,j2,j1);*/
     }
 
+    /*
+    
     public static void sistPuntuacion(String cantado[],Jugador j1,Jugador j2) throws IllegalArgumentException{ 
         //j1 siempre debe ser el que canta primero
         int index = 0;
@@ -257,6 +259,9 @@ public class Main {
             throw new IllegalArgumentException(cantado[index] + " no matcheado");
     }
        
+    
+    */
+    
     public static int ronda(Jugador j1, Jugador j2, Mazo m) {		//	NOTA: si no la hago static, me salta un error
     	/*Se mezcla el mazo*/
     	m.mezclar();
