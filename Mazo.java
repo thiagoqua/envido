@@ -51,8 +51,7 @@ public class Mazo{
         int i;
         Carta temp = new Carta();
         for(i=0;i<40 && cartas[i] == null;++i){}                //seteo al índice en la primer carta del mazo
-        temp.setNumero(cartas[i].getNumero());                  //seteo el palo de la carta que saqué al temporal
-        temp.setPalo(cartas[i].getPalo());                      //seteo el número de la carta que saqué al temporal
+        temp = Carta.builder(cartas[i]);                        //le asigno el valor a la temporal
         cartas[i] = null;                                       //le asigno 0 al número de la carta que saqué para informar que justamente la carta fue sacada
     return temp;}                                               
 

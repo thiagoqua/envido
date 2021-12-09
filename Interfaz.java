@@ -584,7 +584,7 @@ public class Interfaz extends JFrame{
 								}
 								else {
 								
-									int result = JOptionPane.showConfirmDialog(confirmar, "¿Esta seguro que desea salir? El juego se daria como perdido.");
+									int result = JOptionPane.showConfirmDialog(confirmar, "ï¿½Esta seguro que desea salir? El juego se daria como perdido.");
 	
 							        if (result == 0) {
 							        	cp.removeAll();
@@ -6587,9 +6587,12 @@ public class Interfaz extends JFrame{
 	
 
     public static void sistPuntuacion(String cantado[],Jugador j1,Jugador j2) throws IllegalArgumentException{ 
-        //j1 siempre debe ser el que canta primero segun cantoPrimi
+        //j1 siempre debe ser el que canta primero segun cantoPrimi o el que gana la mano si no se canta nada
         int index = 0;
-        if(cantado[index].equals("envido")){                        //canta j1       
+        if(cantado[index] == null){                                 //si no se cantÃ³ nada
+            j1.addPuntos(1);
+        }
+        else if(cantado[index].equals("envido")){                   //canta j1       
             if(cantado[++index].equals("quiero")){                  //canta j2
                 if(j1.envido(j2))
                     j1.addPuntos(2);
@@ -6599,7 +6602,6 @@ public class Interfaz extends JFrame{
             else if(cantado[index].equals("no quiero"))             //canta j2
                 j1.addPuntos(1);
             else if(cantado[index].equals("envido")){               //canta j2
-
                 if(cantado[++index].equals("quiero")){              //canta j1
                     if(j1.envido(j2))
                         j1.addPuntos(4);
@@ -6609,7 +6611,6 @@ public class Interfaz extends JFrame{
                 else if(cantado[index].equals("no quiero"))         //canta j1
                     j2.addPuntos(2);
                 else if(cantado[index].equals("real envido")){      //canta j1
-    
                     if(cantado[++index].equals("quiero")){          //canta j2
                         if(j1.envido(j2))
                             j1.addPuntos(7);
@@ -6619,7 +6620,6 @@ public class Interfaz extends JFrame{
                     else if(cantado[index].equals("no quiero"))     //canta j2
                         j1.addPuntos(4);
                     else if(cantado[index].equals("falta envido")){ //canta j2
-        
                         if(cantado[++index].equals("quiero")){      //canta j1
                             if(j1.envido(j2))
                                 j1.addPuntosF(j2);   
@@ -6635,7 +6635,6 @@ public class Interfaz extends JFrame{
                         throw new IllegalArgumentException(cantado[index] + " no matcheado");
                 }
                 else if(cantado[index].equals("falta envido")){     //canta j1
-    
                     if(cantado[++index].equals("quiero")){          //canta j2
                         if(j1.envido(j2))
                             j1.addPuntosF(j2);   
@@ -6651,7 +6650,6 @@ public class Interfaz extends JFrame{
                     throw new IllegalArgumentException(cantado[index] + " no matcheado");
             }
             else if(cantado[index].equals("real envido")){          //canta j2
-
                 if(cantado[++index].equals("quiero")){              //canta j1
                     if(j1.envido(j2))
                         j1.addPuntos(5);
@@ -6661,7 +6659,6 @@ public class Interfaz extends JFrame{
                 else if(cantado[index].equals("no quiero"))         //canta j1
                     j2.addPuntos(2);
                 else if(cantado[index].equals("falta envido")){     //canta j1
-    
                     if(cantado[++index].equals("quiero")){          //canta j2
                         if(j1.envido(j2))
                             j1.addPuntosF(j2);   
@@ -6677,7 +6674,6 @@ public class Interfaz extends JFrame{
                     throw new IllegalArgumentException(cantado[index] + " no matcheado");
             }
             else if(cantado[index].equals("falta envido")){         //canta j2
-
                 if(cantado[++index].equals("quiero")){              //canta j1
                     if(j1.envido(j2))
                         j1.addPuntosF(j2);   
@@ -6702,7 +6698,6 @@ public class Interfaz extends JFrame{
             else if(cantado[index].equals("no quiero"))             //canta j2
                 j1.addPuntos(1);
             else if(cantado[index].equals("falta envido")){         //canta j2
-
                 if(cantado[++index].equals("quiero")){              //canta j1
                     if(j1.envido(j2))
                         j1.addPuntosF(j2);   
@@ -6731,7 +6726,7 @@ public class Interfaz extends JFrame{
         }
         else if(cantado[index].equals("truco")){                    //se canto el truco por j1
             if(cantado[++index].equals("quiero")){                  //canta j2
-                if(j1.truco(j2))        
+                if(j1.truco)        
                     j1.addPuntos(2);
                 else
                     j2.addPuntos(2);
@@ -6741,7 +6736,7 @@ public class Interfaz extends JFrame{
             else if(cantado[index].equals("retruco")){              //canta j2
 
                 if(cantado[++index].equals("quiero")){              //canta j1
-                    if(j1.truco(j2))
+                    if(j1.truco)
                         j1.addPuntos(3);
                     else
                         j2.addPuntos(3);
@@ -6749,9 +6744,8 @@ public class Interfaz extends JFrame{
                 else if(cantado[index].equals("no quiero"))         //canta j1
                     j2.addPuntos(2);
                 else if(cantado[index].equals("vale cuatro")){      //canta j1
-    
                     if(cantado[++index].equals("quiero")){          //canta j2
-                        if(j1.truco(j2))
+                        if(j1.truco)
                             j1.addPuntos(4);
                         else
                             j2.addPuntos(4);
@@ -6802,7 +6796,7 @@ public class Interfaz extends JFrame{
 			flecha.setEnabled(false);
 			flecha2.setEnabled(false);
 			
-			texto.setText("<html>"+ "EL JUGADOR GANÓ" +"</html>");
+			texto.setText("<html>"+ "EL JUGADOR GANï¿½" +"</html>");
 			
 			rendirse.setText("VOLVER AL MENU");
 			
@@ -6827,7 +6821,7 @@ public class Interfaz extends JFrame{
 			flecha.setEnabled(false);
 			flecha2.setEnabled(false);
 			
-			texto.setText("<html>"+ "LA IA GANÓ" +"</html>");
+			texto.setText("<html>"+ "LA IA GANï¿½" +"</html>");
 			
 			rendirse.setText("VOLVER AL MENU");
 			

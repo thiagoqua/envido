@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class Jugador {
 	
 	protected int puntos;
@@ -5,6 +7,7 @@ public class Jugador {
 	protected boolean soy_mano;			//si el mazo está a la izquierda del jugador
 	protected boolean bandera;			//si es su turno durante la ronda
 	protected boolean cantoPrimi;
+	protected boolean truco;
 	public Carta cartas[];
 	public Carta copyCartas[];		//mantiene una copia de las cartas que no se anulan, como solución provisoria a la excepción
 	
@@ -17,6 +20,7 @@ public class Jugador {
 		this.bandera = false;
 		this.cantoPrimi = false;	/* cuando se inicialize el arreglo de cantos, el jugador que cante primero inicializa
 		esta variable en true para poder sacar bien los puntos después */
+		this.truco = false;			//se debe activar cuando gano el truco
 		this.cartas = new Carta[3];
 		this.copyCartas = new Carta[3];
 	}
@@ -157,8 +161,39 @@ public class Jugador {
 				puntos = c3;
 		}
 	return puntos;}
-	
-	public boolean truco(Jugador j2){
-		return false;
+
+	public void ganeTruco(){				//la activo si gano el jugador gana el truco
+		truco = true;
+	}
+
+	public void reset(String another[]){	//vaceo y reseteo los valores
+		Arrays.fill(another,null);
+		Arrays.fill(cartas,null);
+		Arrays.fill(copyCartas,null);
+		soy_mano = bandera = cantoPrimi = truco = false;
+	}
+
+	protected boolean isCantado(String quieroCantar,String cantos[]){
+        for(String temp : cantos)
+            if(temp != null && temp.equals(quieroCantar))
+                return true;
+    return false;}
+
+	public void voyMazo(String cantos[],Jugador j2){
+		//sumo los correspondientes puntos
+		if(isCantado("truco",cantos)){
+			if(isCantado("retruco",cantos)){
+				if(isCantado("vale cuatro",cantos))
+					j2.addPuntos(4);
+				else
+					j2.addPuntos(3);
+			}
+			else
+				j2.addPuntos(2);
+		}
+		else
+			j2.addPuntos(1);
+		//puedo resetear los valores desde acá o desde la interfaz
+		//reset(cantos);
 	}
 }
