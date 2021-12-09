@@ -56,3 +56,26 @@
 	
 	
 	
+	c1.setEnabled(false);
+	c2.setEnabled(false);
+	c3.setEnabled(false);
+	truco.setEnabled(false);
+	quiero.setEnabled(false);
+	noQuiero.setEnabled(false);
+	flecha2.setEnabled(false);
+	cantarTruco.setEnabled(false);
+	retruco.setEnabled(false);
+	vale_4.setEnabled(false);
+	
+	
+	if(c1.getIcon() != null) {
+		c1.setEnabled(true);
+	}
+	if(c2.getIcon() != null) {
+		c2.setEnabled(true);
+	}
+	if(c3.getIcon() != null) {
+		c3.setEnabled(true);
+	}
+	
+	
