@@ -1,6 +1,5 @@
 import java.util.Arrays;
 
-//VER TEMA DE REVIRAR EN VEZ DE CANTAR TRUCO SIEMPRE
 public class IA extends Jugador{
 
     private short nroMano;                              //si se está jugando primera, segunda o tercera
@@ -26,6 +25,7 @@ public class IA extends Jugador{
     }
 
     public Carta[] yourTurn(String cantos[],Carta tirada){      //metodo que se invocaría cada vez que le toca jugar a la IA
+        super.bandera = true;                                   //es mi turno
         int mato,cartasGood;
         Carta tiro[] = new Carta[2];
         if(puedoCantarEnvido){
@@ -75,8 +75,7 @@ public class IA extends Jugador{
             }
             
         }
-        
-        //ACA TERMINA LA PARTE DE ENVIDO
+        super.bandera = false;
         
         if(tirada == null){                             //si todavía no se tiraron cartas
             if(nroMano == 1){                           //si estoy en la primer mano
@@ -463,9 +462,9 @@ public class IA extends Jugador{
             else                                            //si ya tire 2 cartas y me queda 1
                 return super.tirar(notNull);
         } catch(PardaExeption pe){
-            for(Carta temp : super.cartas)
-                if(temp != null && temp.getNumero() == pe.numeroCarta)
-                    return temp;
+            for(int i=0;i<3;++i)
+                if(super.cartas[i] != null && super.cartas[i].getNumero() == pe.numeroCarta)
+                    return super.tirar(i);
         }
     return null;}
 
@@ -510,9 +509,9 @@ public class IA extends Jugador{
             else                                            //si tire 2 cartas y me queda 1
                 return super.tirar(notNull);
         } catch(PardaExeption pe){
-            for(Carta temp : super.cartas)
-                if(temp != null && temp.getNumero() == pe.numeroCarta)
-                    return temp;
+            for(int i=0;i<3;++i)
+                if(super.cartas[i] != null && super.cartas[i].getNumero() == pe.numeroCarta)
+                    return super.tirar(i);
         }
     return null;}
 

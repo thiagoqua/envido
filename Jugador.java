@@ -46,9 +46,14 @@ public class Jugador {
 	
 	public void setBandera(boolean b) {this.bandera = b;}	
 	
-	public void setMano(boolean m) {this.soy_mano = m;}	
-	
 	public void setCantoPrimi(boolean m) {this.cantoPrimi = m;}
+	
+	public void setMano(boolean m) {this.soy_mano = m;}	
+
+	public void setAmbasManos(boolean miMano,Jugador j2){
+		setMano(miMano);						//seteo mi mano
+		j2.setMano(!miMano);					//seteo la mano del otro jugador con la opuesta a la mía
+	}
 	
 	/* METODOS VARIOS */
 	
