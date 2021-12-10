@@ -1161,6 +1161,8 @@ public class Interfaz extends JFrame{
 										        	}
 										        										        	
 										        	mostrarTirada(tiraIA,tiraIAnull);
+										        	tiraIA = null;
+										        	
 										        	truco.setEnabled(true);
 										        	envido.setEnabled(false);
 										        	cantoEnvido = true;
@@ -1175,6 +1177,7 @@ public class Interfaz extends JFrame{
 										        	
 											        MAQUINA.setBandera(false);
 											        
+											        
 										        }	//FIN IF DEL CANTO DE ENVIDO
 										        
 										        for(int i=0;i<5;i++) {
@@ -1188,13 +1191,15 @@ public class Interfaz extends JFrame{
 									        	}
 									        	else {
 									        		envido.setEnabled(true);
+									        		
+									        		/*SI NO TIENE PARA EL ENVIDO TIRA LA CARTA DIRECTAMENTE*/
+									        		
+									        		mostrarTirada(tiraIA,tiraIAnull);
+										        	auxIA = tiraIA[0];					//esto me sirve para comparar las cartas cuando el jugador tire sin cantar (en la primera)
+											        tiraIA = null;
+									        		
 									        	}
-									        
-									        	/*SI NO TIENE PARA EL ENVIDO TIRA LA CARTA DIRECTAMENTE*/
-									        	
-									        	mostrarTirada(tiraIA,tiraIAnull);
-									        	auxIA = tiraIA[0];					//esto me sirve para comparar las cartas cuando el jugador tire sin cantar (en la primera)
-										        
+									        									        	
 									        	truco.setEnabled(true);
 									        	flecha2.setEnabled(true);
 									        	retruco.setEnabled(false);
