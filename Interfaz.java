@@ -824,7 +824,7 @@ public class Interfaz extends JFrame{
 					    		
 					    		while(jugando) {
 					    			
-					    			/*REINICIO ALGUNAS VARIABLES QUE PODRÍAN MOLESTAR*/
+					    			/*REINICIO ALGUNAS VARIABLES QUE PODRï¿½AN MOLESTAR*/
 					    			
 					    			acumulador = "";
 									
@@ -917,7 +917,17 @@ public class Interfaz extends JFrame{
 											MAQUINA.activatePuedoCantarEnvido(true);
 											
 											//LA MAQUINA PUEDE CANTAR PREVIAMENTE ENVIDO ANTES DEL TRUCO
-											cantaEnvidoIA();
+											//cantaEnvidoIA();
+											MAQUINA.yourTurnAccept(cantado);
+
+											//SI LA IA CANTA ENVIDO, SE TIENE QUE ESPERAR LA DECISION DEL JUGADOR
+											//if(la ia canta el envido){
+											// sistPuntuacion(cantado,MAQUINA,j);
+											// Arrays.fill(cantado,"");
+											// cantado[0] = "truco";
+											// MAQUINA.activatePuedoCantarEnvido(false);
+											// MAQUINA.yourTurnAccept(cantado);
+											//}
 											
 											texto.setText("<html>"+ "" +"</html>");
 											
@@ -1474,7 +1484,7 @@ public class Interfaz extends JFrame{
 					    			//INVERTIR IMAGENES DE MANO Y MAZO
 									invertirManoMazo();
 					    			
-									//HAGO UNA PEQUEÑA PAUSA PARA QUE SE NOTE LA TRANSICION
+									//HAGO UNA PEQUEï¿½A PAUSA PARA QUE SE NOTE LA TRANSICION
 									
 									Thread t2 = new Thread() {
 						    			

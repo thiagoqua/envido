@@ -25,58 +25,44 @@ public class IA extends Jugador{
     }
 
     public Carta[] yourTurn(String cantos[],Carta tirada){      //metodo que se invocaría cada vez que le toca jugar a la IA
-        super.bandera = true;                                   //es mi turno
-        int mato,cartasGood;
-        Carta tiro[] = new Carta[2];
+        super.bandera = true;
+        yourTurnEnvido(cantos);
+        super.bandera = false;
+    return yourTurnTruco(cantos,tirada);}
+
+    public void yourTurnEnvido(String cantos[]){
         if(puedoCantarEnvido){
+            nroMano = 1;                                        //si puedo cantar envido es porque estoy en la primer mano
             int puntosEnvido = super.getPuntosEnvido();
             checkIfMentimos();
             if(puntosEnvido <= 22 && mentimos){                 //si no tengo puntos y puedo mentir
                 System.out.println("SE MIENTE PERRO");
                 super.cantoPrimi = true;
                 cantar(0,cantos);
-    //          try{
-    //              wait();                                 //espero respuesta del jugador desde main
-    //          } catch(InterruptedException e){
-    //
-    //          }
             }
             else{
                 if(super.bandera){
                     if(puntosEnvido > 22 && puntosEnvido < 29){
                         super.cantoPrimi = true;
                         cantar(0,cantos);
-    //                     try{
-    //                         wait();                                 //espero respuesta del jugador desde main
-    //                     } catch(InterruptedException e){
-    //
-    //                     }
                     }
                     else if(puntosEnvido >= 28 && puntosEnvido < 32){
                         super.cantoPrimi = true;
                         cantar(1,cantos);
-    //                     try{
-    //                         wait();                                 //espero respuesta del jugador desde main
-    //                     } catch(InterruptedException e){
-    //
-    //                     }
                     }
                     else if(puntosEnvido >= 32){
                         super.cantoPrimi = true;
                         cantar(2,cantos);
-    //                     try{
-    //                         wait();                                 //espero respuesta del jugador desde main
-    //                     } catch(InterruptedException e){
-    //
-    //                     }
                     }
                 }
                 puedoCantarEnvido = false;
             }
-            
         }
-        super.bandera = false;
-        
+    }
+
+    public Carta[] yourTurnTruco(String cantos[],Carta tirada){
+        int mato,cartasGood;
+        Carta tiro[] = new Carta[2];
         if(tirada == null){                             //si todavía no se tiraron cartas
             if(nroMano == 1){                           //si estoy en la primer mano
                 tiro[0] = tirarBajo();
@@ -89,19 +75,9 @@ public class IA extends Jugador{
                     if((cartasGood = manyGoods()) > 0){     //si tengo cartas buenas
                         if(!super.isCantado("truco",cantos)){     //si no esta cantado el truco
                             cantar(3,cantos);                   //canto truco
-//                     try{
-//                         wait();                                 //espero respuesta del jugador desde main
-//                     } catch(InterruptedException e){
-//
-//                     }
                         }
                     } else if(mentimos){                    //si no tengo cartas buenas pero puedo mentir
                         cantar(3,cantos);                   //canto truco
-                        // try{
-                        //     wait();
-                        // } catch(InterruptedException e){
-
-                        // }
                     }
                 }
                 tiro[0] = tirarAlto();                      
@@ -124,11 +100,6 @@ public class IA extends Jugador{
                     super.cantoPrimi = true;
                     if(!super.isCantado("truco",cantos)){         //si no esta cantado el truco
                         cantar(3,cantos);                   //canto truco
-//                     try{
-//                         wait();                                 //espero respuesta del jugador desde main
-//                     } catch(InterruptedException e){
-//
-//                     }
                     }
                     tiro[1] = tirarAlto();                  //y tiro la mas alta
                     ++nroMano;
@@ -136,11 +107,6 @@ public class IA extends Jugador{
                 }
                 else if(mentimos){                          //si no tengo cartas buenas pero puedo mentir
                     cantar(3,cantos);
-                    // try{
-                    //     wait();
-                    // } catch(InterruptedException e){
-                        
-                    // }
                     tiro[1] = tirarAlto();
                     ++nroMano;
                     return tiro;
@@ -160,12 +126,7 @@ public class IA extends Jugador{
                 if(cartasGood > 0){                         //si tengo cartas buenas
                     super.cantoPrimi = true;
                     if(!super.isCantado("truco",cantos)){         //si no esta cantado el truco
-                        cantar(3,cantos);                   //canto truco
-//                     try{
-//                         wait();                                 //espero respuesta del jugador desde main
-//                     } catch(InterruptedException e){
-//
-//                     }
+                        cantar(3,cantos);
                     }
                     tiro[1] = tirarAlto();                  //y reviento
                     ++nroMano;
@@ -173,11 +134,6 @@ public class IA extends Jugador{
                 }
                 else if(mentimos){                          //si no tengo cartas buenas pero puedo mentir
                     cantar(3,cantos);
-                    // try{
-                    //     wait();
-                    // } catch(InterruptedException e){
-                        
-                    // }
                     tiro[1] = tirarBajo();
                     ++nroMano;
                     return tiro;
@@ -257,6 +213,12 @@ public class IA extends Jugador{
             }
         }
         else if(cantos[end].equals("truco")){
+            if(nroMano == 1 && puedoCantarEnvido){  //puedo cantar el envido antes ya que el jugador me canto truco apenas empieza
+                if(puntosEnvido >= 25){
+                    cantos[end] = null;         //vaceo la posicion para que funcione sist puntuacion
+                    cantar(0,cantos);           //canto envido
+                }
+            }
             if(cartasGood == 1){
                 cantar(6,cantos);           //quiero
             }
