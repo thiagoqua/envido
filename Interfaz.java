@@ -24,6 +24,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
+import java.util.Arrays;
+
 public class Interfaz extends JFrame{
 	
 	private static final long serialVersionUID = 1L;
@@ -914,12 +916,40 @@ public class Interfaz extends JFrame{
 										
 										else if(cantado[0].equals("truco")) {
 											
+											cantarTruco.setEnabled(false);
+											
 											MAQUINA.activatePuedoCantarEnvido(true);
 											
 											//LA MAQUINA PUEDE CANTAR PREVIAMENTE ENVIDO ANTES DEL TRUCO
-											//cantaEnvidoIA();
+											
 											MAQUINA.yourTurnAccept(cantado);
-
+											
+											if(cantado[0].equals("envido")) {
+												
+												texto.setText("<html>"+ cantado[0] +"</html>");
+												
+												cantaEnvidoIA();
+												
+											}
+											
+											texto.setText("<html>"+ "" +"</html>");
+											
+											Arrays.fill(cantado,"");
+											
+											//TRAS EL ENVIDO, SE ACEPTA O NO EL TRUCO
+											
+											cantado[0] = "truco";
+											texto.setText("<html>"+ cantado[0] +"</html>");
+											
+											MAQUINA.activatePuedoCantarEnvido(false);
+											MAQUINA.yourTurnAccept(cantado);
+											
+											//SE DESARROLLA LA FUNCION DEL TRUCO
+											//truco2();
+											
+											
+											/* QUEDA GUARDADO POR CUALQUIER COSA*/
+											
 											//SI LA IA CANTA ENVIDO, SE TIENE QUE ESPERAR LA DECISION DEL JUGADOR
 											//if(la ia canta el envido){
 											// sistPuntuacion(cantado,MAQUINA,j);
@@ -929,54 +959,6 @@ public class Interfaz extends JFrame{
 											// MAQUINA.yourTurnAccept(cantado);
 											//}
 											
-											texto.setText("<html>"+ "" +"</html>");
-											
-											for(int i=0;i<5;i++) {
-								        		cantado[i] = "";
-								        	}
-											
-											//TRAS EL ENVIDO, SI SE DA, EL JUGADOR DEBE VOLVER A CANTAR TRUCO SI QUIERE
-											
-											accionUsuario = false;
-						    				Thread t2 = new Thread() {
-								    			
-								    			@Override
-								    			public void run() {
-										    		
-								    				System.out.print("\nEspero que el jugador tire o cante truco ");
-								    				while(accionUsuario == false) {
-								    					try {
-											    			System.out.print(". ");
-											    			Thread.sleep(1000);
-														} catch (InterruptedException e) {
-															e.printStackTrace();
-														}
-										    		}
-										    		System.out.println("\nRetomo la ejecucion\n");
-								    			}
-								    			
-								    		};
-								    		
-											t2.start();			
-											
-											try {
-												t2.join();					
-//												Thread.sleep(1000);
-											}catch(InterruptedException e) {}
-											
-											if(cantado[0].equals("truco")) {
-												
-												//CREAR OTRA FUNCION
-												//truco();
-												
-											}
-											
-											else {
-												
-												//CREAR OTRA FUNCION
-												//tirarDir();
-												
-											}
 											
 										}
 										
@@ -997,15 +979,35 @@ public class Interfaz extends JFrame{
 						    				c3.setEnabled(false);
 											
 											auxJ = queCartaFueTirada();
-											
-											//tiraIA = MAQUINA.yourTurn(cantado,auxJ);
-											
+														
 											//LA IA PUEDE CANTAR ENVIDO
-											cantaEnvidoIA();
+											MAQUINA.yourTurnEnvido(cantado);
+											
+											if(cantado[0].equals("envido") || cantado[0].equals("real envido") || cantado[0].equals("falta envido")) {
+												
+												texto.setText("<html>"+ cantado[0] +"</html>");
+												
+												cantaEnvidoIA();
+												
+											}
+											
+											Arrays.fill(cantado,"");
 											
 											//LA IA PUEDE CANTAR TRUCO
 											
+											if(cantado[0].equals("truco")) {
+												
+												//truco3();
+												
+											}
 											
+											//LA IA PUEDE TIRAR DIRECTAMENTE
+											
+											else {
+												
+												//tiraDir3();
+												
+											}
 											
 										}
 										
@@ -1043,280 +1045,7 @@ public class Interfaz extends JFrame{
 										        if(cantado[0] != null && cantado[0]!="") {
 										        	if(cantado[0].equals("envido") || cantado[0].equals("real envido") || cantado[0].equals("falta envido")) {
 														
-										        		if(cantado[0].equals("falta envido")) {
-										        			envido.setEnabled(false);
-										        		}
-										        		else if (cantado[0].equals("real envido")){
-										        			envido.setEnabled(true);
-										        			cantarEnvido.setEnabled(false);
-										        			real_envido.setEnabled(false);
-										        		}
-										        		else {
-										        			envido.setEnabled(true);
-										        		}
-										        		
-										        		texto.setText("<html>"+ cantado[0] +"</html>");
-														quiero.setEnabled(true);
-														noQuiero.setEnabled(true);
-																												
-											    		c1.setEnabled(false);
-											    		c2.setEnabled(false);
-											    		c3.setEnabled(false);
-											    		
-											    		Thread espero = new Thread() {
-											    			
-											    			@Override
-											    			public void run() {
-													    		
-											    				System.out.print("\nEspero que el jugador quiera/no quiera el envido o revire ");
-											    				while(accionUsuario == false) {
-											    					try {
-														    			System.out.print(". ");
-														    			Thread.sleep(1000);
-																	} catch (InterruptedException e) {
-																		e.printStackTrace();
-																	}
-													    		}
-													    		System.out.println("\nRetomo la ejecucion\n");
-											    			}
-											    			
-											    		};
-											    		
-														espero.start();			
-														
-														try {
-															espero.join();					
-//															Thread.sleep(1000);
-														}catch(InterruptedException e) {}
-											    		
-											    		accionUsuario = false;
-											    		
-											    		//SI EL JUGADOR QUIERE
-											    		
-											    		if(cantado[1].equals("quiero")) {
-											    			//SE SUMAN PUNTOS
-											    			
-										    				sistPuntuacion(cantado,MAQUINA,j);
-										    				acumulador = String.valueOf(j.getPuntos());
-										    				pts1.setText(acumulador);
-											    			acumulador = "";
-											    			acumulador = String.valueOf(MAQUINA.getPuntos());
-											    			pts2.setText(acumulador);
-											    			
-											    			reiniciarMenuCantos();
-											    			
-											    			puntosMaximosSuperados();
-											    			
-											    		}
-											    		
-											    		/*SI EL JUGADOR NO QUIERE*/
-											    		
-											    		else if(cantado[1].equals("no quiero")) {
-											    			
-											    			sistPuntuacion(cantado,MAQUINA,j);
-											    			acumulador = String.valueOf(MAQUINA.getPuntos());
-										    				pts2.setText(acumulador);
-											    			
-										    				reiniciarMenuCantos();
-										    				
-										    				puntosMaximosSuperados();
-										    				
-											    		}
-											    		
-											    		/*SI EL JUGADOR REVIRA*/
-											    		
-											    		else if(cantado[1].equals("envido") || cantado[1].equals("real envido") || cantado[1].equals("falta envido")) {
-											    			
-											    			quiero.setEnabled(false);
-											    			noQuiero.setEnabled(false);
-											    			
-											    			if(cantado[1].equals("envido")) {
-											    				cantarEnvido.setEnabled(false);
-											    				
-											    			}
-											    			else if(cantado[1].equals("real envido")) {
-											    				cantarEnvido.setEnabled(false);
-											    				real_envido.setEnabled(false);
-											    			}
-											    			else {
-											    				cantarEnvido.setEnabled(false);
-											    				real_envido.setEnabled(false);
-											    				falta_envido.setEnabled(false);
-											    			}
-											    			
-											    			MAQUINA.yourTurnAccept(cantado);
-											    			
-											    			//SI LA IA QUIERE
-											    			
-											    			if(cantado[2].equals("quiero")) {
-											    				
-											    				/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-											    				System.out.println("la IA quiso");
-											    				/***/
-											    				
-											    				sistPuntuacion(cantado,MAQUINA,j);
-											    				acumulador = String.valueOf(j.getPuntos());
-											    				pts1.setText(acumulador);
-											    				acumulador = "";
-											    				acumulador = String.valueOf(MAQUINA.getPuntos());
-											    				pts2.setText(acumulador);											    				
-											    				
-											    				reiniciarMenuCantos();
-											    				
-											    				puntosMaximosSuperados();
-											    				
-											    			}
-											    			
-											    			//SI LA IA NO QUIERE
-											    			
-											    			else if(cantado[2].equals("no quiero")) {
-											    				
-											    				/**PROVISORIO*/
-											    				System.out.println("la IA no quiso");
-											    				/***/
-											    				
-											    				sistPuntuacion(cantado,MAQUINA,j);
-											    				acumulador = String.valueOf(j.getPuntos());
-											    				pts1.setText(acumulador);
-											    				
-											    				reiniciarMenuCantos();
-											    				
-											    				puntosMaximosSuperados();
-											    				
-											    			}
-											    			
-											    			//SI LA IA REVIRA, CREO OTRO HILO DE ESPERA
-											    			
-											    			else if(cantado[2].equals("real envido") || cantado[2].equals("falta envido")) {
-											    				
-											    				/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-											    				
-											    				System.out.println("la IA revira");
-											    				
-											    				/***/
-											    				
-											    				texto.setText("<html>"+ cantado[2] +"</html>");
-																quiero.setEnabled(true);
-																noQuiero.setEnabled(true);
-											    				
-											    				if(cantado[2].equals("real envido")) {
-											    					envido.setEnabled(true);
-											    					real_envido.setEnabled(false);
-											    					falta_envido.setEnabled(true);
-											    				}
-											    				else {
-											    					envido.setEnabled(false);
-											    				}
-											    				
-													    		Thread espero2 = new Thread() {
-													    			
-													    			@Override
-													    			public void run() {
-															    		
-													    				System.out.print("\nEspero que el jugador quiera/no quiera - revire (2) ");
-													    				while(accionUsuario == false) {
-													    					try {
-																    			System.out.print(". ");
-																    			Thread.sleep(1000);
-																			} catch (InterruptedException e) {
-																				e.printStackTrace();
-																			}
-															    		}
-															    		System.out.println("\nRetomo la ejecucion\n");
-													    			}
-													    			
-													    		};
-												    			
-													    		espero2.start();			//nota: ver donde ponerlo si no funca
-													    		
-																try {
-																	espero2.join();					
-//																	Thread.sleep(1000);
-																}catch(InterruptedException e) {}
-													    		
-																//SI EL JUGADOR QUIERE
-																
-																if(cantado[3].equals("quiero")) {
-																	
-																	//SE SUMAN PUNTOS
-														
-																	sistPuntuacion(cantado,MAQUINA,j);
-																	acumulador = String.valueOf(j.getPuntos());
-																	pts1.setText(acumulador);
-																	acumulador = "";
-																	acumulador = String.valueOf(MAQUINA.getPuntos());
-																	pts2.setText(acumulador);
-																	
-																	reiniciarMenuCantos();
-																	
-																	puntosMaximosSuperados();
-																	
-																}
-																
-																//SI EL JUGADOR NO QUIERE
-																
-																else if(cantado[3].equals("no quiero")) {
-																	
-																	sistPuntuacion(cantado,MAQUINA,j);
-																	acumulador = String.valueOf(MAQUINA.getPuntos());
-																	pts2.setText(acumulador);
-																	
-																	reiniciarMenuCantos();
-																	
-																	puntosMaximosSuperados();
-																	
-																}
-																
-																//SI EL JUGADOR REVIRA
-																
-																else if(cantado[3].equals("falta envido")) {
-																	
-																	quiero.setEnabled(false);
-																	noQuiero.setEnabled(false);
-																	
-																	MAQUINA.yourTurnAccept(cantado);
-																	
-																	//SI LA IA QUIERE
-																	
-																	if(cantado[4].equals("quiero")) {
-																		
-																		/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-																		System.out.println("la IA quiso");
-																		/***/
-																		
-																		sistPuntuacion(cantado,MAQUINA,j);
-																		acumulador = String.valueOf(j.getPuntos());
-																		pts1.setText(acumulador);
-																		acumulador = "";
-																		acumulador = String.valueOf(MAQUINA.getPuntos());
-																		pts2.setText(acumulador);
-																		
-																		reiniciarMenuCantos();
-																		
-																		puntosMaximosSuperados();
-																		
-																	}
-																	
-																	else if(cantado[4].equals("no quiero")){
-																		
-																		/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-																		System.out.println("la IA no quiso");
-																		/***/
-																		
-																		sistPuntuacion(cantado,MAQUINA,j);
-																		acumulador = String.valueOf(j.getPuntos());
-																		pts1.setText(acumulador);
-
-																		reiniciarMenuCantos();
-																		puntosMaximosSuperados();
-																		
-																	}
-																	
-																}
-																
-											    			}
-											    			
-											    		}
+										        		cantaEnvidoIA();
 											    		
 													}
 										        	
@@ -6551,6 +6280,8 @@ public class Interfaz extends JFrame{
 		
 		if(j.getPuntos() >= 30) {
 			
+			JOptionPane.showMessageDialog(Interfaz.this, "FIN DEL JUEGO.");
+			
 			quiero.setEnabled(false);
 			noQuiero.setEnabled(false);
 			c1.setEnabled(false);
@@ -6576,6 +6307,8 @@ public class Interfaz extends JFrame{
 		
 		else if(MAQUINA.getPuntos() >= 30){
 			
+			JOptionPane.showMessageDialog(Interfaz.this, "FIN DEL JUEGO.");
+			
 			quiero.setEnabled(false);
 			noQuiero.setEnabled(false);
 			c1.setEnabled(false);
@@ -6595,7 +6328,7 @@ public class Interfaz extends JFrame{
 			
 			texto.setText("<html>"+ "LA IA GAN�" +"</html>");
 			
-			rendirse.setText("VOLVER AL MENU");
+			rendirse.setText("MENU");
 			
 		}
 		
@@ -7136,11 +6869,289 @@ public class Interfaz extends JFrame{
 	
 	public void cantaEnvidoIA() {
 		
+		if(cantado[0].equals("falta envido")) {
+			envido.setEnabled(false);
+		}
+		else if (cantado[0].equals("real envido")){
+			envido.setEnabled(true);
+			cantarEnvido.setEnabled(false);
+			real_envido.setEnabled(false);
+		}
+		else {
+			envido.setEnabled(true);
+		}
 		
+		texto.setText("<html>"+ cantado[0] +"</html>");
+		quiero.setEnabled(true);
+		noQuiero.setEnabled(true);
+																
+		c1.setEnabled(false);
+		c2.setEnabled(false);
+		c3.setEnabled(false);
+		
+		Thread espero = new Thread() {
+			
+			@Override
+			public void run() {
+	    		
+				System.out.print("\nEspero que el jugador quiera/no quiera el envido o revire ");
+				while(accionUsuario == false) {
+					try {
+		    			System.out.print(". ");
+		    			Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+	    		}
+	    		System.out.println("\nRetomo la ejecucion\n");
+			}
+			
+		};
+		
+		espero.start();			
+		
+		try {
+			espero.join();					
+//			Thread.sleep(1000);
+		}catch(InterruptedException e) {}
+		
+		accionUsuario = false;
+		
+		//SI EL JUGADOR QUIERE
+		
+		if(cantado[1].equals("quiero")) {
+			//SE SUMAN PUNTOS
+			
+			sistPuntuacion(cantado,MAQUINA,j);
+			acumulador = String.valueOf(j.getPuntos());
+			pts1.setText(acumulador);
+			acumulador = "";
+			acumulador = String.valueOf(MAQUINA.getPuntos());
+			pts2.setText(acumulador);
+			
+			reiniciarMenuCantos();
+			
+			puntosMaximosSuperados();
+			
+		}
+		
+		/*SI EL JUGADOR NO QUIERE*/
+		
+		else if(cantado[1].equals("no quiero")) {
+			
+			sistPuntuacion(cantado,MAQUINA,j);
+			acumulador = String.valueOf(MAQUINA.getPuntos());
+			pts2.setText(acumulador);
+			
+			reiniciarMenuCantos();
+			
+			puntosMaximosSuperados();
+			
+		}
+		
+		/*SI EL JUGADOR REVIRA*/
+		
+		else if(cantado[1].equals("envido") || cantado[1].equals("real envido") || cantado[1].equals("falta envido")) {
+			
+			quiero.setEnabled(false);
+			noQuiero.setEnabled(false);
+			
+			if(cantado[1].equals("envido")) {
+				cantarEnvido.setEnabled(false);
+				
+			}
+			else if(cantado[1].equals("real envido")) {
+				cantarEnvido.setEnabled(false);
+				real_envido.setEnabled(false);
+			}
+			else {
+				cantarEnvido.setEnabled(false);
+				real_envido.setEnabled(false);
+				falta_envido.setEnabled(false);
+			}
+			
+			MAQUINA.yourTurnAccept(cantado);
+			
+			//SI LA IA QUIERE
+			
+			if(cantado[2].equals("quiero")) {
+				
+				/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
+				System.out.println("la IA quiso");
+				/***/
+				
+				sistPuntuacion(cantado,MAQUINA,j);
+				acumulador = String.valueOf(j.getPuntos());
+				pts1.setText(acumulador);
+				acumulador = "";
+				acumulador = String.valueOf(MAQUINA.getPuntos());
+				pts2.setText(acumulador);											    				
+				
+				reiniciarMenuCantos();
+				
+				puntosMaximosSuperados();
+				
+			}
+			
+			//SI LA IA NO QUIERE
+			
+			else if(cantado[2].equals("no quiero")) {
+				
+				/**PROVISORIO*/
+				System.out.println("la IA no quiso");
+				/***/
+				
+				sistPuntuacion(cantado,MAQUINA,j);
+				acumulador = String.valueOf(j.getPuntos());
+				pts1.setText(acumulador);
+				
+				reiniciarMenuCantos();
+				
+				puntosMaximosSuperados();
+				
+			}
+			
+			//SI LA IA REVIRA, CREO OTRO HILO DE ESPERA
+			
+			else if(cantado[2].equals("real envido") || cantado[2].equals("falta envido")) {
+				
+				/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
+				
+				System.out.println("la IA revira");
+				
+				/***/
+				
+				texto.setText("<html>"+ cantado[2] +"</html>");
+				quiero.setEnabled(true);
+				noQuiero.setEnabled(true);
+				
+				if(cantado[2].equals("real envido")) {
+					envido.setEnabled(true);
+					real_envido.setEnabled(false);
+					falta_envido.setEnabled(true);
+				}
+				else {
+					envido.setEnabled(false);
+				}
+				
+	    		Thread espero2 = new Thread() {
+	    			
+	    			@Override
+	    			public void run() {
+			    		
+	    				System.out.print("\nEspero que el jugador quiera/no quiera - revire (2) ");
+	    				while(accionUsuario == false) {
+	    					try {
+				    			System.out.print(". ");
+				    			Thread.sleep(1000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+			    		}
+			    		System.out.println("\nRetomo la ejecucion\n");
+	    			}
+	    			
+	    		};
+    			
+	    		espero2.start();			//nota: ver donde ponerlo si no funca
+	    		
+				try {
+					espero2.join();					
+//					Thread.sleep(1000);
+				}catch(InterruptedException e) {}
+	    		
+				//SI EL JUGADOR QUIERE
+				
+				if(cantado[3].equals("quiero")) {
+					
+					//SE SUMAN PUNTOS
+		
+					sistPuntuacion(cantado,MAQUINA,j);
+					acumulador = String.valueOf(j.getPuntos());
+					pts1.setText(acumulador);
+					acumulador = "";
+					acumulador = String.valueOf(MAQUINA.getPuntos());
+					pts2.setText(acumulador);
+					
+					reiniciarMenuCantos();
+					
+					puntosMaximosSuperados();
+					
+				}
+				
+				//SI EL JUGADOR NO QUIERE
+				
+				else if(cantado[3].equals("no quiero")) {
+					
+					sistPuntuacion(cantado,MAQUINA,j);
+					acumulador = String.valueOf(MAQUINA.getPuntos());
+					pts2.setText(acumulador);
+					
+					reiniciarMenuCantos();
+					
+					puntosMaximosSuperados();
+					
+				}
+				
+				//SI EL JUGADOR REVIRA
+				
+				else if(cantado[3].equals("falta envido")) {
+					
+					quiero.setEnabled(false);
+					noQuiero.setEnabled(false);
+					
+					MAQUINA.yourTurnAccept(cantado);
+					
+					//SI LA IA QUIERE
+					
+					if(cantado[4].equals("quiero")) {
+						
+						/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
+						System.out.println("la IA quiso");
+						/***/
+						
+						sistPuntuacion(cantado,MAQUINA,j);
+						acumulador = String.valueOf(j.getPuntos());
+						pts1.setText(acumulador);
+						acumulador = "";
+						acumulador = String.valueOf(MAQUINA.getPuntos());
+						pts2.setText(acumulador);
+						
+						reiniciarMenuCantos();
+						
+						puntosMaximosSuperados();
+						
+					}
+					
+					else if(cantado[4].equals("no quiero")){
+						
+						/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
+						System.out.println("la IA no quiso");
+						/***/
+						
+						sistPuntuacion(cantado,MAQUINA,j);
+						acumulador = String.valueOf(j.getPuntos());
+						pts1.setText(acumulador);
+
+						reiniciarMenuCantos();
+						puntosMaximosSuperados();
+						
+					}
+					
+				}
+				
+			}
+			
+		}
 		
 	}
 	
 	
-	
+	//FUNCION QUE SERVIRA PARA LLAMAR UN HILO EN VEZ DE CREAR MUCHOS DE FORMA INDIVIDUAL
+	public void llamadaHilos() {
+		
+		
+		
+	}
     
 }	//FIN INTERFAZ
