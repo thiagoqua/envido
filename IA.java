@@ -1,5 +1,7 @@
 import java.util.Arrays;
 
+import javax.lang.model.util.ElementScanner14;
+
 public class IA extends Jugador{
 
     private short nroMano;                              //si se está jugando primera, segunda o tercera
@@ -72,7 +74,7 @@ public class IA extends Jugador{
             else{
                 if(tengoPrimera){   
                     checkIfMentimos();    
-                    if((cartasGood = manyGoods()) > 0){     //si tengo cartas buenas
+                    if((cartasGood = currentGoods()) > 0){     //si tengo cartas buenas
                         if(!super.isCantado("truco",cantos)){     //si no esta cantado el truco
                             cantar(3,cantos);                   //canto truco
                         }
@@ -95,7 +97,7 @@ public class IA extends Jugador{
             }
             else if(isParda(super.cartas[mato],tirada)){    //si hago parda
                 tiro[0] = super.tirar(mato);                //la empardo
-                cartasGood = manyGoods();                   //me fijo cuantas cartas buenas tengo despues de empardar
+                cartasGood = currentGoods();                   //me fijo cuantas cartas buenas tengo despues de empardar
                 if(cartasGood > 0){                         //si tengo cartas buenas
                     super.cantoPrimi = true;
                     if(!super.isCantado("truco",cantos)){         //si no esta cantado el truco
@@ -119,7 +121,7 @@ public class IA extends Jugador{
             }
             else{                                           //si la mato
                 tiro[0] = super.tirar(mato);                //la mato
-                cartasGood = manyGoods();                   //me fijo cuantas cartas buenas tengo despues de matar
+                cartasGood = currentGoods();                   //me fijo cuantas cartas buenas tengo despues de matar
                 checkIfMentimos();
                 if(nroMano == 1)                            //si estoy en la primer mano y hago primera
                     tengoPrimera = true;
@@ -148,11 +150,15 @@ public class IA extends Jugador{
     }
 
     public void yourTurnAccept(String cantos[]){             //metodo que se invocaria cada vez que tiene que aceptar, rechazar o revirar la IA
-        int end = 0,puntosEnvido,cartasGood;
+        int end = 0,puntosEnvido,cartasGood,manyNulls = 0,totalCartasGood;
         puntosEnvido = getPuntosEnvido();
-        cartasGood = manyGoods();
+        cartasGood = currentGoods();                             //por si el jugador me canta truco una vez que yo haya jugado todas mis cartas
+        totalCartasGood = totalGoods();
         checkIfMentimos();
         while(cantos[end+1] != null && cantos[end+1] != ""){++end;}                    //accedo a lo ultimo que se canto
+        for(Carta temp : super.cartas)
+            if(temp == null)
+                ++manyNulls;
         if(end > 0 && cantos[end-1].equals("envido")){          //si se canta envido envido
             if(puntosEnvido > 25 && puntosEnvido < 28){
                 cantar(6,cantos);           //quiero
@@ -219,11 +225,14 @@ public class IA extends Jugador{
                     cantar(0,cantos);           //canto envido
                 }
             }
-            if(cartasGood == 1){
+            if(cartasGood == 1 && totalCartasGood > 1){
                 cantar(6,cantos);           //quiero
             }
             else if(cartasGood >= 2){
                 cantar(4,cantos);           //retruco
+            }
+            else if(manyNulls == 3 && totalCartasGood > 1){  //si ya tire todas, mis cartas fueron buenas y me cantaron truco
+                cantar(3,cantos);
             }
             else if(cartasGood < 1 && mentimos){                //si no tengo cartas buenas y puedo mentir
                 System.out.println("SE MIENTE PERRO");
@@ -234,22 +243,25 @@ public class IA extends Jugador{
             }
         }
         else if(cantos[end].equals("retruco")){
-            if(cartasGood == 2){
+            if(cartasGood == 2 || totalCartasGood >= 2){
                 cantar(6,cantos);           //quiero
             }
-            else if(cartasGood == 3){
+            else if(cartasGood == 3 || totalCartasGood >= 2){
                 cantar(5,cantos);           //vale cuatro
             }
             else if(cartasGood < 2 && mentimos){                //si no tengo cartas buenas y puedo mentir
                 System.out.println("SE MIENTE PERRO");
                 cantar(5,cantos);           //vale cuatro                  //canto el vale cuatro
             }
+            else if(manyNulls == 3 && totalCartasGood > 1){  //si ya tire todas, mis cartas fueron buenas y me cantaron truco
+                cantar(3,cantos);
+            }
             else{
                 cantar(7,cantos);           //no quiero
             }
         }
         else if(cantos[end].equals("vale cuatro")){
-            if(cartasGood == 3){
+            if(cartasGood == 3 || totalCartasGood >= 2){
                 cantar(6,cantos);           //quiero
             }
             else{
@@ -477,14 +489,14 @@ public class IA extends Jugador{
         }
     return null;}
 
-    private int manyGoods(){
+    private int currentGoods(){                         //me dice cuantoas cartas buenas tengo que todavía no tiré
         int many = 0;
         for(Carta temp : super.cartas)                          //me fijo cuantas cartas buenas tengo (para el truco)
                 if(temp != null && temp.isGood())
                     ++many;
     return many;}
 
-    public void checkIfMentimos(){
+    private void checkIfMentimos(){
         int aVer = (int)(Math.random() * 20);
         //si se quiere que la IA mienta menos o más hay que modificar el valor con el que se compara aVer
         if(aVer <= 10)
@@ -492,4 +504,11 @@ public class IA extends Jugador{
         else
             mentimos = false;
     }
+
+    private int totalGoods(){   //me dice cuantas cartas buenas tengo/tuve en total
+        int many = 0;
+        for(Carta temp : super.copyCartas)
+            if(temp.isGood())
+                ++many;
+    return many;}
 }
