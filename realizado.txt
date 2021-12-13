@@ -67,6 +67,7 @@
 	retruco.setEnabled(false);
 	vale_4.setEnabled(false);
 	
+	texto.setText("<html>"+ cantado[0] +"</html>");
 	
 	if(c1.getIcon() != null) {
 		c1.setEnabled(true);
@@ -78,4 +79,55 @@
 		c3.setEnabled(true);
 	}
 	
+	//LA IA GANA
+			
+			sistPuntuacion(cantado,MAQUINA,j);
+			acumulador = String.valueOf(MAQUINA.getPuntos());
+			pts2.setText(acumulador);
+			
+			puntosMaximosSuperados();
+			//SIGUIENTE RONDA
+			
+			
+	//EL JUGADOR GANA
+    			
+				sistPuntuacion(cantado,MAQUINA,j);
+				acumulador = String.valueOf(j.getPuntos());
+				pts1.setText(acumulador);
+				
+				puntosMaximosSuperados();
+    			//SIGUIENTE RONDA
+    			
+    			
+    			/***/
+				System.out.println("la IA no quiso");
+				/***/
+				
+				
+	accionUsuario = false;
+				Thread espero13 = new Thread() {
+					
+					@Override
+					public void run() {
+			    		
+						System.out.print("\nEspero que el jugador quiera/no quiera truco - revire ");
+						while(accionUsuario == false) {
+							try {
+				    			System.out.print(". ");
+				    			Thread.sleep(1000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+			    		}
+			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+					}
+					
+				};
+				
+				espero13.start();	
+				
+				try {
+					espero13.join();					
+//					Thread.sleep(1000);
+				}catch(InterruptedException e) {}
 	
