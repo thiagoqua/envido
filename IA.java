@@ -43,19 +43,17 @@ public class IA extends Jugador{
                 cantar(0,cantos);
             }
             else{
-                if(super.bandera){
-                    if(puntosEnvido > 22 && puntosEnvido < 29){
-                        super.cantoPrimi = true;
-                        cantar(0,cantos);
-                    }
-                    else if(puntosEnvido >= 28 && puntosEnvido < 32){
-                        super.cantoPrimi = true;
-                        cantar(1,cantos);
-                    }
-                    else if(puntosEnvido >= 32){
-                        super.cantoPrimi = true;
-                        cantar(2,cantos);
-                    }
+                if(puntosEnvido > 22 && puntosEnvido < 29){
+                    super.cantoPrimi = true;
+                    cantar(0,cantos);      //canto envido
+                }
+                else if(puntosEnvido >= 28 && puntosEnvido < 32){
+                    super.cantoPrimi = true;
+                    cantar(1,cantos);       //canto real envido
+                }
+                else if(puntosEnvido >= 32){
+                    super.cantoPrimi = true;
+                    cantar(2,cantos);       //canto falta envido
                 }
                 puedoCantarEnvido = false;
             }
@@ -76,9 +74,11 @@ public class IA extends Jugador{
                     checkIfMentimos();    
                     if((cartasGood = currentGoods()) > 0){     //si tengo cartas buenas
                         if(!super.isCantado("truco",cantos)){     //si no esta cantado el truco
+                            super.cantoPrimi = true;
                             cantar(3,cantos);                   //canto truco
                         }
                     } else if(mentimos){                    //si no tengo cartas buenas pero puedo mentir
+                        super.cantoPrimi = true;
                         cantar(3,cantos);                   //canto truco
                     }
                 }
@@ -87,7 +87,7 @@ public class IA extends Jugador{
                 return tiro;
             }
         }
-        else{     
+        else{                                           //si el jugador ya tiro una carta
             mato = someKillsIt(tirada);
             checkIfMentimos();
             if(mato == -1){                                 //si no la mato ni empardo tiro una baja
@@ -95,52 +95,33 @@ public class IA extends Jugador{
                 ++nroMano;
                 return tiro;
             }
-            else if(isParda(super.cartas[mato],tirada)){    //si hago parda
+            else if(isParda(super.cartas[mato],tirada)){    //si la empardo
                 tiro[0] = super.tirar(mato);                //la empardo
-                cartasGood = currentGoods();                   //me fijo cuantas cartas buenas tengo despues de empardar
-                if(cartasGood > 0){                         //si tengo cartas buenas
-                    super.cantoPrimi = true;
-                    if(!super.isCantado("truco",cantos)){         //si no esta cantado el truco
-                        cantar(3,cantos);                   //canto truco
-                    }
-                    tiro[1] = tirarAlto();                  //y tiro la mas alta
-                    ++nroMano;
-                    return tiro;
-                }
-                else if(mentimos){                          //si no tengo cartas buenas pero puedo mentir
-                    cantar(3,cantos);
-                    tiro[1] = tirarAlto();
-                    ++nroMano;
-                    return tiro;
-                }
-                else{                                       //sino empardo y tiro la mas alta que tenga de todas formas
-                    tiro[1] = tirarAlto();                  //y tiro la mas alta
-                    ++nroMano;
-                    return tiro;
-                }
+                ++nroMano;
+                return tiro;
             }
             else{                                           //si la mato
                 tiro[0] = super.tirar(mato);                //la mato
-                cartasGood = currentGoods();                   //me fijo cuantas cartas buenas tengo despues de matar
+                cartasGood = currentGoods();                //me fijo cuantas cartas buenas tengo despues de matar
                 checkIfMentimos();
-                if(nroMano == 1)                            //si estoy en la primer mano y hago primera
+                if(nroMano == 1)                            //si estoy en la primer mano y mato estoy haciendo primera
                     tengoPrimera = true;
                 if(cartasGood > 0){                         //si tengo cartas buenas
-                    super.cantoPrimi = true;
-                    if(!super.isCantado("truco",cantos)){         //si no esta cantado el truco
-                        cantar(3,cantos);
+                    if(!super.isCantado("truco",cantos)){   //si no esta cantado el truco
+                        super.cantoPrimi = true;
+                        cantar(3,cantos);                   //canto truco
                     }
                     tiro[1] = tirarAlto();                  //y reviento
                     ++nroMano;
                     return tiro;               
                 }
                 else if(mentimos){                          //si no tengo cartas buenas pero puedo mentir
-                    cantar(3,cantos);
+                    cantar(3,cantos);                       //canto truco
                     tiro[1] = tirarBajo();
                     ++nroMano;
                     return tiro;
                 }
-                else{
+                else{                                       //si no tengo cartas buenas y no puedo mentir
                     tiro[1] = tirarBajo();
                     ++nroMano;
                     return tiro;
