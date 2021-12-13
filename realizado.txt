@@ -105,7 +105,7 @@
 				
 				
 	accionUsuario = false;
-				Thread espero13 = new Thread() {
+				Thread espero = new Thread() {
 					
 					@Override
 					public void run() {
@@ -124,10 +124,10 @@
 					
 				};
 				
-				espero13.start();	
+				espero.start();	
 				
 				try {
-					espero13.join();					
+					espero.join();					
 //					Thread.sleep(1000);
 				}catch(InterruptedException e) {}
 	
