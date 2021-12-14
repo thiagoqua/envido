@@ -1,0 +1,22 @@
+cuando (en rondas pares) juego yo primero, y después le toca a la IA y canta el envido, a mi no me deja revirar
+hay veces que se canta truco, no se quiere y después canta retruco
+en rondas pares la IA canta truco, yo le acepto, juega la IA y después yo quiero cantar retruco y los botones están deshabilitados
+otras que canto truco digo quiero y se va al mazo
+cuando termina una ronda par y empieza una impar, no se borran las cartas de la mesa
+error1.png
+en rondas impares hay veces que no puedo cantar envido ni revirar el truco, el botón está deshabilitado
+	una de las oportunidades que pasa es cuando la IA juega primero y no canta el envido, lo quiero cantar y el
+	botón está deshabilitado.
+cuando se termina el juego y salta el anuncio, se puede seguir jugando
+cuando canto truco me aparece muy seguido éste error, y va cambiando el número de la función trucoqueridobloque:
+	Exception in thread "Thread-1" java.lang.NullPointerException: Cannot read field "numero" because "<parameter1>" is null
+        at Carta.builder(Carta.java:30)
+        at Carta.returnOrden(Carta.java:53)
+        at Interfaz.trucoQueridoBloque5(Interfaz.java:9623)
+        at Interfaz.tirarDir(Interfaz.java:6063)
+        at Interfaz$4$2.run(Interfaz.java:1341)
+error2.png (cuando termina una ronda par y empieza una impar)
+
+
+
+

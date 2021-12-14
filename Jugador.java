@@ -186,19 +186,22 @@ public class Jugador {
 
 	public void voyMazo(String cantos[],Jugador j2){
 		//sumo los correspondientes puntos
+		System.out.print("\nENTRE PAIT y ");
 		if(isCantado("truco",cantos)){
 			if(isCantado("retruco",cantos)){
-				if(isCantado("vale cuatro",cantos))
+				if(isCantado("vale cuatro",cantos)){
 					j2.addPuntos(4);
-				else
+				}
+				else{
 					j2.addPuntos(3);
+				}
 			}
-			else
+			else{
 				j2.addPuntos(2);
+			}
 		}
-		else
+		else{
 			j2.addPuntos(1);
-		//puedo resetear los valores desde acá o desde la interfaz
-		//reset(cantos);
+		}
 	}
 }

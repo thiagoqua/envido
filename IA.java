@@ -5,24 +5,19 @@ import javax.lang.model.util.ElementScanner14;
 public class IA extends Jugador{
 
     private short nroMano;                              //si se está jugando primera, segunda o tercera
-    private boolean tengoPrimera;                       //se activa si la IA hace primera
     private boolean puedoCantarEnvido;                  //la habilito desde main cuando estoy en la primer mano
     private boolean mentimos;
 
     public IA(){
         nroMano = 1;
-        tengoPrimera = false;
         mentimos = false;
         //super(tag);
     }
 	
     public void activatePuedoCantarEnvido(boolean cond){puedoCantarEnvido = cond;}
 
-    public void activateTengoPrimera(){tengoPrimera = true;}    //lo uso cuando la IA tira y el jugador no mata
-
     public void reset(){                                        //lo invoco al finalizar cada ronda
         nroMano = 1;
-        tengoPrimera = false;
         puedoCantarEnvido = false;
     }
 
@@ -70,17 +65,15 @@ public class IA extends Jugador{
                 return tiro;
             }
             else{
-                if(tengoPrimera){   
-                    checkIfMentimos();    
-                    if((cartasGood = currentGoods()) > 0){     //si tengo cartas buenas
-                        if(!super.isCantado("truco",cantos)){     //si no esta cantado el truco
-                            super.cantoPrimi = true;
-                            cantar(3,cantos);                   //canto truco
-                        }
-                    } else if(mentimos){                    //si no tengo cartas buenas pero puedo mentir
+                checkIfMentimos();    
+                if((cartasGood = currentGoods()) > 0){     //si tengo cartas buenas
+                    if(!super.isCantado("truco",cantos)){     //si no esta cantado el truco
                         super.cantoPrimi = true;
                         cantar(3,cantos);                   //canto truco
                     }
+                } else if(mentimos) {                    //si no tengo cartas buenas pero puedo mentir
+                    super.cantoPrimi = true;
+                    cantar(3,cantos);                   //canto truco
                 }
                 tiro[0] = tirarAlto();                      
                 ++nroMano;
@@ -104,8 +97,6 @@ public class IA extends Jugador{
                 tiro[0] = super.tirar(mato);                //la mato
                 cartasGood = currentGoods();                //me fijo cuantas cartas buenas tengo despues de matar
                 checkIfMentimos();
-                if(nroMano == 1)                            //si estoy en la primer mano y mato estoy haciendo primera
-                    tengoPrimera = true;
                 if(cartasGood > 0){                         //si tengo cartas buenas
                     if(!super.isCantado("truco",cantos)){   //si no esta cantado el truco
                         super.cantoPrimi = true;
@@ -201,12 +192,13 @@ public class IA extends Jugador{
         }
         else if(cantos[end].equals("truco")){
             if(nroMano == 1 && puedoCantarEnvido){  //puedo cantar el envido antes ya que el jugador me canto truco apenas empieza
+                System.out.println("\nentre a donde quiero pait");
                 if(puntosEnvido >= 25){
                     cantos[end] = null;         //vaceo la posicion para que funcione sist puntuacion
                     cantar(0,cantos);           //canto envido
                 }
             }
-            if(cartasGood == 1 && totalCartasGood > 1){
+            if(cartasGood == 1 || totalCartasGood > 1){
                 cantar(6,cantos);           //quiero
             }
             else if(cartasGood >= 2){
@@ -215,7 +207,7 @@ public class IA extends Jugador{
             else if(manyNulls == 3 && totalCartasGood > 1){  //si ya tire todas, mis cartas fueron buenas y me cantaron truco
                 cantar(3,cantos);
             }
-            else if(cartasGood < 1 && mentimos){                //si no tengo cartas buenas y puedo mentir
+            else if(totalCartasGood < 1 && mentimos){                //si no tengo cartas buenas y puedo mentir
                 System.out.println("SE MIENTE PERRO");
                 cantar(4,cantos);           //retruco                  //canto el retruco
             }
@@ -480,7 +472,7 @@ public class IA extends Jugador{
     private void checkIfMentimos(){
         int aVer = (int)(Math.random() * 20);
         //si se quiere que la IA mienta menos o más hay que modificar el valor con el que se compara aVer
-        if(aVer <= 10)
+        if(aVer <= 15)
             mentimos = true;
         else
             mentimos = false;

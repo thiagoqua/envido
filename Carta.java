@@ -50,32 +50,16 @@ public class Carta{
 	
     
     public int returnOrden(Carta c){
-        int i=0;
-    	
+        Carta temp = builder(c);
+        if(ORDEN[0] == null)                                    //si no esta inicializado el arreglo de orden
+            initOrden();
         /*ANALIZO LAS CARTAS IMPORTANTES PRIMERO*/
-        
-        for(int j=0;j<4;j++) {
-        	
-            if(c.getNumero() == ORDEN[i].getNumero() && c.getPalo().equals(ORDEN[i].getPalo())) {
-            	return i;
-            }
-            else {
-            	i++;
-            }
-        	
-        }
-
-        for(int j=0;j<10;j++) {
-        	if(c.getNumero() == ORDEN[i].getNumero()) {
-            	return i;
-            }
-            else {
-            	i++;
-            }
-        }
-        
-        return -1;
-    }
+        if(!temp.equals(ORDEN[0]) && !temp.equals(ORDEN[1]) && !temp.equals(ORDEN[2]) && !temp.equals(ORDEN[3]))
+            temp.setPalo("");
+        for(int i=0;i<ORDEN.length;++i)
+            if(temp.equals(ORDEN[i]))
+                return i;
+    return -1;}
     
     
 	@Override
@@ -94,12 +78,10 @@ public class Carta{
     public boolean mata(Carta given) throws PardaExeption{
         int indexOfGiven,indexOfMine;
         Carta auxx = builder(given);
-        Carta auxmine = new Carta();
+        Carta auxmine = builder(this);
         if(ORDEN[0] == null)                                    //si no esta inicializado el arreglo de orden
             initOrden();
         indexOfGiven = indexOfMine = -1;
-        auxmine.setNumero(numero);
-        auxmine.setPalo(palo);
         //le borro el palo ya que da lo mismo si lo tiene o no para el ORDEN
         if(!auxx.equals(ORDEN[0]) && !auxx.equals(ORDEN[1]) && !auxx.equals(ORDEN[2]) && !auxx.equals(ORDEN[3]))
             auxx.setPalo("");
