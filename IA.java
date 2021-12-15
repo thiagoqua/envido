@@ -32,13 +32,13 @@ public class IA extends Jugador{
             nroMano = 1;                                        //si puedo cantar envido es porque estoy en la primer mano
             int puntosEnvido = super.getPuntosEnvido();
             checkIfMentimos();
-            if(puntosEnvido <= 22 && mentimos){                 //si no tengo puntos y puedo mentir
+            if(puntosEnvido <= 24 && mentimos){                 //si no tengo puntos y puedo mentir
                 System.out.println("SE MIENTE PERRO");
                 super.cantoPrimi = true;
                 cantar(0,cantos);
             }
             else{
-                if(puntosEnvido > 22 && puntosEnvido < 29){
+                if(puntosEnvido > 24 && puntosEnvido < 29){
                     super.cantoPrimi = true;
                     cantar(0,cantos);      //canto envido
                 }

@@ -184,10 +184,13 @@ public class Jugador {
                 return true;
     return false;}
 
-	public void voyMazo(String cantos[],Jugador j2){
+	public void voyMazo(String cantos[],Jugador j2, boolean cantoEnvido){
 		//sumo los correspondientes puntos
 		System.out.print("\nENTRE PAIT y ");
-		if(isCantado("truco",cantos)){
+		if(cantoEnvido == false && cantos[0] == "") {
+			j2.addPuntos(2);
+		}
+		else if(isCantado("truco",cantos)){
 			if(isCantado("retruco",cantos)){
 				if(isCantado("vale cuatro",cantos)){
 					j2.addPuntos(4);

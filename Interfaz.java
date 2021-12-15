@@ -575,7 +575,12 @@ public class Interfaz extends JFrame{
 								
 								mazo.setEnabled(false);
 								
-								j.voyMazo(cantado, MAQUINA);
+								j.voyMazo(cantado, MAQUINA, cantoEnvido);
+								
+								acumulador = "";
+								acumulador = String.valueOf(MAQUINA.getPuntos());
+				    			pts2.setText(acumulador);
+				    			puntosMaximosSuperados();
 								
 								//LIMPIAR TODA LA INTERFAZ
 								//RESTAURAR POR LAS DUDAS LAS CARTAS QUE SE REPARTIERON
@@ -593,6 +598,8 @@ public class Interfaz extends JFrame{
 								
 								//RESTAURAR EL MENU IZQUIERDO
 								reiniciarMenuCantos();
+								flecha2.setEnabled(true);
+								flecha.setEnabled(true);
 								
 								//RESTAURAR TEXTO EN VACIO
 								texto.setText("<html>"+ "" +"</html>");
@@ -609,7 +616,7 @@ public class Interfaz extends JFrame{
 								texto.setText("<html>"+ "" +"</html>");
 								
 								ronda+=1;
-								//ActionListener();
+								cantoEnvido = false;
 								
 								funcionJuego();
 								
@@ -854,9 +861,21 @@ public class Interfaz extends JFrame{
 						
 						
 						//VARIAR ENTRE IA Y JUGADOR, PORQUE LAS RONDAS IMPARES ARRANCA LA IA Y LAS PARES EL JUGADOR
+						jugando = true;
 						
-						funcionJuego();
-											
+//						Thread juego = new Thread() {
+//							
+//					    	@Override
+//					    	public void run() {
+						
+					    		funcionJuego();
+									
+//					    	}	//FIN RUN JUEGO
+//							
+//					    };
+//						
+//						juego.start();					//OJO QUE NO USA JOIN JUEGO.START
+						
 					}	//FIN ACTION-PERFORMED JUGAR-MAQUINA
 				
 				});		//FIN ACTION-LISTENER JUGAR-MAQUINA
@@ -970,22 +989,22 @@ public class Interfaz extends JFrame{
 	
 	
 	public void funcionJuego() {
-		
+	
 		Thread juego = new Thread() {
 			
 	    	@Override
 	    	public void run() {
-	    		
-	    		while(jugando) {
-	    			
-	    			/*REINICIO ALGUNAS VARIABLES QUE PODR�AN MOLESTAR*/
-	    			
-	    			acumulador = "";
+
+				while(jugando) {
+					
+					/*REINICIO ALGUNAS VARIABLES QUE PODR�AN MOLESTAR*/
+					
+					acumulador = "";
 					
 		    		for(int i=0;i<5;i++) {
 		        		cantado[i] = "";
 		        	}
-	    			
+					
 		    		MAQUINA.truco = false; j.truco = false;
 		    		mazo.setEnabled(true);
 		    		
@@ -1000,36 +1019,36 @@ public class Interfaz extends JFrame{
 				 	
 			        for(Carta x : MAQUINA.cartas)
 			            System.out.println(x + "\n");
-	    			
-	    			/*SE VISUALIZAN LAS CARTAS DEL JUGADOR EN PANTALLA*/
-	    
-	    			mostrarCartasJugador();
-	    			
-	    			if(ronda % 2 == 0) {
-	    				
-	    				//ACTIVO DETERMINADOS BOTONES
-	    				
-	    				truco.setEnabled(true);
-	    				flecha2.setEnabled(true);
-	    				cantarTruco.setEnabled(true);
-	    				retruco.setEnabled(false);
-	    				vale_4.setEnabled(false);
-	    				
-	    				envido.setEnabled(true);
-	    				flecha.setEnabled(true);
-	    				cantarEnvido.setEnabled(true);
-	    				real_envido.setEnabled(true);
-	    				falta_envido.setEnabled(true);
-	    				
-	    				c1.setEnabled(true);
-	    				c2.setEnabled(true);
-	    				c3.setEnabled(true);
-	    				
-	    				//SETEO LAS MANOS
-	    				j.setAmbasManos(true, MAQUINA);
-	    				
-	    				accionUsuario = false;
-	    				Thread t = new Thread() {
+					
+					/*SE VISUALIZAN LAS CARTAS DEL JUGADOR EN PANTALLA*/
+		
+					mostrarCartasJugador();
+					
+					if(ronda % 2 == 0) {
+						
+						//ACTIVO DETERMINADOS BOTONES
+						
+						truco.setEnabled(true);
+						flecha2.setEnabled(true);
+						cantarTruco.setEnabled(true);
+						retruco.setEnabled(false);
+						vale_4.setEnabled(false);
+						
+						envido.setEnabled(true);
+						flecha.setEnabled(true);
+						cantarEnvido.setEnabled(true);
+						real_envido.setEnabled(true);
+						falta_envido.setEnabled(true);
+						
+						c1.setEnabled(true);
+						c2.setEnabled(true);
+						c3.setEnabled(true);
+						
+						//SETEO LAS MANOS
+						j.setAmbasManos(true, MAQUINA);
+						
+						accionUsuario = false;
+						Thread t = new Thread() {
 			    			
 			    			@Override
 			    			public void run() {
@@ -1052,9 +1071,9 @@ public class Interfaz extends JFrame{
 						
 						try {
 							t.join();					
-//							Thread.sleep(1000);
+		//							Thread.sleep(1000);
 						}catch(InterruptedException e) {}
-	    				
+						
 						/*EL JUGADOR CANTA ENVIDO*/
 						
 						if(cantado[0].equals("envido") || cantado[0].equals("real envido") || cantado[0].equals("falta envido")) {
@@ -1148,6 +1167,7 @@ public class Interfaz extends JFrame{
 								cantaEnvidoIA();
 								
 								mazo.setEnabled(true);
+								envido.setEnabled(false);
 							}
 							
 							Arrays.fill(cantado,"");
@@ -1159,6 +1179,7 @@ public class Interfaz extends JFrame{
 							
 							if(cantado[0].equals("truco")) {
 								
+								mazo.setEnabled(false);
 								truco3();
 								
 							}
@@ -1173,226 +1194,213 @@ public class Interfaz extends JFrame{
 							
 						}
 						
-	    				
-	    			}
-	    			
-	    			else {	
-	    				
-	    				truco.setEnabled(false);
-	    				flecha2.setEnabled(false);
-	    				cantarTruco.setEnabled(true);
-	    				retruco.setEnabled(false);
-	    				vale_4.setEnabled(false);
-	    				
-	    				envido.setEnabled(false);
-	    				flecha.setEnabled(false);
-	    				cantarEnvido.setEnabled(false);
-	    				real_envido.setEnabled(false);
-	    				falta_envido.setEnabled(false);
-	    				
-	    				c1.setEnabled(false);
-	    				c2.setEnabled(false);
-	    				c3.setEnabled(false);
-	    				
-	    				//SETEO LAS MANOS
-	    				MAQUINA.setAmbasManos(true,j);
-	    				
-	    			
-		    			/*ESTE HILO EJECUTARA LA ACCION DE LA MAQUINA (TIRAR CARTAS, ETC.)*/
-
-						Thread IAThread = new Thread(){
-				             
-							@Override
-							public void run() {
+						
+					}
+					
+					else {	
+						
+						truco.setEnabled(false);
+						flecha2.setEnabled(true);
+						cantarTruco.setEnabled(true);
+						retruco.setEnabled(false);
+						vale_4.setEnabled(false);
+						
+						envido.setEnabled(false);
+						flecha.setEnabled(true);
+						cantarEnvido.setEnabled(false);
+						real_envido.setEnabled(false);
+						falta_envido.setEnabled(false);
+						
+						c1.setEnabled(false);
+						c2.setEnabled(false);
+						c3.setEnabled(false);
+						
+						//SETEO LAS MANOS
+						MAQUINA.setAmbasManos(true,j);
+												
+						/*LA IA EMPIEZA (RONDA 1 Y RONDAS IMPARES) */
+						
+						MAQUINA.activatePuedoCantarEnvido(true);		//nota: decidir si quiero que sea true o false
+						tiraIA = MAQUINA.yourTurn(cantado,null);
+						auxIA = tiraIA[0];
+						
+						System.out.println("\nTira:");
+						System.out.println(tiraIA[0]);
+						
+						System.out.println("\nCantado:");
+				        for(int i = 0;cantado[i] != "";++i) {
+				            System.out.println(cantado[i]);
+				        }
+						
+				        /* CANTA ENVIDO (SI TIENE) */
+				        
+				        if(cantado[0] != null && cantado[0]!="") {
+				        	if(cantado[0].equals("envido") || cantado[0].equals("real envido") || cantado[0].equals("falta envido")) {
 								
-								/*LA IA EMPIEZA (RONDA 1 Y RONDAS IMPARES) */
-								
-								MAQUINA.activatePuedoCantarEnvido(true);		//nota: decidir si quiero que sea true o false
-								tiraIA = MAQUINA.yourTurn(cantado,null);
-								auxIA = tiraIA[0];
-								
-								System.out.println("\nTira:");
-								System.out.println(tiraIA[0]);
-								
-								System.out.println("\nCantado:");
-						        for(int i = 0;cantado[i] != "";++i) {
-						            System.out.println(cantado[i]);
-						        }
-								
-						        /* CANTA ENVIDO (SI TIENE) */
-						        
-						        if(cantado[0] != null && cantado[0]!="") {
-						        	if(cantado[0].equals("envido") || cantado[0].equals("real envido") || cantado[0].equals("falta envido")) {
-										
-						        		mazo.setEnabled(false);
-						        		cantaEnvidoIA();
-							    		
+				        		mazo.setEnabled(false);
+				        		cantaEnvidoIA();
+					    		
+							}
+				        	
+				        	/*CUANDO YA SE CANTO ENVIDO EL ARREGLO DE CANTADOS SE PONE A NULL PARA EL TRUCO*/
+				        	
+				        	mazo.setEnabled(true);
+				        	texto.setText("<html>"+ "" +"</html>");
+				        	
+				        	for(int i=0;i<5;i++) {
+				        		cantado[i] = "";
+				        	}
+				        										        	
+				        	mostrarTirada(tiraIA,tiraIAnull);
+				        	tiraIA = null;
+				        	
+				        	truco.setEnabled(true);
+				        	envido.setEnabled(false);
+				        	cantoEnvido = true;
+				        	
+					        c1.setEnabled(true);
+					        c2.setEnabled(true);
+					        c3.setEnabled(true);
+					        
+					        quiero.setEnabled(false);
+					        noQuiero.setEnabled(false);
+					       
+					        
+				        }	//FIN IF DEL CANTO DE ENVIDO
+				        
+				        for(int i=0;i<5;i++) {
+			        		cantado[i] = "";
+			        	}
+				        
+				        /*SI LA IA CANTO ENVIDO ENTONCES SE DESACTIVA EL BOTON, SINO SE MANTIENE ACTIVO*/
+					        
+			        	if(cantoEnvido == true) {
+			        		envido.setEnabled(false);
+			        	}
+			        	else {
+			        		envido.setEnabled(true);
+			        		cantarEnvido.setEnabled(true);
+			        		real_envido.setEnabled(true);
+			        		falta_envido.setEnabled(true);
+			        		
+			        		/*SI NO TIENE PARA EL ENVIDO TIRA LA CARTA DIRECTAMENTE*/
+			        		
+			        		mostrarTirada(tiraIA,tiraIAnull);
+				        	auxIA = tiraIA[0];					//esto me sirve para comparar las cartas cuando el jugador tire sin cantar (en la primera)
+					        tiraIA = null;
+			        		
+			        	}
+			        									        	
+			        	truco.setEnabled(true);
+			        	cantarTruco.setEnabled(true);
+			        	flecha2.setEnabled(true);
+			        	retruco.setEnabled(false);
+			        	vale_4.setEnabled(false);
+			        	
+				        c1.setEnabled(true);
+				        c2.setEnabled(true);
+				        c3.setEnabled(true);
+				        
+				        quiero.setEnabled(false);
+				        noQuiero.setEnabled(false);
+					        
+			        	accionUsuario = false;
+				        Thread espero3 = new Thread() {
+			    			
+			    			@Override
+			    			public void run() {
+					    		
+			    				System.out.print("\nEspero que el jugador tire carta / me cante truco/envido y concluya su turno ");
+			    				while(accionUsuario == false) {
+			    					try {
+						    			System.out.print(". ");
+						    			Thread.sleep(1000);
+									} catch (InterruptedException e) {
+										e.printStackTrace();
 									}
-						        	
-						        	/*CUANDO YA SE CANTO ENVIDO EL ARREGLO DE CANTADOS SE PONE A NULL PARA EL TRUCO*/
-						        	
-						        	mazo.setEnabled(true);
-						        	texto.setText("<html>"+ "" +"</html>");
-						        	
-						        	for(int i=0;i<5;i++) {
-						        		cantado[i] = "";
-						        	}
-						        										        	
-						        	mostrarTirada(tiraIA,tiraIAnull);
-						        	tiraIA = null;
-						        	
-						        	truco.setEnabled(true);
-						        	envido.setEnabled(false);
-						        	cantoEnvido = true;
-						        	
-							        c1.setEnabled(true);
-							        c2.setEnabled(true);
-							        c3.setEnabled(true);
-							        
-							        quiero.setEnabled(false);
-							        noQuiero.setEnabled(false);
-							       
-							        
-						        }	//FIN IF DEL CANTO DE ENVIDO
-						        
-						        for(int i=0;i<5;i++) {
-					        		cantado[i] = "";
-					        	}
-						        
-						        /*SI LA IA CANTO ENVIDO ENTONCES SE DESACTIVA EL BOTON, SINO SE MANTIENE ACTIVO*/
-							        
-					        	if(cantoEnvido == true) {
-					        		envido.setEnabled(false);
-					        	}
-					        	else {
-					        		envido.setEnabled(true);
-					        		
-					        		/*SI NO TIENE PARA EL ENVIDO TIRA LA CARTA DIRECTAMENTE*/
-					        		
-					        		mostrarTirada(tiraIA,tiraIAnull);
-						        	auxIA = tiraIA[0];					//esto me sirve para comparar las cartas cuando el jugador tire sin cantar (en la primera)
-							        tiraIA = null;
-					        		
-					        	}
-					        									        	
-					        	truco.setEnabled(true);
-					        	flecha2.setEnabled(true);
-					        	retruco.setEnabled(false);
-					        	vale_4.setEnabled(false);
-					        	
-						        c1.setEnabled(true);
-						        c2.setEnabled(true);
-						        c3.setEnabled(true);
-						        
-						        quiero.setEnabled(false);
-						        noQuiero.setEnabled(false);
-							        
-					        	accionUsuario = false;
-						        Thread espero3 = new Thread() {
-					    			
-					    			@Override
-					    			public void run() {
-							    		
-					    				System.out.print("\nEspero que el jugador tire carta / me cante truco/envido y concluya su turno ");
-					    				while(accionUsuario == false) {
-					    					try {
-								    			System.out.print(". ");
-								    			Thread.sleep(1000);
-											} catch (InterruptedException e) {
-												e.printStackTrace();
-											}
-							    		}
-							    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-					    			}
-					    			
-					    		};
-				    			
-					    		espero3.start();	
-					    		
-					    		try {
-									espero3.join();					
-//										Thread.sleep(1000);
-								}catch(InterruptedException e) {}
-					    		
-						    		
-						    		
-					    		/*EL JUGADOR PUEDE CANTAR ENVIDO (SI NO SE CANTO PREVIAMENTE)*/
-					    		
-					    		if(cantado[0].equals("envido") || cantado[0].equals("real envido") || cantado[0].equals("falta envido")) {
-					    			
-					    			cantaEnvidoJugador();
-						    		
 					    		}
-					    		
-					    		
-					    		/*EL JUGADOR PUEDE CANTAR TRUCO*/
-					    		
-					    		else if(cantado[0].equals("truco")) {
-					    			
-					    			truco();
-					    			
-					    		} 
-						        
-					    		
-						        /*EL JUGADOR PUEDE TIRAR CARTA DIRECTAMENTE*/
-						        
-					    		else {
-					    			
-					    			tirarDir();
-					    			
-					    		}
-					    		
-					    		texto.setText("<html>"+ "" +"</html>");
-					    		//reiniciarMenuCantos();
-					        											
-							} //FIN RUN IATHREAD
-							
-						};
-						
-						IAThread.start();
-						
-						try {
-							IAThread.join();					//sincroniza los hilos
+					    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
+			    			}
+			    			
+			    		};
+		    			
+			    		espero3.start();	
+			    		
+			    		try {
+							espero3.join();					
 //										Thread.sleep(1000);
 						}catch(InterruptedException e) {}
-					
-//						    		if(pts1.getText().equals("30") || pts2.getText().equals("30") ) {
-//										JOptionPane.showMessageDialog(Interfaz.this, "FIN DEL JUEGO.");
-//										jugando = false;
-//										
-//										//tal vez deba restaurar el contenedor original, llevando a la persona al menu principal
-//										
-//									}	
-						
 			    		
-						//RESTAURAR DE CERO LA INTERFAZ CUANDO SE PASA A LA SIGUIENTE RONDA
-							
-							//RESTAURAR POR LAS DUDAS LAS CARTAS QUE SE REPARTIERON
-							for(int i=0;i<3;++i){
-					            MAQUINA.cartas[i] = null;
-								j.cartas[i] = null;
-							}
+				    		
+				    		
+			    		/*EL JUGADOR PUEDE CANTAR ENVIDO (SI NO SE CANTO PREVIAMENTE)*/
+			    		
+			    		if(cantado[0].equals("envido") || cantado[0].equals("real envido") || cantado[0].equals("falta envido")) {
+			    			
+			    			cantaEnvidoJugador();
+				    		
+			    		}
+			    		
+			    		
+			    		/*EL JUGADOR PUEDE CANTAR TRUCO*/
+			    		
+			    		else if(cantado[0].equals("truco")) {
+			    			
+			    			truco();
+			    			
+			    		} 
+				        
+			    		
+				        /*EL JUGADOR PUEDE TIRAR CARTA DIRECTAMENTE*/
+				        
+			    		else {
+			    			
+			    			tirarDir();
+			    			
+			    		}
+			    		
+			    		texto.setText("<html>"+ "" +"</html>");
+			    		//reiniciarMenuCantos();
+					        											
+										
+					}	//FIN RONDAS IMPARES
+					
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					
+					//RESTAURAR DE CERO LA INTERFAZ CUANDO SE PASA A LA SIGUIENTE RONDA
+					
+						//RESTAURAR POR LAS DUDAS LAS CARTAS QUE SE REPARTIERON
+						for(int i=0;i<3;++i){
+				            MAQUINA.cartas[i] = null;
+							j.cartas[i] = null;
+						}
+					
+						//RESTAURAR EN CERO LAS CARTAS SOBRE LA MESA
+						l1.setIcon(null); l2.setIcon(null); l3.setIcon(null);
+						l4.setIcon(null); l5.setIcon(null); l6.setIcon(null);
 						
-							//RESTAURAR EN CERO LAS CARTAS SOBRE LA MESA
-							l1.setIcon(null); l2.setIcon(null); l3.setIcon(null);
-							l4.setIcon(null); l5.setIcon(null); l6.setIcon(null);
-							
-							//RESTAURAR EN CERO LAS CARTAS DEL JUGADOR
-							c1.setIcon(null); c2.setIcon(null); c3.setIcon(null);
-							
-							//RESTAURAR EL MENU IZQUIERDO
-							reiniciarMenuCantos();
-							
-							//RESTAURAR TEXTO EN VACIO
-							texto.setText("<html>"+ "" +"</html>");
-							
-	    			}
-	    			
-	    			ronda+=1;
-	    			
-	    			//INVERTIR IMAGENES DE MANO Y MAZO
+						//RESTAURAR EN CERO LAS CARTAS DEL JUGADOR
+						c1.setIcon(null); c2.setIcon(null); c3.setIcon(null);
+						
+						//RESTAURAR EL MENU IZQUIERDO
+						reiniciarMenuCantos();
+						flecha2.setEnabled(true);
+						flecha.setEnabled(true);
+						
+						//RESTAURAR TEXTO EN VACIO
+						texto.setText("<html>"+ "" +"</html>");
+					
+					ronda+=1;
+					
+					cantoEnvido = false;
+					
+					//INVERTIR IMAGENES DE MANO Y MAZO
 					invertirManoMazo();
-	    			
+					
 					texto.setText("<html>"+ "REPARTIENDO" +"</html>");
 					
 					//HAGO UNA PEQUENIA PAUSA PARA QUE SE NOTE LA TRANSICION
@@ -1405,16 +1413,15 @@ public class Interfaz extends JFrame{
 					
 					texto.setText("<html>"+ "" +"</html>");
 					
-	    		} //FIN WHILE JUEGO
-	    	
-	    		System.out.println("\n\nFIN FIN FINNNNN !!!!!!!\n\n");
-	    	
-			}	//FIN RUN JUEGO
+				} //FIN WHILE JUEGO
+			
+				System.out.println("\n\nFIN FIN FINNNNN !!!!!!!\n\n");
 		
+	    	}	//FIN RUN JUEGO
+			
 	    };
 		
 		juego.start();					//OJO QUE NO USA JOIN JUEGO.START
-		
 		
 	}
 	
@@ -1462,6 +1469,7 @@ public class Interfaz extends JFrame{
 		
 		if(cantado[1].equals("quiero")) {
 			
+			retruco.setEnabled(false);
 			trucoCantadoIA();
 			
 		}
@@ -1613,6 +1621,8 @@ public class Interfaz extends JFrame{
 				c3.setEnabled(true);
 			}
 			
+			mazo.setEnabled(true);
+			
 			accionUsuario = false;
 			Thread espero13 = new Thread() {
 				
@@ -1683,7 +1693,7 @@ public class Interfaz extends JFrame{
 				
 				/*SI LA IA MATA O EMPARDA*/
 				
-				if(aux.returnOrden(auxIA) < aux.returnOrden(auxJ)) {
+				if(aux.returnOrden(auxIA) <= aux.returnOrden(auxJ)) {
 					
 					//LA IA GANA
 					MAQUINA.truco = true;
@@ -2718,9 +2728,9 @@ public class Interfaz extends JFrame{
 			
 			else {
 				
-				tiratmp[0] = tiraIA[1];
-				mostrarTirada(tiratmp, true);
 				auxIA = tiraIA[1];
+				tiratmp[0] = auxIA;
+				mostrarTirada(tiratmp, true);
 				
 				if(c1.getIcon() != null) {
 					c1.setEnabled(true);
@@ -3389,13 +3399,14 @@ public class Interfaz extends JFrame{
 			}catch(InterruptedException e) {}
 			
 			cantarTruco.setEnabled(false);
-			c1.setEnabled(false);
-			c2.setEnabled(false);
-			c3.setEnabled(false);
 			
 			/*EL JUGADOR PUEDE CANTAR TRUCO*/
 			
 			if(cantado[0].equals("truco")) {
+				
+				c1.setEnabled(false);
+				c2.setEnabled(false);
+				c3.setEnabled(false);
 				
 				MAQUINA.yourTurnAccept(cantado);
 				
@@ -8454,10 +8465,8 @@ public class Interfaz extends JFrame{
 	
 	public void trucoQueridoB4() {
 		
-		tiraIA = null;
-		tiraIA = MAQUINA.yourTurn(cantado, auxJ);
-		mostrarTirada(tiraIA, true);
 		auxIA = tiraIA[0];
+		mostrarTirada(tiraIA, true);
 		
 		/*SI LA IA MATA O EMPARDA*/
 		
@@ -8845,6 +8854,7 @@ public class Interfaz extends JFrame{
 			c3.setEnabled(true);
 		}
 		
+		accionUsuario = false;
 		Thread espero41 = new Thread() {
 			
 			@Override
@@ -8884,19 +8894,12 @@ public class Interfaz extends JFrame{
 		tiraIA = null;
 		tiraIA = MAQUINA.yourTurn(cantado, auxJ);
 		auxIA = tiraIA[0];
-		//tiraIAnull = true;					//TODO - CHEQUEAR POR LAS DUDAS
-		//mostrarTirada(tiraIA,tiraIAnull);
 		
 		/*SI LA IA MATA*/
 		
 		if(aux.returnOrden(auxIA) < aux.returnOrden(auxJ)) {
 			
 			mostrarTirada(tiraIA,true);
-			//tiraIA = null;
-			//tiraIA = MAQUINA.yourTurn(cantado, null);
-			//auxIA = tiraIA[0];
-			//tiraIAnull = true;
-			//mostrarTirada(tiraIA,tiraIAnull);
 		
 			if(c1.getIcon() != null) {
 				c1.setEnabled(true);
@@ -8936,7 +8939,7 @@ public class Interfaz extends JFrame{
 			}catch(InterruptedException e) {}
 			
 			//EL JUGADOR TIRA EN TERCERA
-			auxIA = tiraIA[0];
+			auxIA = tiraIA[1];
 			auxJ = queCartaFueTirada();
 			
 			/*SI EL JUGADOR MATA*/
@@ -9648,12 +9651,26 @@ public class Interfaz extends JFrame{
 		
 		else {
 			
+			c1.setEnabled(false);
+			c2.setEnabled(false);
+			c3.setEnabled(false);
+			
 			//LA IA TIRA
 			tiraIA = null;
 			tiraIA = MAQUINA.yourTurn(cantado, null);
 			tiraIAnull = true;
 			mostrarTirada(tiraIA,tiraIAnull);
 			auxIA = tiraIA[0];
+			
+			if(c1.getIcon() != null) {
+				c1.setEnabled(true);
+			}
+			if(c2.getIcon() != null) {
+				c2.setEnabled(true);
+			}
+			if(c3.getIcon() != null) {
+				c3.setEnabled(true);
+			}
 			
 			accionUsuario = false;
 			Thread espero21 = new Thread() {
@@ -11107,6 +11124,8 @@ public class Interfaz extends JFrame{
 		
 		if(j.getPuntos() >= 30) {
 			
+			jugando = false;
+			
 			JOptionPane.showMessageDialog(Interfaz.this, "FIN DEL JUEGO.");
 			
 			quiero.setEnabled(false);
@@ -11126,14 +11145,16 @@ public class Interfaz extends JFrame{
 			flecha.setEnabled(false);
 			flecha2.setEnabled(false);
 			
-			texto.setText("<html>"+ "EL JUGADOR GAN�" +"</html>");
+			texto.setText("<html>"+ "EL JUGADOR GANO" +"</html>");
 			
-			rendirse.setText("VOLVER AL MENU");
+			rendirse.setText("MENU");
 			
 		}
 		
 		else if(MAQUINA.getPuntos() >= 30){
 			
+			jugando = false;
+			
 			JOptionPane.showMessageDialog(Interfaz.this, "FIN DEL JUEGO.");
 			
 			quiero.setEnabled(false);
@@ -11153,7 +11174,7 @@ public class Interfaz extends JFrame{
 			flecha.setEnabled(false);
 			flecha2.setEnabled(false);
 			
-			texto.setText("<html>"+ "LA IA GAN�" +"</html>");
+			texto.setText("<html>"+ "LA IA GANO" +"</html>");
 			
 			rendirse.setText("MENU");
 			
@@ -11728,6 +11749,9 @@ public class Interfaz extends JFrame{
 		
 		if(cantado[0].equals("falta envido")) {
 			envido.setEnabled(false);
+			cantarEnvido.setEnabled(false);
+			real_envido.setEnabled(false);
+			falta_envido.setEnabled(false);
 		}
 		else if (cantado[0].equals("real envido")){
 			envido.setEnabled(true);
@@ -11735,7 +11759,7 @@ public class Interfaz extends JFrame{
 			real_envido.setEnabled(false);
 			falta_envido.setEnabled(true);
 		}
-		else {
+		else if (cantado[0].equals("envido")){
 			envido.setEnabled(true);
 			cantarEnvido.setEnabled(true);
 			real_envido.setEnabled(true);
@@ -11873,7 +11897,7 @@ public class Interfaz extends JFrame{
 				
 			}
 			
-			//SI LA IA REVIRA, CREO OTRO HILO DE ESPERA
+			//SI LA IA REVIRA
 			
 			else if(cantado[2].equals("real envido") || cantado[2].equals("falta envido")) {
 				
@@ -11923,6 +11947,8 @@ public class Interfaz extends JFrame{
 //					Thread.sleep(1000);
 				}catch(InterruptedException e) {}
 	    		
+				falta_envido.setEnabled(false);
+				
 				//SI EL JUGADOR QUIERE
 				
 				if(cantado[3].equals("quiero")) {
