@@ -35,7 +35,7 @@ public class IA extends Jugador{
             if(puntosEnvido <= 24 && mentimos){                 //si no tengo puntos y puedo mentir
                 System.out.println("SE MIENTE PERRO");
                 super.cantoPrimi = true;
-                cantar(0,cantos);
+                cantar(0,cantos);           //canto envido
             }
             else{
                 if(puntosEnvido > 24 && puntosEnvido < 29){
@@ -56,11 +56,15 @@ public class IA extends Jugador{
     }
 
     public Carta[] yourTurnTruco(String cantos[],Carta tirada){
-        int mato,cartasGood;
+        int mato,cartasGood,manyNulls;
+        manyNulls = cartasNull();
         Carta tiro[] = new Carta[2];
         if(tirada == null){                             //si todavía no se tiraron cartas
             if(nroMano == 1){                           //si estoy en la primer mano
-                tiro[0] = tirarBajo();
+                if(Math.random() > 0.5)                 //va a ir alternando entre tirar alto y bajo en la primer mano cuando tiene que jugar
+                    tiro[0] = tirarBajo();
+                else
+                    tiro[0] = tirarAlto();
                 ++nroMano;
                 return tiro;
             }
@@ -95,6 +99,7 @@ public class IA extends Jugador{
             }
             else{                                           //si la mato
                 tiro[0] = super.tirar(mato);                //la mato
+                manyNulls = cartasNull();                   //me vuelvo a fijar las nulas una vez ya tirada una carta
                 cartasGood = currentGoods();                //me fijo cuantas cartas buenas tengo despues de matar
                 checkIfMentimos();
                 if(cartasGood > 0){                         //si tengo cartas buenas
@@ -102,19 +107,31 @@ public class IA extends Jugador{
                         super.cantoPrimi = true;
                         cantar(3,cantos);                   //canto truco
                     }
-                    tiro[1] = tirarAlto();                  //y reviento
-                    ++nroMano;
-                    return tiro;               
+                    if(manyNulls != 3){                     //si todavía tengo cartas una vez que tire
+                        tiro[1] = tirarAlto();              //reviento
+                        ++nroMano;
+                    }
+                    //si no tengo mas cartas es porque maté en 3ra, y por ende retorno 1 sola
+                    return tiro;
                 }
                 else if(mentimos){                          //si no tengo cartas buenas pero puedo mentir
-                    cantar(3,cantos);                       //canto truco
-                    tiro[1] = tirarBajo();
-                    ++nroMano;
+                    if(!super.isCantado("truco",cantos)){   //si no esta cantado el truco
+                        super.cantoPrimi = true;
+                        cantar(3,cantos);                   //canto truco
+                    }
+                    if(manyNulls != 3){                     //si todavía tengo cartas una vez que tire
+                        tiro[1] = tirarBajo();              //tiro baja
+                        ++nroMano;
+                    }
+                    //si no tengo mas cartas es porque maté en 3ra, y por ende retorno 1 sola
                     return tiro;
                 }
                 else{                                       //si no tengo cartas buenas y no puedo mentir
-                    tiro[1] = tirarBajo();
-                    ++nroMano;
+                    if(manyNulls != 3){                     //si todavía tengo cartas una vez que tire
+                        tiro[1] = tirarBajo();              //tiro baja
+                        ++nroMano;
+                    }
+                    //si no tengo mas cartas es porque maté en 3ra, y por ende retorno 1 sola
                     return tiro;
                 }
             }
@@ -122,15 +139,13 @@ public class IA extends Jugador{
     }
 
     public void yourTurnAccept(String cantos[]){             //metodo que se invocaria cada vez que tiene que aceptar, rechazar o revirar la IA
-        int end = 0,puntosEnvido,cartasGood,manyNulls = 0,totalCartasGood;
+        int end = 0,puntosEnvido,cartasGood,manyNulls,totalCartasGood;
+        manyNulls = cartasNull();
         puntosEnvido = getPuntosEnvido();
         cartasGood = currentGoods();                             //por si el jugador me canta truco una vez que yo haya jugado todas mis cartas
         totalCartasGood = totalGoods();
         checkIfMentimos();
         while(cantos[end+1] != null && cantos[end+1] != ""){++end;}                    //accedo a lo ultimo que se canto
-        for(Carta temp : super.cartas)
-            if(temp == null)
-                ++manyNulls;
         if(end > 0 && cantos[end-1].equals("envido")){          //si se canta envido envido
             if(puntosEnvido > 25 && puntosEnvido < 28){
                 cantar(6,cantos);           //quiero
@@ -183,6 +198,10 @@ public class IA extends Jugador{
             }
         }
         else if(cantos[end].equals("falta envido")){
+            System.out.println("ENTRE PAIT y el array es:");
+            for(String temp : cantos)
+                if(temp != null)
+                    System.out.println(temp);
             if(puntosEnvido > 31){
                 cantar(6,cantos);           //quiero
             }
@@ -370,12 +389,11 @@ public class IA extends Jugador{
 
     private Carta tirarBajo(){                              //tira la carta mas baja que tiene
         int notNull,manyNulls;
-        notNull = manyNulls = 0;
+        notNull = 0;
+        manyNulls = cartasNull();
         for(int i = 0;i < 3;++i){                           //me fijo cuantas cartas tengo actualmente no tiradas
-            if(super.cartas[i] == null)
-                ++manyNulls;
-            else
-                notNull = i;                                //me guardo la que no es nula para tirarla si es la unica que me queda
+            if(super.cartas[i] != null)
+                notNull = i;                            //me guardo la que no es nula para tirarla si es la unica que me queda
         }
         try{
             if(manyNulls == 0){                             //si todavia no tire ninguna carta
@@ -482,6 +500,13 @@ public class IA extends Jugador{
         int many = 0;
         for(Carta temp : super.copyCartas)
             if(temp.isGood())
+                ++many;
+    return many;}
+
+    private int cartasNull(){
+        int many = 0;
+        for(Carta temp : super.cartas)
+            if(temp == null)
                 ++many;
     return many;}
 }
