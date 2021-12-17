@@ -146,6 +146,13 @@ public class IA extends Jugador{
         totalCartasGood = totalGoods();
         checkIfMentimos();
         while(cantos[end+1] != null && cantos[end+1] != ""){++end;}                    //accedo a lo ultimo que se canto
+        
+        System.out.println("Muestro el arreglo de cantos dentro de yourTurnAccept: ");
+        System.out.println(cantos[0]);
+        System.out.println(cantos[1]);
+        System.out.println(cantos[2]);
+        System.out.println("END: " + end + "\n");
+        
         if(end > 0 && cantos[end-1].equals("envido")){          //si se canta envido envido
             if(puntosEnvido > 25 && puntosEnvido < 28){
                 cantar(6,cantos);           //quiero
@@ -157,7 +164,7 @@ public class IA extends Jugador{
                 cantar(2,cantos);           //falta envido
             }
             else if(puntosEnvido < 25 && mentimos){
-                System.out.println("SE MIENTE PERRO");
+                System.out.println("SE MIENTE PERRO. estoy en la parte de envido envido");
                 cantar(1,cantos);           //real envido
             }
             else{
@@ -175,7 +182,7 @@ public class IA extends Jugador{
                 cantar(2,cantos);           //falta envido
             }
             else if(puntosEnvido <= 24 && mentimos){            //si no tengo puntos y puedo mentir
-                System.out.println("SE MIENTE PERRO");
+                System.out.println("SE MIENTE PERRO. estoy en la parte de envido");
                 cantar(1,cantos);           //real envido                  //canto el real envido
             }
             else{
@@ -190,7 +197,7 @@ public class IA extends Jugador{
                 cantar(2,cantos);           //falta envido
             }
             else if(puntosEnvido <= 27 && mentimos){            //si no tengo puntos y puedo mentir
-                System.out.println("SE MIENTE PERRO");
+                System.out.println("SE MIENTE PERRO. estoy en la parte de real envido");
                 cantar(2,cantos);           //falta envido                 //canto la falta envido
             }
             else{

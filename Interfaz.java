@@ -1099,7 +1099,7 @@ public class Interfaz extends JFrame{
 							
 							MAQUINA.yourTurnAccept(cantado);
 							
-							if(cantado[0].equals("envido")) {
+							if(cantado[0].equals("envido") || cantado[0].equals("real envido") || cantado[0].equals("falta envido")) {
 								
 								mazo.setEnabled(false);
 								texto.setText("<html>"+ cantado[0] +"</html>");
@@ -1164,7 +1164,7 @@ public class Interfaz extends JFrame{
 								mazo.setEnabled(false);
 								texto.setText("<html>"+ cantado[0] +"</html>");
 								
-								cantaEnvidoIA();
+								cantaEnvidoIA(); 
 								
 								mazo.setEnabled(true);
 								envido.setEnabled(false);
@@ -11850,7 +11850,7 @@ public class Interfaz extends JFrame{
 				cantarEnvido.setEnabled(false);
 				real_envido.setEnabled(false);
 			}
-			else {
+			else if(cantado[1].equals("falta envido")){
 				cantarEnvido.setEnabled(false);
 				real_envido.setEnabled(false);
 				falta_envido.setEnabled(false);
@@ -11919,6 +11919,10 @@ public class Interfaz extends JFrame{
 				else {
 					envido.setEnabled(false);
 				}
+				
+				System.out.println(cantado[0]);
+				System.out.println(cantado[1]);
+				System.out.println(cantado[2]);
 				
 				accionUsuario = false;
 	    		Thread espero2 = new Thread() {
