@@ -1,7 +1,5 @@
 import java.util.Arrays;
 
-import javax.lang.model.util.ElementScanner14;
-
 public class IA extends Jugador{
 
     private short nroMano;                              //si se está jugando primera, segunda o tercera
@@ -146,25 +144,18 @@ public class IA extends Jugador{
         totalCartasGood = totalGoods();
         checkIfMentimos();
         while(cantos[end+1] != null && cantos[end+1] != ""){++end;}                    //accedo a lo ultimo que se canto
-        
-        System.out.println("Muestro el arreglo de cantos dentro de yourTurnAccept: ");
-        System.out.println(cantos[0]);
-        System.out.println(cantos[1]);
-        System.out.println(cantos[2]);
-        System.out.println("END: " + end + "\n");
-        
-        if(end > 0 && cantos[end-1].equals("envido")){          //si se canta envido envido
-            if(puntosEnvido > 25 && puntosEnvido < 28){
+        if(end > 0 && cantos[end-1].equals("envido") && cantos[end].equals("envido")){//si se canta envido envido
+            if(puntosEnvido > 26 && puntosEnvido <= 28){
                 cantar(6,cantos);           //quiero
             }
-            else if(puntosEnvido >= 28 && puntosEnvido < 31){
+            else if(puntosEnvido > 28 && puntosEnvido <= 31){
                 cantar(1,cantos);           //real envido
             }
-            else if(puntosEnvido >= 31){
+            else if(puntosEnvido > 31){
                 cantar(2,cantos);           //falta envido
             }
             else if(puntosEnvido < 25 && mentimos){
-                System.out.println("SE MIENTE PERRO. estoy en la parte de envido envido");
+                System.out.println("SE MIENTE PERRO.");
                 cantar(1,cantos);           //real envido
             }
             else{
@@ -172,17 +163,20 @@ public class IA extends Jugador{
             }
         }
         else if(cantos[end].equals("envido")){
-            if(puntosEnvido > 24 && puntosEnvido <= 27){
+            if(puntosEnvido > 24 && puntosEnvido <= 26){
                 cantar(6,cantos);           //quiero
             }
-            else if(puntosEnvido > 27 && puntosEnvido <= 31){
+            else if(puntosEnvido > 26 && puntosEnvido <= 28){
+                cantar(6,cantos);           //quiero
+            }
+            else if(puntosEnvido > 28 && puntosEnvido <= 31){
                 cantar(1,cantos);           //real envido
             }
             else if(puntosEnvido > 31){
                 cantar(2,cantos);           //falta envido
             }
             else if(puntosEnvido <= 24 && mentimos){            //si no tengo puntos y puedo mentir
-                System.out.println("SE MIENTE PERRO. estoy en la parte de envido");
+                System.out.println("SE MIENTE PERRO.");
                 cantar(1,cantos);           //real envido                  //canto el real envido
             }
             else{
@@ -190,14 +184,14 @@ public class IA extends Jugador{
             }
         }
         else if(cantos[end].equals("real envido")){
-            if(puntosEnvido > 27 && puntosEnvido <= 31){
+            if(puntosEnvido > 28 && puntosEnvido <= 31){
                 cantar(6,cantos);           //quiero
             }
             else if(puntosEnvido > 31){
                 cantar(2,cantos);           //falta envido
             }
             else if(puntosEnvido <= 27 && mentimos){            //si no tengo puntos y puedo mentir
-                System.out.println("SE MIENTE PERRO. estoy en la parte de real envido");
+                System.out.println("SE MIENTE PERRO.");
                 cantar(2,cantos);           //falta envido                 //canto la falta envido
             }
             else{
@@ -205,10 +199,6 @@ public class IA extends Jugador{
             }
         }
         else if(cantos[end].equals("falta envido")){
-            System.out.println("ENTRE PAIT y el array es:");
-            for(String temp : cantos)
-                if(temp != null)
-                    System.out.println(temp);
             if(puntosEnvido > 31){
                 cantar(6,cantos);           //quiero
             }
@@ -218,7 +208,6 @@ public class IA extends Jugador{
         }
         else if(cantos[end].equals("truco")){
             if(nroMano == 1 && puedoCantarEnvido){  //puedo cantar el envido antes ya que el jugador me canto truco apenas empieza
-                System.out.println("\nentre a donde quiero pait");
                 if(puntosEnvido >= 25){
                     cantos[end] = null;         //vaceo la posicion para que funcione sist puntuacion
                     cantar(0,cantos);           //canto envido
