@@ -16,7 +16,8 @@ public class IA extends Jugador{
 
     public void reset(){                                        //lo invoco al finalizar cada ronda
         nroMano = 1;
-        puedoCantarEnvido = false;
+        puedoCantarEnvido = mentimos = false;
+        super.reset();
     }
 
     public Carta[] yourTurn(String cantos[],Carta tirada){      //metodo que se invocaría cada vez que le toca jugar a la IA
@@ -137,7 +138,13 @@ public class IA extends Jugador{
     }
 
     public void yourTurnAccept(String cantos[]){             //metodo que se invocaria cada vez que tiene que aceptar, rechazar o revirar la IA
-        int end = 0,puntosEnvido,cartasGood,manyNulls,totalCartasGood;
+        
+    	System.out.println("ESTOY DENTRO DE LA IA");
+    	for(int i=0;i<5;i++) {
+			System.out.println(cantos[i]);
+		}
+    	
+    	int end = 0,puntosEnvido,cartasGood,manyNulls,totalCartasGood;
         manyNulls = cartasNull();
         puntosEnvido = getPuntosEnvido();
         cartasGood = currentGoods();                             //por si el jugador me canta truco una vez que yo haya jugado todas mis cartas

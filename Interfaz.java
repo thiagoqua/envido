@@ -614,10 +614,13 @@ public class Interfaz extends JFrame{
 								if(j.getPuntos() >= 30 || MAQUINA.getPuntos() >= 30) {		//TODO - IMPORTANTE LIMPIAR EL JUEGO PARA QUE SE PUEDA VOLVER A JUGAR EN CASO DE QUE SE QUIERA
 									
 									//RESTAURO CADA VARIABLE
+										
+										MAQUINA.reset();
+										j.reset();
 									
 										//REPONGO LAS CARTAS
 										mazoCartas.reponer();
-									
+										
 										//RESTAURAR POR LAS DUDAS LAS CARTAS QUE SE REPARTIERON
 										for(int i=0;i<3;++i){
 								            MAQUINA.cartas[i] = null;
@@ -659,8 +662,6 @@ public class Interfaz extends JFrame{
 										
 										cantoEnvido = false;
 										acumulador = "";
-									
-									//juego.stop();
 									
 									//REMUEVO LA INTERFAZ DE JUEGO
 									cp.removeAll();
@@ -787,13 +788,19 @@ public class Interfaz extends JFrame{
 							public void actionPerformed(ActionEvent e) {
 								int i;
 								for(i=0;i<5;i++) {
-									if(cantado[i]==null || cantado[i]=="") {
+									if(cantado[i]==null || cantado[i].equals("")) {
 										cantado[i] = "envido";
 										break;
 									}
 								}
 								texto.setText("<html>"+ cantado[i] +"</html>");
 								accionUsuario = true;
+								
+								System.out.println("ESTOY DENTRO DEL BOTON ENVIDO PARA VERIFICAR QUE SOLO HAY UN ENVIDO");
+								for(int j=0;j<5;j++) {
+					        		System.out.println(cantado[j]);
+					        	}
+								
 							}
 							
 						});
@@ -1049,6 +1056,10 @@ public class Interfaz extends JFrame{
 			mostrarCartasJugador();
 			
 			if(ronda % 2 == 0) {
+				
+				for(int i=0;i<5;i++) {
+	        		cantado[i] = "";
+	        	}
 				
 				//ACTIVO DETERMINADOS BOTONES
 				
@@ -1441,6 +1452,10 @@ public class Interfaz extends JFrame{
 			}
 			
 			irseAlMazo = false;
+			
+			//RESETEO ALGUNAS VARIABLES DE LOS JUGADORES
+			MAQUINA.reset();
+			j.reset();
 			
 			//REPONGO LAS CARTAS, LAS LLEVO AL MAZO
 			mazoCartas.reponer();
@@ -12040,6 +12055,11 @@ public class Interfaz extends JFrame{
 	
 	public int cantaEnvidoJugador() {
 		
+		System.out.println("ESTOY DENTRO DE CANTA ENVIDO JUGADOR");
+		for(int i=0;i<5;i++) {
+			System.out.println(cantado[i]);
+		}
+		
 		quiero.setEnabled(false);
 		noQuiero.setEnabled(false);
 		
@@ -12052,7 +12072,7 @@ public class Interfaz extends JFrame{
 		cantarEnvido.setEnabled(false);
 		real_envido.setEnabled(false);
 		falta_envido.setEnabled(false);
-		
+				
 		MAQUINA.yourTurnAccept(cantado);
 		
 		/*SI LA IA QUIERE*/
@@ -12109,6 +12129,10 @@ public class Interfaz extends JFrame{
 			/***/
 			
 			if(cantado[1].equals("envido")) {
+				
+				for(int i=0;i<5;i++) {
+    				System.out.println(cantado[i]);
+    			}
 				
 				quiero.setEnabled(true);
 				noQuiero.setEnabled(true);
@@ -12181,6 +12205,10 @@ public class Interfaz extends JFrame{
 	    		/* SI EL JUGADOR REVIRA */
 	    		
 	    		else if(cantado[2].equals("real envido") || cantado[2].equals("falta envido")) {
+	    			
+	    			for(int i=0;i<5;i++) {
+	    				System.out.println(cantado[i]);
+	    			}
 	    			
 	    			real_envido.setEnabled(false);
 	    			falta_envido.setEnabled(false);
@@ -12434,7 +12462,7 @@ public class Interfaz extends JFrame{
 	    		
 			}
 			
-			else {
+			else if(cantado[1].equals("falta envido")){
 				
 				cantarEnvido.setEnabled(false);
 				real_envido.setEnabled(false);

@@ -15,7 +15,7 @@ public class Jugador {
 	
 	public Jugador() {
 		//this.tag = tag;
-		this.puntos = 25;
+		this.puntos = 0;
 		this.soy_mano = false;
 		this.bandera = false;
 		this.cantoPrimi = false;	/* cuando se inicialize el arreglo de cantos, el jugador que cante primero inicializa
@@ -171,8 +171,7 @@ public class Jugador {
 		truco = true;
 	}
 
-	public void reset(String another[]){	//vaceo y reseteo los valores
-		Arrays.fill(another,null);
+	public void reset(){	//vaceo y reseteo los valores
 		Arrays.fill(cartas,null);
 		Arrays.fill(copyCartas,null);
 		soy_mano = bandera = cantoPrimi = truco = false;
