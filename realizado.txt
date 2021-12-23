@@ -130,4 +130,23 @@
 					espero.join();					
 //					Thread.sleep(1000);
 				}catch(InterruptedException e) {}
-	
+
+				
+				
+				
+				
+				
+				
+				/*EL JUGADOR SE VA AL MAZO*/
+	    		
+	    		if(irseAlMazo == true) {
+	    			
+	    			System.out.println("ME VOY AL MAZO");
+	    			
+	    		}
+	    		
+	    		/*EL JUGADOR TIRA*/
+	    		
+	    		else {
+	    			
+	    		}
