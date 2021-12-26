@@ -139,8 +139,7 @@ public class Interfaz extends JFrame{
     private int ronda;
     
     private boolean irseAlMazo;
-    
-    private Thread juego;
+
     //
     
     /*OTROS*/
@@ -150,254 +149,7 @@ public class Interfaz extends JFrame{
 	
 	public Interfaz() {
 	
-	/*INICIALIZACION DE OBJETOS DE OTRAS CLASES*/
-	
-	j = new Jugador();
-	MAQUINA = new IA();
-	mazoCartas = new Mazo();
-	
-	cantado = new String[5];	//acumula los cantos sucesivos
-	cantado = new String[5];
-    tiraIA = new Carta[2];
-    tiratmp = new Carta[1];
-    
-    accionUsuario = false;
-	jugando = true;
-	
-	auxJ = new Carta();
-    auxIA = new Carta();
-    aux = new Carta();
-    
-    tiraIAnull = false;
-    acumulador = "";
-    irseAlMazo = false;
-    ronda = 1;
-	cantoEnvido = false;   
-    
-	/*CREACION DE VENTANA BASICA*/
-	setIconImage(new ImageIcon(getClass().getResource("/images/icon.jpg")).getImage());
-	setTitle("TRUCO");
-	setSize(800,600);			//SE PUEDE CAMBIAR A 1200x900 Y MANTENER BIEN LA ESTRUCTURA (AUNQUE HABRIA QUE CAMBIAR EL TAMA�O DE LAS IMAGENES)
-	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	setLocationRelativeTo(null);
-	
-	/*INICIALIZACION DE ALGUNOS COMPONENTES*/
-	
-	contorno = BorderFactory.createLineBorder(Color.BLUE);
-	contorno2 = BorderFactory.createLineBorder(Color.RED);
-	contorno3 = BorderFactory.createLineBorder(Color.BLACK);
-	
-	texto_nombre = new JTextField("");
-	
-	cp = getContentPane();
-	
-	cp.add(ventanaPrincipal());
-	
-
-	/*CREACION DE MENU DE BOTONES IZQUIERDO*/
-	
-	flecha = new JButton("<=");
-	flecha2 = new JButton("<=");
-	
-	truco = new JButton("TRUCO");
-	envido = new JButton("ENVIDO");
-	mazo = new JButton("MAZO");
-	rendirse = new JButton("RENDIRSE");
-	
-	cantarTruco = new JButton("TRUCO");
-	retruco = new JButton("RETRUCO");
-	vale_4 = new JButton("VALE 4");
-	
-	cantarEnvido = new JButton("ENVIDO");
-	real_envido = new JButton("REAL ENVIDO");
-	falta_envido = new JButton("FALTA ENVIDO");
-	
-	menu = new JPanel();
-	GridLayout columna = new GridLayout(8,1);
-	menu.setLayout(columna);
-	menu.setPreferredSize(new Dimension(100,600));
-	menu.add(new JLabel(""));
-	menu.add(new JLabel(""));
-	menu.add(truco);
-	menu.add(envido);
-	menu.add(mazo);
-	menu.add(rendirse);
-	menu.add(new JLabel(""));
-	menu.add(new JLabel(""));
-	
-	menuCantosE = new JPanel();
-	GridLayout columna2 = new GridLayout(8,1);
-	menuCantosE.setLayout(columna2);
-	menuCantosE.setPreferredSize(new Dimension(100,600));
-	menuCantosE.add(new JLabel(""));
-	menuCantosE.add(new JLabel(""));
-	menuCantosE.add(flecha);
-	menuCantosE.add(cantarEnvido);
-	menuCantosE.add(real_envido);
-	menuCantosE.add(falta_envido);
-	menuCantosE.add(new JLabel(""));
-	menuCantosE.add(new JLabel(""));
-	
-	menuCantosT = new JPanel();
-	GridLayout columna3 = new GridLayout(8,1);
-	menuCantosT.setLayout(columna3);
-	menuCantosT.setPreferredSize(new Dimension(100,600));
-	menuCantosT.add(new JLabel(""));
-	menuCantosT.add(new JLabel(""));
-	menuCantosT.add(flecha2);
-	menuCantosT.add(cantarTruco);
-	menuCantosT.add(retruco);
-	menuCantosT.add(vale_4);
-	menuCantosT.add(new JLabel(""));
-	menuCantosT.add(new JLabel(""));
-	
-	/*CREACION DE LOS COMPONENTES CENTRALES*/
-	
-	l1 = new JLabel();
-	//l1.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
-	l1.setHorizontalAlignment(SwingConstants.CENTER);
-	l2 = new JLabel();
-	//l2.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
-	l2.setHorizontalAlignment(SwingConstants.CENTER);
-	l3 = new JLabel();
-	l3.setHorizontalAlignment(SwingConstants.CENTER);
-	//l3.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
-	
-	JPanel cartas = new JPanel(new GridLayout(1,3,4,4));
-	cartas.add(l1);
-	cartas.add(l2);
-	cartas.add(l3);
-	
-	//
-	
-	JPanel cantos = new JPanel();
-	cantos.setLayout(new GridBagLayout());
-	
-
-	texto = new JLabel("<html>"+ "" +"</html>",SwingConstants.CENTER);
-	texto.setPreferredSize(new Dimension(300,30));
-	texto.setBorder(contorno3);
-	texto.setFont(new Font("Consolas",Font.PLAIN,30));
-	
-	quiero = new JButton("QUIERO");
-	quiero.setBackground(Color.GREEN);
-	quiero.setPreferredSize(new Dimension(150,30));
-	noQuiero = new JButton("NO QUIERO");
-	noQuiero.setBackground(Color.RED);
-	noQuiero.setPreferredSize(new Dimension(150,30));
-	
-	GridBagConstraints constraints = new GridBagConstraints();
-	constraints.gridx = 0;
-	constraints.gridy = 0;
-	constraints.gridwidth = 2;
-	constraints.gridheight = 1;
-	constraints.fill = GridBagConstraints.HORIZONTAL;
-	cantos.add(texto, constraints);
-	
-	constraints.gridx = 0;
-	constraints.gridy = 1;
-	constraints.gridwidth = 1;
-	constraints.gridheight = 1;
-	cantos.add(quiero, constraints);
-	
-	constraints.gridx = 1;
-	constraints.gridy = 1;
-	constraints.gridwidth = 1;
-	constraints.gridheight = 1;
-	cantos.add(noQuiero, constraints);
-	
-	//
-	
-	l4 = new JLabel();
-	//l4.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
-	l4.setHorizontalAlignment(SwingConstants.CENTER);
-	l5 = new JLabel();
-	//l5.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
-	l5.setHorizontalAlignment(SwingConstants.CENTER);
-	l6 = new JLabel();
-	l6.setHorizontalAlignment(SwingConstants.CENTER);
-	//l6.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
-	
-	JPanel cartas2 = new JPanel(new GridLayout(1,3,4,4));
-	cartas2.add(l4);
-	cartas2.add(l5);
-	cartas2.add(l6);
-	
-	//
-	ctemp = new JButton();
-	c1 = new JButton();
-	c2 = new JButton();
-	c3 = new JButton();
-	
-	JPanel cartas3 = new JPanel(new GridLayout(1,3,4,4));
-	cartas3.add(c1);
-	cartas3.add(c2);
-	cartas3.add(c3);
-	
-	//
-	
-	union = new JPanel();
-	union.setLayout(new BoxLayout(union, BoxLayout.Y_AXIS));
-	union.add(cartas);
-	union.add(cantos);
-	union.add(cartas2);
-	union.add(cartas3);
-	
-	
-	/*CREACION DE LOS COMPONENTES DERECHOS*/
-	pts1 = new JLabel("0");
-	pts1.setBorder(contorno);
-	pts1.setHorizontalAlignment(SwingConstants.CENTER);
-	
-	pts2 = new JLabel("0");
-	pts2.setBorder(contorno2);
-	pts2.setHorizontalAlignment(SwingConstants.CENTER);
-	
-	j1 = new JLabel("");
-	j1.setBorder(contorno);
-	j1.setHorizontalAlignment(SwingConstants.CENTER);
-	
-	j2 = new JLabel("");
-	j2.setBorder(contorno2);
-	j2.setHorizontalAlignment(SwingConstants.CENTER);
-	
-	img_mano = new JLabel();
-	img_mano.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/mazo.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
-	img_mano.setBorder(contorno);
-	img_mano.setHorizontalAlignment(SwingConstants.CENTER);
-	
-	img_mazo = new JLabel();
-	img_mazo.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/mano.png")).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
-	img_mazo.setBorder(contorno2);
-	img_mazo.setHorizontalAlignment(SwingConstants.CENTER);
-	
-	JPanel panel_pts = new JPanel(new GridLayout(2,2,4,4));
-	panel_pts.add(pts1);
-	panel_pts.add(pts2);
-	panel_pts.add(j1);
-	panel_pts.add(j2);
-	
-	JPanel panel1 = new JPanel();
-	
-	panel2 = new JPanel(new GridLayout(1,1,4,4));
-	panel2.add(img_mano);
-	panel2.add(img_mazo);
-	
-	JPanel panel3 = new JPanel();
-	
-	unionDer = new JPanel(new GridLayout(4,1,4,4));
-	unionDer.setPreferredSize(new Dimension(200,600));
-	unionDer.add(panel1);
-	unionDer.add(panel_pts);
-	unionDer.add(panel2);
-	unionDer.add(panel3);
-	
-	ActionListener();
-	
-	/*CONFIGURACIONES ADICIONALES DE LA VENTANA*/
-	
-	setResizable(false);
-	setVisible(true);
+		interfazCreacion();
 	
 	}
 	
@@ -604,94 +356,6 @@ public class Interfaz extends JFrame{
 							
 						});
 						
-						rendirse.addActionListener(new ActionListener() {
-							
-							@Override
-							public void actionPerformed(ActionEvent e) {
-								
-								JFrame confirmar = new JFrame();
-						        
-								if(j.getPuntos() >= 30 || MAQUINA.getPuntos() >= 30) {		//TODO - IMPORTANTE LIMPIAR EL JUEGO PARA QUE SE PUEDA VOLVER A JUGAR EN CASO DE QUE SE QUIERA
-									
-									//RESTAURO CADA VARIABLE
-										
-										MAQUINA.reset();
-										j.reset();
-									
-										//REPONGO LAS CARTAS
-										mazoCartas.reponer();
-										
-										//RESTAURAR POR LAS DUDAS LAS CARTAS QUE SE REPARTIERON
-										for(int i=0;i<3;++i){
-								            MAQUINA.cartas[i] = null;
-											j.cartas[i] = null;
-											MAQUINA.copyCartas[i] = null;
-											j.copyCartas[i] = null;
-										}
-									
-										for(int i=0;i<5;i++) {
-							        		cantado[i] = "";
-							        	}
-										
-										//RESTAURAR EN CERO LAS CARTAS SOBRE LA MESA
-										l1.setIcon(null); l2.setIcon(null); l3.setIcon(null);
-										l4.setIcon(null); l5.setIcon(null); l6.setIcon(null);
-										
-										//RESTAURAR EN CERO LAS CARTAS DEL JUGADOR
-										c1.setIcon(null); c2.setIcon(null); c3.setIcon(null);
-										
-										//RESTAURAR EL MENU IZQUIERDO
-										reiniciarMenuCantos();
-										flecha2.setEnabled(true);
-										flecha.setEnabled(true);
-										
-										//RESTAURAR TEXTO EN VACIO
-										texto.setText("<html>"+ "" +"</html>");
-										pts1.setText("0");
-										pts2.setText("0");
-									
-										//RESTAURO PUNTOS DEL JUGADOR
-										j.puntos = 0;
-										MAQUINA.puntos = 0;
-										
-										//REINICIO EL NRO DE RONDAS
-										ronda=1;
-										
-										//INVERTIR IMAGENES DE MANO Y MAZO
-										invertirManoMazo();
-										
-										cantoEnvido = false;
-										acumulador = "";
-									
-									//REMUEVO LA INTERFAZ DE JUEGO
-									cp.removeAll();
-									cp.revalidate();
-									cp.repaint();
-									cp.add(ventanaPrincipal());
-									
-									ActionListener();			//CHEQUEAR QUE HACE ESTE ACTION-LISTENER 
-									
-								}
-								else {										//TODO - ESTO TAMBIEN HAY QUE LIMPIARLO
-								
-									int result = JOptionPane.showConfirmDialog(confirmar, "�Esta seguro que desea salir? El juego se daria como perdido.");
-	
-							        if (result == 0) {
-							        	cp.removeAll();
-										cp.revalidate();
-										cp.repaint();
-										cp.add(ventanaPrincipal());
-										
-										ActionListener();	
-							        }
-							        
-							        else if (result == 1) {}
-							        else {}
-
-								}
-							}
-						});		//FIN RENDIRSE
-						
 						flecha.addActionListener(new ActionListener() {
 							
 							@Override
@@ -786,6 +450,7 @@ public class Interfaz extends JFrame{
 							
 							@Override
 							public void actionPerformed(ActionEvent e) {
+								
 								int i;
 								for(i=0;i<5;i++) {
 									if(cantado[i]==null || cantado[i].equals("")) {
@@ -809,6 +474,7 @@ public class Interfaz extends JFrame{
 							
 							@Override
 							public void actionPerformed(ActionEvent e) {
+								
 								int i;
 								for(i=0;i<5;i++) {
 									if(cantado[i]==null || cantado[i]=="") {
@@ -825,6 +491,7 @@ public class Interfaz extends JFrame{
 							
 							@Override
 							public void actionPerformed(ActionEvent e) {
+								
 								int i;
 								for(i=0;i<5;i++) {
 									if(cantado[i]==null || cantado[i]=="") {
@@ -896,10 +563,102 @@ public class Interfaz extends JFrame{
 							}
 						});
 						
+						
+						rendirse.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								
+								JFrame confirmar = new JFrame();
+						        
+								if(j.getPuntos() >= 30 || MAQUINA.getPuntos() >= 30) {		//TODO - IMPORTANTE LIMPIAR EL JUEGO PARA QUE SE PUEDA VOLVER A JUGAR EN CASO DE QUE SE QUIERA
+									
+									//RESTAURO CADA VARIABLE
+										
+										MAQUINA.reset();
+										j.reset();
+									
+										//REPONGO LAS CARTAS
+										mazoCartas.reponer();
+										
+										//RESTAURAR POR LAS DUDAS LAS CARTAS QUE SE REPARTIERON
+										for(int i=0;i<3;++i){
+								            MAQUINA.cartas[i] = null;
+											j.cartas[i] = null;
+											MAQUINA.copyCartas[i] = null;
+											j.copyCartas[i] = null;
+										}
+									
+										for(int i=0;i<5;i++) {
+							        		cantado[i] = "";
+							        	}
+										
+										//RESTAURAR EN CERO LAS CARTAS SOBRE LA MESA
+										l1.setIcon(null); l2.setIcon(null); l3.setIcon(null);
+										l4.setIcon(null); l5.setIcon(null); l6.setIcon(null);
+										
+										//RESTAURAR EN CERO LAS CARTAS DEL JUGADOR
+										c1.setIcon(null); c2.setIcon(null); c3.setIcon(null);
+										
+										//RESTAURAR EL MENU IZQUIERDO
+										flecha2.setEnabled(true);
+										flecha.setEnabled(true);
+										reiniciarMenuCantos();
+										
+										//RESTAURAR TEXTO EN VACIO
+										texto.setText("<html>"+ "" +"</html>");
+										pts1.setText("0");
+										pts2.setText("0");
+									
+										//RESTAURO PUNTOS DEL JUGADOR
+										j.puntos = 0;
+										MAQUINA.puntos = 0;
+										
+										//REINICIO EL NRO DE RONDAS
+										ronda=1;
+										
+										//INVERTIR IMAGENES DE MANO Y MAZO
+										invertirManoMazo();
+										
+										cantoEnvido = false;
+										acumulador = "";
+									
+									//REMUEVO LA INTERFAZ DE JUEGO
+									cp.removeAll();
+									cp.revalidate();
+									cp.repaint();
+									
+									interfazCreacion();
+									
+									//cp.add(ventanaPrincipal());
+									
+									//ActionListener();			//ME PERMITE EJECUTAR ACCIONES CON LOS BOTONES "JUGAR", "CONFIG" Y "SALIR"
+									
+								}
+								else {										//TODO - ESTO TAMBIEN HAY QUE LIMPIARLO
+								
+									int result = JOptionPane.showConfirmDialog(confirmar, "�Esta seguro que desea salir? El juego se daria como perdido.");
+	
+							        if (result == 0) {
+							        	cp.removeAll();
+										cp.revalidate();
+										cp.repaint();
+//										cp.add(ventanaPrincipal());
+//										
+//										ActionListener();	
+							        }
+							        
+							        else if (result == 1) {}
+							        else {}
+
+								}
+							}
+						});		//FIN RENDIRSE
+						
 						//TODO - INICIO DEL JUEGO
 						jugando = true;
 						
-						juego = new Thread() {
+						Thread juego = new Thread() {
 							
 					    	@Override
 					    	public void run() {
@@ -911,6 +670,8 @@ public class Interfaz extends JFrame{
 					    };
 						
 						juego.start();					//OJO QUE NO USA JOIN JUEGO.START
+						
+						
 						
 					}	//FIN ACTION-PERFORMED JUGAR-MAQUINA
 				
@@ -1022,6 +783,262 @@ public class Interfaz extends JFrame{
 		});		//FIN CONFIG
 		
 	}	//FIN FUNCION ACTION-LISTENER
+	
+	
+	
+	public void interfazCreacion() {
+		
+		/*INICIALIZACION DE OBJETOS DE OTRAS CLASES*/
+		
+		j = new Jugador();
+		MAQUINA = new IA();
+		mazoCartas = new Mazo();
+		
+		cantado = new String[5];	//acumula los cantos sucesivos
+		cantado = new String[5];
+	    tiraIA = new Carta[2];
+	    tiratmp = new Carta[1];
+	    
+	    accionUsuario = false;
+		jugando = true;
+		
+		auxJ = new Carta();
+	    auxIA = new Carta();
+	    aux = new Carta();
+	    
+	    tiraIAnull = false;
+	    acumulador = "";
+	    irseAlMazo = false;
+	    ronda = 1;
+		cantoEnvido = false;   
+	    
+		/*CREACION DE VENTANA BASICA*/
+		setIconImage(new ImageIcon(getClass().getResource("/images/icon.jpg")).getImage());
+		setTitle("TRUCO");
+		setSize(800,600);			//SE PUEDE CAMBIAR A 1200x900 Y MANTENER BIEN LA ESTRUCTURA (AUNQUE HABRIA QUE CAMBIAR EL TAMA�O DE LAS IMAGENES)
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
+		
+		/*INICIALIZACION DE ALGUNOS COMPONENTES*/
+		
+		contorno = BorderFactory.createLineBorder(Color.BLUE);
+		contorno2 = BorderFactory.createLineBorder(Color.RED);
+		contorno3 = BorderFactory.createLineBorder(Color.BLACK);
+		
+		texto_nombre = new JTextField("");
+		
+		cp = getContentPane();
+		
+		cp.add(ventanaPrincipal());
+		
+
+		/*CREACION DE MENU DE BOTONES IZQUIERDO*/
+		
+		flecha = new JButton("<=");
+		flecha2 = new JButton("<=");
+		
+		truco = new JButton("TRUCO");
+		envido = new JButton("ENVIDO");
+		mazo = new JButton("MAZO");
+		rendirse = new JButton("RENDIRSE");
+		
+		cantarTruco = new JButton("TRUCO");
+		retruco = new JButton("RETRUCO");
+		vale_4 = new JButton("VALE 4");
+		
+		cantarEnvido = new JButton("ENVIDO");
+		real_envido = new JButton("REAL ENVIDO");
+		falta_envido = new JButton("FALTA ENVIDO");
+		
+		menu = new JPanel();
+		GridLayout columna = new GridLayout(8,1);
+		menu.setLayout(columna);
+		menu.setPreferredSize(new Dimension(100,600));
+		menu.add(new JLabel(""));
+		menu.add(new JLabel(""));
+		menu.add(truco);
+		menu.add(envido);
+		menu.add(mazo);
+		menu.add(rendirse);
+		menu.add(new JLabel(""));
+		menu.add(new JLabel(""));
+		
+		menuCantosE = new JPanel();
+		GridLayout columna2 = new GridLayout(8,1);
+		menuCantosE.setLayout(columna2);
+		menuCantosE.setPreferredSize(new Dimension(100,600));
+		menuCantosE.add(new JLabel(""));
+		menuCantosE.add(new JLabel(""));
+		menuCantosE.add(flecha);
+		menuCantosE.add(cantarEnvido);
+		menuCantosE.add(real_envido);
+		menuCantosE.add(falta_envido);
+		menuCantosE.add(new JLabel(""));
+		menuCantosE.add(new JLabel(""));
+		
+		menuCantosT = new JPanel();
+		GridLayout columna3 = new GridLayout(8,1);
+		menuCantosT.setLayout(columna3);
+		menuCantosT.setPreferredSize(new Dimension(100,600));
+		menuCantosT.add(new JLabel(""));
+		menuCantosT.add(new JLabel(""));
+		menuCantosT.add(flecha2);
+		menuCantosT.add(cantarTruco);
+		menuCantosT.add(retruco);
+		menuCantosT.add(vale_4);
+		menuCantosT.add(new JLabel(""));
+		menuCantosT.add(new JLabel(""));
+		
+		/*CREACION DE LOS COMPONENTES CENTRALES*/
+		
+		l1 = new JLabel();
+		//l1.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		l1.setHorizontalAlignment(SwingConstants.CENTER);
+		l2 = new JLabel();
+		//l2.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		l2.setHorizontalAlignment(SwingConstants.CENTER);
+		l3 = new JLabel();
+		l3.setHorizontalAlignment(SwingConstants.CENTER);
+		//l3.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		
+		JPanel cartas = new JPanel(new GridLayout(1,3,4,4));
+		cartas.add(l1);
+		cartas.add(l2);
+		cartas.add(l3);
+		
+		//
+		
+		JPanel cantos = new JPanel();
+		cantos.setLayout(new GridBagLayout());
+		
+
+		texto = new JLabel("<html>"+ "" +"</html>",SwingConstants.CENTER);
+		texto.setPreferredSize(new Dimension(300,30));
+		texto.setBorder(contorno3);
+		texto.setFont(new Font("Consolas",Font.PLAIN,30));
+		
+		quiero = new JButton("QUIERO");
+		quiero.setBackground(Color.GREEN);
+		quiero.setPreferredSize(new Dimension(150,30));
+		noQuiero = new JButton("NO QUIERO");
+		noQuiero.setBackground(Color.RED);
+		noQuiero.setPreferredSize(new Dimension(150,30));
+		
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.gridwidth = 2;
+		constraints.gridheight = 1;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		cantos.add(texto, constraints);
+		
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		constraints.gridwidth = 1;
+		constraints.gridheight = 1;
+		cantos.add(quiero, constraints);
+		
+		constraints.gridx = 1;
+		constraints.gridy = 1;
+		constraints.gridwidth = 1;
+		constraints.gridheight = 1;
+		cantos.add(noQuiero, constraints);
+		
+		//
+		
+		l4 = new JLabel();
+		//l4.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		l4.setHorizontalAlignment(SwingConstants.CENTER);
+		l5 = new JLabel();
+		//l5.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		l5.setHorizontalAlignment(SwingConstants.CENTER);
+		l6 = new JLabel();
+		l6.setHorizontalAlignment(SwingConstants.CENTER);
+		//l6.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blanco.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		
+		JPanel cartas2 = new JPanel(new GridLayout(1,3,4,4));
+		cartas2.add(l4);
+		cartas2.add(l5);
+		cartas2.add(l6);
+		
+		//
+		ctemp = new JButton();
+		c1 = new JButton();
+		c2 = new JButton();
+		c3 = new JButton();
+		
+		JPanel cartas3 = new JPanel(new GridLayout(1,3,4,4));
+		cartas3.add(c1);
+		cartas3.add(c2);
+		cartas3.add(c3);
+		
+		//
+		
+		union = new JPanel();
+		union.setLayout(new BoxLayout(union, BoxLayout.Y_AXIS));
+		union.add(cartas);
+		union.add(cantos);
+		union.add(cartas2);
+		union.add(cartas3);
+		
+		
+		/*CREACION DE LOS COMPONENTES DERECHOS*/
+		pts1 = new JLabel("0");
+		pts1.setBorder(contorno);
+		pts1.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		pts2 = new JLabel("0");
+		pts2.setBorder(contorno2);
+		pts2.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		j1 = new JLabel("");
+		j1.setBorder(contorno);
+		j1.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		j2 = new JLabel("");
+		j2.setBorder(contorno2);
+		j2.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		img_mano = new JLabel();
+		img_mano.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/mazo.png")).getImage().getScaledInstance(100, 150, Image.SCALE_SMOOTH)));
+		img_mano.setBorder(contorno);
+		img_mano.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		img_mazo = new JLabel();
+		img_mazo.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/mano.png")).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+		img_mazo.setBorder(contorno2);
+		img_mazo.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		JPanel panel_pts = new JPanel(new GridLayout(2,2,4,4));
+		panel_pts.add(pts1);
+		panel_pts.add(pts2);
+		panel_pts.add(j1);
+		panel_pts.add(j2);
+		
+		JPanel panel1 = new JPanel();
+		
+		panel2 = new JPanel(new GridLayout(1,1,4,4));
+		panel2.add(img_mano);
+		panel2.add(img_mazo);
+		
+		JPanel panel3 = new JPanel();
+		
+		unionDer = new JPanel(new GridLayout(4,1,4,4));
+		unionDer.setPreferredSize(new Dimension(200,600));
+		unionDer.add(panel1);
+		unionDer.add(panel_pts);
+		unionDer.add(panel2);
+		unionDer.add(panel3);
+		
+		ActionListener();										//LO LLAMO POR PRIMERA VEZ PARA ARRANCAR LA 1ER PARTIDA
+		
+		/*CONFIGURACIONES ADICIONALES DE LA VENTANA*/
+		
+		setResizable(false);
+		setVisible(true);
+		
+		
+	}
 	
 	
 	public void funcionJuego() {
@@ -1263,7 +1280,7 @@ public class Interfaz extends JFrame{
 				
 				truco.setEnabled(false);
 				flecha2.setEnabled(true);
-				cantarTruco.setEnabled(true);
+				cantarTruco.setEnabled(false);
 				retruco.setEnabled(false);
 				vale_4.setEnabled(false);
 				
@@ -1478,9 +1495,9 @@ public class Interfaz extends JFrame{
 				c1.setIcon(null); c2.setIcon(null); c3.setIcon(null);
 				
 				//RESTAURAR EL MENU IZQUIERDO
-				reiniciarMenuCantos();
 				flecha2.setEnabled(true);
 				flecha.setEnabled(true);
+				reiniciarMenuCantos();
 				
 				//RESTAURAR TEXTO EN VACIO
 				texto.setText("<html>"+ "" +"</html>");
@@ -12092,11 +12109,10 @@ public class Interfaz extends JFrame{
 			acumulador = String.valueOf(MAQUINA.getPuntos());
 			pts2.setText(acumulador);
 			
+			envido.setEnabled(false);
 			reiniciarMenuCantos();
 			
 			puntosMaximosSuperados();
-			
-			envido.setEnabled(false);
 			
 		}
 		
@@ -12112,10 +12128,10 @@ public class Interfaz extends JFrame{
 			acumulador = String.valueOf(j.getPuntos());
 			pts1.setText(acumulador);
 			
+			envido.setEnabled(false);
+			
 			reiniciarMenuCantos();
 			puntosMaximosSuperados();
-			
-			envido.setEnabled(false);
 			
 		}
 		
@@ -12180,11 +12196,11 @@ public class Interfaz extends JFrame{
 	    			acumulador = String.valueOf(MAQUINA.getPuntos());
 	    			pts2.setText(acumulador);
 	    			
+	    			envido.setEnabled(false);
+	    			
 	    			reiniciarMenuCantos();
 	    			puntosMaximosSuperados();
 	    			
-					envido.setEnabled(false);
-					
 	    		}
 	    		
 	    		/*SI EL JUGADOR NO QUIERE*/
@@ -12196,10 +12212,11 @@ public class Interfaz extends JFrame{
 	    			acumulador = String.valueOf(MAQUINA.getPuntos());
 	    			pts2.setText(acumulador);
 	    			
+	    			envido.setEnabled(false);
+	    			
 	    			reiniciarMenuCantos();
 	    			puntosMaximosSuperados();
 	    			
-	    			envido.setEnabled(false);
 	    		}
 	    		
 	    		/* SI EL JUGADOR REVIRA */
@@ -12232,10 +12249,10 @@ public class Interfaz extends JFrame{
 	    				acumulador = String.valueOf(MAQUINA.getPuntos());
 	    				pts2.setText(acumulador);
 						
+	    				envido.setEnabled(false);
+	    				
 						reiniciarMenuCantos();
 						puntosMaximosSuperados();
-						
-						envido.setEnabled(false);
 						
 		    		}
 		    		
@@ -12252,11 +12269,11 @@ public class Interfaz extends JFrame{
 	    				sistPuntuacion(cantado,j,MAQUINA);
 	    				acumulador = String.valueOf(j.getPuntos());
 	    				pts1.setText(acumulador);
-		    			
+	    				
+		    			envido.setEnabled(false);
 		    			reiniciarMenuCantos();
 		    			puntosMaximosSuperados();
-		    			
-		    			envido.setEnabled(false);
+		    		
 		    		}
 		    		
 		    		/*SI LA IA REVIRA*/
@@ -12309,11 +12326,11 @@ public class Interfaz extends JFrame{
 			    			acumulador = "";
 			    			acumulador = String.valueOf(MAQUINA.getPuntos());
 			    			pts2.setText(acumulador);
-			    			
+
+							envido.setEnabled(false);
 			    			reiniciarMenuCantos();
 			    			puntosMaximosSuperados();
 			    			
-							envido.setEnabled(false);
 							
 			    		}
 			    		
@@ -12325,11 +12342,11 @@ public class Interfaz extends JFrame{
 			    			sistPuntuacion(cantado,j,MAQUINA);
 			    			acumulador = String.valueOf(MAQUINA.getPuntos());
 			    			pts2.setText(acumulador);
-			    			
+
+			    			envido.setEnabled(false);
 			    			reiniciarMenuCantos();
 			    			puntosMaximosSuperados();
 			    			
-			    			envido.setEnabled(false);
 			    		}
 			    		
 		    		}
@@ -12383,11 +12400,11 @@ public class Interfaz extends JFrame{
 	    			acumulador = "";
 	    			acumulador = String.valueOf(MAQUINA.getPuntos());
 	    			pts2.setText(acumulador);
-	    			
+
+					envido.setEnabled(false);
 	    			reiniciarMenuCantos();
 	    			puntosMaximosSuperados();
 	    			
-					envido.setEnabled(false);
 	    		}
 	    		
 	    		/*SI EL JUGADOR NO QUIERE*/
@@ -12398,11 +12415,11 @@ public class Interfaz extends JFrame{
 	    			sistPuntuacion(cantado,j,MAQUINA);
 	    			acumulador = String.valueOf(MAQUINA.getPuntos());
 	    			pts2.setText(acumulador);
-	    			
+
+	    			envido.setEnabled(false);
 	    			reiniciarMenuCantos();
 	    			puntosMaximosSuperados();
 	    			
-	    			envido.setEnabled(false);
 	    		}
 	    		
 	    		/* SI EL JUGADOR REVIRA */
@@ -12429,11 +12446,11 @@ public class Interfaz extends JFrame{
 	    				acumulador = "";
 	    				acumulador = String.valueOf(MAQUINA.getPuntos());
 	    				pts2.setText(acumulador);
-						
+
+						envido.setEnabled(false);
 		    			reiniciarMenuCantos();
 		    			puntosMaximosSuperados();
 		    			
-						envido.setEnabled(false);
 						
 		    		}
 	    			
@@ -12450,11 +12467,11 @@ public class Interfaz extends JFrame{
 	    				sistPuntuacion(cantado,j,MAQUINA);
 	    				acumulador = String.valueOf(j.getPuntos());
 	    				pts1.setText(acumulador);
-	    				
+
+	    				envido.setEnabled(false);
 	    				reiniciarMenuCantos();
 	    				puntosMaximosSuperados();
 	    				
-	    				envido.setEnabled(false);
 	    				
 	    			}
 	    			
@@ -12482,11 +12499,11 @@ public class Interfaz extends JFrame{
 					acumulador = "";
 					acumulador = String.valueOf(MAQUINA.getPuntos());
 					pts2.setText(acumulador);
-					
+
+					envido.setEnabled(false);
 	    			reiniciarMenuCantos();
 	    			puntosMaximosSuperados();
 	    			
-					envido.setEnabled(false);
 	    		}
 				
 				/*SI EL JUGADOR NO QUIERE*/
@@ -12498,10 +12515,10 @@ public class Interfaz extends JFrame{
 					acumulador = String.valueOf(MAQUINA.getPuntos());
 					pts2.setText(acumulador);
 					
+					envido.setEnabled(false);
 					reiniciarMenuCantos();
 					puntosMaximosSuperados();
-					
-					envido.setEnabled(false);
+				
 					
 				}
 				
