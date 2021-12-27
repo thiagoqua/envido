@@ -54,99 +54,11 @@
 	- Se crearon hilos y se inició la secuencia de cantos y tiradas de los jugadores.
 	
 	
-	
-	
-	c1.setEnabled(false);
-	c2.setEnabled(false);
-	c3.setEnabled(false);
-	truco.setEnabled(false);
-	quiero.setEnabled(false);
-	noQuiero.setEnabled(false);
-	flecha2.setEnabled(false);
-	cantarTruco.setEnabled(false);
-	retruco.setEnabled(false);
-	vale_4.setEnabled(false);
-	
-	texto.setText("<html>"+ cantado[0] +"</html>");
-	
-	if(c1.getIcon() != null) {
-		c1.setEnabled(true);
-	}
-	if(c2.getIcon() != null) {
-		c2.setEnabled(true);
-	}
-	if(c3.getIcon() != null) {
-		c3.setEnabled(true);
-	}
-	
-	//LA IA GANA
+	texto.setText("<html>"+ cantado[] +"</html>");
 			
-			sistPuntuacion(cantado,MAQUINA,j);
-			acumulador = String.valueOf(MAQUINA.getPuntos());
-			pts2.setText(acumulador);
-			
-			puntosMaximosSuperados();
-			//SIGUIENTE RONDA
-			
-			
-	//EL JUGADOR GANA
-    			
-				sistPuntuacion(cantado,MAQUINA,j);
-				acumulador = String.valueOf(j.getPuntos());
-				pts1.setText(acumulador);
-				
-				puntosMaximosSuperados();
-    			//SIGUIENTE RONDA
-    			
-    			
-    			/***/
-				System.out.println("la IA no quiso");
-				/***/
-				
-				
-	accionUsuario = false;
-				Thread espero = new Thread() {
-					
-					@Override
-					public void run() {
-			    		
-						System.out.print("\nEspero que el jugador quiera/no quiera truco - revire ");
-						while(accionUsuario == false) {
-							try {
-				    			System.out.print(". ");
-				    			Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-			    		}
-			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-					}
-					
-				};
-				
-				espero.start();	
-				
-				try {
-					espero.join();					
-//					Thread.sleep(1000);
-				}catch(InterruptedException e) {}
-
-				
-				
-				
-				
-				
-				
-				/*EL JUGADOR SE VA AL MAZO*/
-	    		
-	    		if(irseAlMazo == true) {
-	    			
-	    			System.out.println("ME VOY AL MAZO");
-	    			
-	    		}
-	    		
-	    		/*EL JUGADOR TIRA*/
-	    		
-	    		else {
-	    			
-	    		}
+			try {
+				Thread.sleep(800);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+	

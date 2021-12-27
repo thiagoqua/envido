@@ -461,11 +461,6 @@ public class Interfaz extends JFrame{
 								texto.setText("<html>"+ cantado[i] +"</html>");
 								accionUsuario = true;
 								
-								System.out.println("ESTOY DENTRO DEL BOTON ENVIDO PARA VERIFICAR QUE SOLO HAY UN ENVIDO");
-								for(int j=0;j<5;j++) {
-					        		System.out.println(cantado[j]);
-					        	}
-								
 							}
 							
 						});
@@ -630,9 +625,6 @@ public class Interfaz extends JFrame{
 									
 									interfazCreacion();
 									
-									//cp.add(ventanaPrincipal());
-									
-									//ActionListener();			//ME PERMITE EJECUTAR ACCIONES CON LOS BOTONES "JUGAR", "CONFIG" Y "SALIR"
 									
 								}
 								else {										//TODO - ESTO TAMBIEN HAY QUE LIMPIARLO
@@ -640,12 +632,64 @@ public class Interfaz extends JFrame{
 									int result = JOptionPane.showConfirmDialog(confirmar, "�Esta seguro que desea salir? El juego se daria como perdido.");
 	
 							        if (result == 0) {
-							        	cp.removeAll();
+							        	
+							        	//RESTAURO CADA VARIABLE
+										
+										MAQUINA.reset();
+										j.reset();
+									
+										//REPONGO LAS CARTAS
+										mazoCartas.reponer();
+										
+										//RESTAURAR POR LAS DUDAS LAS CARTAS QUE SE REPARTIERON
+										for(int i=0;i<3;++i){
+								            MAQUINA.cartas[i] = null;
+											j.cartas[i] = null;
+											MAQUINA.copyCartas[i] = null;
+											j.copyCartas[i] = null;
+										}
+									
+										for(int i=0;i<5;i++) {
+							        		cantado[i] = "";
+							        	}
+										
+										//RESTAURAR EN CERO LAS CARTAS SOBRE LA MESA
+										l1.setIcon(null); l2.setIcon(null); l3.setIcon(null);
+										l4.setIcon(null); l5.setIcon(null); l6.setIcon(null);
+										
+										//RESTAURAR EN CERO LAS CARTAS DEL JUGADOR
+										c1.setIcon(null); c2.setIcon(null); c3.setIcon(null);
+										
+										//RESTAURAR EL MENU IZQUIERDO
+										flecha2.setEnabled(true);
+										flecha.setEnabled(true);
+										reiniciarMenuCantos();
+										
+										//RESTAURAR TEXTO EN VACIO
+										texto.setText("<html>"+ "" +"</html>");
+										pts1.setText("0");
+										pts2.setText("0");
+									
+										//RESTAURO PUNTOS DEL JUGADOR
+										j.puntos = 0;
+										MAQUINA.puntos = 0;
+										
+										//REINICIO EL NRO DE RONDAS
+										ronda=1;
+										
+										//INVERTIR IMAGENES DE MANO Y MAZO
+										invertirManoMazo();
+										
+										cantoEnvido = false;
+										acumulador = "";
+									
+										//REMUEVO LA INTERFAZ DE JUEGO
+										cp.removeAll();
 										cp.revalidate();
 										cp.repaint();
-//										cp.add(ventanaPrincipal());
 //										
-//										ActionListener();	
+										interfazCreacion();
+										
 							        }
 							        
 							        else if (result == 1) {}
@@ -1147,6 +1191,8 @@ public class Interfaz extends JFrame{
 					
 					MAQUINA.activatePuedoCantarEnvido(true);
 					
+					mazo.setEnabled(false);
+					
 					//LA MAQUINA PUEDE CANTAR PREVIAMENTE ENVIDO ANTES DEL TRUCO
 					
 					MAQUINA.yourTurnAccept(cantado);
@@ -1166,8 +1212,6 @@ public class Interfaz extends JFrame{
 						
 					}
 					
-					//TODO - QUE PASA SI CANTA ENVIDO Y QUIERE DIRECTAMENTE EL TRUCO? O EN TODO CASO CANTA RETRUCO? ACA HAY COSAS QUE ESTAN MAL
-					
 					texto.setText("<html>"+ "" +"</html>");
 					
 					Arrays.fill(cantado,"");
@@ -1180,22 +1224,10 @@ public class Interfaz extends JFrame{
 					texto.setText("<html>"+ cantado[0] +"</html>");
 					
 					MAQUINA.activatePuedoCantarEnvido(false);
-					MAQUINA.yourTurnAccept(cantado);
+					//MAQUINA.yourTurnAccept(cantado);
 					
 					//SE DESARROLLA LA FUNCION DEL TRUCO
 					truco2();
-					
-					
-					/* QUEDA GUARDADO POR CUALQUIER COSA*/
-					
-					//SI LA IA CANTA ENVIDO, SE TIENE QUE ESPERAR LA DECISION DEL JUGADOR
-					//if(la ia canta el envido){
-					// sistPuntuacion(cantado,MAQUINA,j);
-					// Arrays.fill(cantado,"");
-					// cantado[0] = "truco";
-					// MAQUINA.activatePuedoCantarEnvido(false);
-					// MAQUINA.yourTurnAccept(cantado);
-					//}
 					
 					
 				}
@@ -1543,6 +1575,7 @@ public class Interfaz extends JFrame{
 		
 		truco.setEnabled(true);
 		retruco.setEnabled(true);
+		mazo.setEnabled(false);
 		
 		accionUsuario = false;
 		Thread espero13 = new Thread() {
@@ -1609,9 +1642,13 @@ public class Interfaz extends JFrame{
 			
 			if(cantado[2].equals("quiero")) {
 				
-				/***/
-				System.out.println("la IA quiso");
-				/***/
+				texto.setText("<html>"+ cantado[2] +"</html>");
+				
+				try {
+					Thread.sleep(800);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				
 				trucoCantadoIA();
 				
@@ -1621,9 +1658,13 @@ public class Interfaz extends JFrame{
 			
 			else if(cantado[2].equals("no quiero")) {
 				
-				/***/
-				System.out.println("la IA no quiso");
-				/***/
+				texto.setText("<html>"+ cantado[2] +"</html>");
+				
+				try {
+					Thread.sleep(800);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				
 				//EL JUGADOR GANA
     			
@@ -2179,6 +2220,7 @@ public class Interfaz extends JFrame{
 		
 		truco.setEnabled(false);
 		flecha2.setEnabled(true);
+		mazo.setEnabled(true);
 		
 		accionUsuario = false;
 		Thread espero7 = new Thread() {
@@ -2818,6 +2860,7 @@ public class Interfaz extends JFrame{
 				noQuiero.setEnabled(true);
 				retruco.setEnabled(true);
 				truco.setEnabled(true);
+				mazo.setEnabled(false);
 				
 				texto.setText("<html>"+ cantado[0] +"</html>");
 				
@@ -2886,9 +2929,13 @@ public class Interfaz extends JFrame{
 					
 					if(cantado[2].equals("quiero")) {
 						
-						/***/
-						System.out.println("la IA quiso");
-						/***/
+						texto.setText("<html>"+ cantado[2] +"</html>");
+						
+						try {
+							Thread.sleep(800);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 						
 						trucoQueridoB1();
 						
@@ -2898,9 +2945,13 @@ public class Interfaz extends JFrame{
 					
 					else if(cantado[2].equals("no quiero")) {
 						
-						/***/
-						System.out.println("la IA no quiso");
-						/***/
+						texto.setText("<html>"+ cantado[2] +"</html>");
+						
+						try {
+							Thread.sleep(800);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 						
 						//EL JUGADOR GANA
 						
@@ -3042,6 +3093,7 @@ public class Interfaz extends JFrame{
 					c1.setEnabled(false);
 					c2.setEnabled(false);
 					c3.setEnabled(false);
+					mazo.setEnabled(false);
 					
 					cantarTruco.setEnabled(false);
 					
@@ -3050,9 +3102,14 @@ public class Interfaz extends JFrame{
 					/*SI LA IA QUIERE*/
 					
 					if(cantado[1].equals("quiero")) {
-						/***/
-						System.out.println("la IA quiso");
-						/***/
+						
+						texto.setText("<html>"+ cantado[1] +"</html>");
+						
+						try {
+							Thread.sleep(800);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 						
 						trucoQueridoB2();
 						
@@ -3062,9 +3119,13 @@ public class Interfaz extends JFrame{
 					
 					else if(cantado[1].equals("no quiero")) {
 						
-						/***/
-						System.out.println("la IA no quiso");
-						/***/
+						texto.setText("<html>"+ cantado[1] +"</html>");
+						
+						try {
+							Thread.sleep(800);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 						
 						//EL JUGADOR GANA
 		    			
@@ -3152,9 +3213,14 @@ public class Interfaz extends JFrame{
 							/*SI LA IA QUIERE*/
 							
 							if(cantado[3].equals("quiero")) {
-								/***/
-								System.out.println("la IA quiso");
-								/***/
+								
+								texto.setText("<html>"+ cantado[3] +"</html>");
+								
+								try {
+									Thread.sleep(800);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
 								
 								trucoQueridoB2();
 								
@@ -3163,9 +3229,14 @@ public class Interfaz extends JFrame{
 							/*SI LA IA NO QUIERE*/
 							
 							else {
-								/***/
-								System.out.println("la IA no quiso");
-								/***/
+								
+								texto.setText("<html>"+ cantado[3] +"</html>");
+								
+								try {
+									Thread.sleep(800);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
 								
 								//EL JUGADOR GANA
 								
@@ -3246,6 +3317,7 @@ public class Interfaz extends JFrame{
 							c1.setEnabled(false);
 							c2.setEnabled(false);
 							c3.setEnabled(false);
+							mazo.setEnabled(false);
 							
 							MAQUINA.yourTurnAccept(cantado);
 							
@@ -3253,9 +3325,13 @@ public class Interfaz extends JFrame{
 							
 							if(cantado[1].equals("quiero")) {
 								
-								 /***/
-								System.out.println("la IA quiso");
-								/***/
+								texto.setText("<html>"+ cantado[1] +"</html>");
+								
+								try {
+									Thread.sleep(800);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
 								
 								trucoQueridoB3();
 								
@@ -3265,9 +3341,13 @@ public class Interfaz extends JFrame{
 							
 							else if(cantado[1].equals("no quiero")) {
 								
-								 /***/
-								System.out.println("la IA no quiso");
-								/***/
+								texto.setText("<html>"+ cantado[1] +"</html>");
+								
+								try {
+									Thread.sleep(800);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
 								
 								//EL JUGADOR GANA
 				    			
@@ -3350,9 +3430,14 @@ public class Interfaz extends JFrame{
 									/*SI LA IA QUIERE*/
 									
 									if(cantado[3].equals("quiero")) {
-										/***/
-										System.out.println("la IA no quiso");
-										/***/
+										
+										texto.setText("<html>"+ cantado[3] +"</html>");
+										
+										try {
+											Thread.sleep(800);
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
 										
 										trucoQueridoB3();
 										
@@ -3361,9 +3446,14 @@ public class Interfaz extends JFrame{
 									/*SI LA IA NO QUIERE*/
 									
 									else {
-										/***/
-										System.out.println("la IA no quiso");
-										/***/
+										
+										texto.setText("<html>"+ cantado[3] +"</html>");
+										
+										try {
+											Thread.sleep(800);
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
 										
 										//EL JUGADOR GANA
 						    			
@@ -3400,6 +3490,7 @@ public class Interfaz extends JFrame{
 								noQuiero.setEnabled(true);
 								truco.setEnabled(true);
 								retruco.setEnabled(true);
+								mazo.setEnabled(false);
 								
 								accionUsuario = false;
 								Thread espero19 = new Thread() {
@@ -3463,9 +3554,14 @@ public class Interfaz extends JFrame{
 									/*SI LA IA QUIERE*/
 									
 									if(cantado[2].equals("quiero")) {
-										/***/
-										System.out.println("la IA quiso");
-										/***/
+										
+										texto.setText("<html>"+ cantado[2] +"</html>");
+										
+										try {
+											Thread.sleep(800);
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
 										
 										trucoQueridoB4();
 										
@@ -3474,9 +3570,14 @@ public class Interfaz extends JFrame{
 									/*SI LA IA NO QUIERE*/
 									
 									else if(cantado[2].equals("no quiero")) {
-										/***/
-										System.out.println("la IA no quiso");
-										/***/
+										
+										texto.setText("<html>"+ cantado[2] +"</html>");
+										
+										try {
+											Thread.sleep(800);
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
 										
 										//EL JUGADOR GANA
 						    			
@@ -3688,6 +3789,7 @@ public class Interfaz extends JFrame{
 				c1.setEnabled(false);
 				c2.setEnabled(false);
 				c3.setEnabled(false);
+				mazo.setEnabled(false);
 				
 				MAQUINA.yourTurnAccept(cantado);
 				
@@ -3695,9 +3797,13 @@ public class Interfaz extends JFrame{
 				
 				if(cantado[1].equals("quiero")) {
 					
-				    /***/
-					System.out.println("la IA quiso");
-					/***/
+					texto.setText("<html>"+ cantado[1] +"</html>");
+					
+					try {
+						Thread.sleep(800);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 					
 					trucoQueridoB5();
 				}
@@ -3706,9 +3812,13 @@ public class Interfaz extends JFrame{
 				
 				else if(cantado[1].equals("no quiero")) {
 					
-				    /***/
-					System.out.println("la IA no quiso");
-					/***/
+					texto.setText("<html>"+ cantado[1] +"</html>");
+					
+					try {
+						Thread.sleep(800);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 					
 					sistPuntuacion(cantado,j,MAQUINA);
 					acumulador = String.valueOf(j.getPuntos());
@@ -3792,9 +3902,13 @@ public class Interfaz extends JFrame{
 						
 						if(cantado[3].equals("quiero")) {
 							
-							/***/
-							System.out.println("la IA quiso");
-							/***/
+							texto.setText("<html>"+ cantado[3] +"</html>");
+							
+							try {
+								Thread.sleep(800);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
 							
 							trucoQueridoB5();
 							
@@ -3804,9 +3918,13 @@ public class Interfaz extends JFrame{
 						
 						else {
 							
-							/***/
-							System.out.println("la IA no quiso");
-							/***/
+							texto.setText("<html>"+ cantado[3] +"</html>");
+							
+							try {
+								Thread.sleep(800);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
 							
 							//EL JUGADOR GANA
 			    			
@@ -3848,6 +3966,7 @@ public class Interfaz extends JFrame{
 					quiero.setEnabled(true);
 					noQuiero.setEnabled(true);
 					retruco.setEnabled(true);
+					mazo.setEnabled(false);
 					
 					accionUsuario = false;
 					Thread espero24 = new Thread() {
@@ -3915,9 +4034,14 @@ public class Interfaz extends JFrame{
 						
 						if(cantado[2].equals("quiero")) {
 							
-							/***/
-							System.out.println("la IA quiso");
-							/***/
+							texto.setText("<html>"+ cantado[2] +"</html>");
+							
+							try {
+								Thread.sleep(800);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+							
 							trucoQueridoB6();
 							
 						}
@@ -3926,9 +4050,13 @@ public class Interfaz extends JFrame{
 						
 						else if(cantado[2].equals("no quiero")) {
 							
-							/***/
-							System.out.println("la IA no quiso");
-							/***/
+							texto.setText("<html>"+ cantado[2] +"</html>");
+							
+							try {
+								Thread.sleep(800);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
 							
 							//EL JUGADOR GANA
 			    			
@@ -4031,6 +4159,7 @@ public class Interfaz extends JFrame{
 							retruco.setEnabled(true);
 							quiero.setEnabled(true);
 							noQuiero.setEnabled(true);
+							mazo.setEnabled(false);
 							
 							accionUsuario = false;
 							Thread espero27 = new Thread() {
@@ -4095,9 +4224,15 @@ public class Interfaz extends JFrame{
 								/*SI LA IA QUIERE*/
 								
 								if(cantado[2].equals("quiero")) {
-									/***/
-									System.out.println("la IA quiso");
-									/***/
+									
+									texto.setText("<html>"+ cantado[2] +"</html>");
+									
+									try {
+										Thread.sleep(800);
+									} catch (InterruptedException e) {
+										e.printStackTrace();
+									}
+									
 									trucoQueridoB7();
 									
 								}
@@ -4105,9 +4240,15 @@ public class Interfaz extends JFrame{
 								/*SI LA IA NO QUIERE*/
 								
 								else if(cantado[2].equals("no quiero")) {
-									/***/
-									System.out.println("la IA no quiso");
-									/***/
+									
+									texto.setText("<html>"+ cantado[2] +"</html>");
+									
+									try {
+										Thread.sleep(800);
+									} catch (InterruptedException e) {
+										e.printStackTrace();
+									}
+									
 									//EL JUGADOR GANA
 					    			
 									sistPuntuacion(cantado,MAQUINA,j);
@@ -4249,6 +4390,7 @@ public class Interfaz extends JFrame{
 								c1.setEnabled(false);
 								c2.setEnabled(false);
 								c3.setEnabled(false);
+								mazo.setEnabled(false);
 								
 								MAQUINA.yourTurnAccept(cantado);
 								
@@ -4256,9 +4398,13 @@ public class Interfaz extends JFrame{
 								
 								if(cantado[1].equals("quiero")) {
 									
-									/***/
-									System.out.println("la IA quiso");
-									/***/
+									texto.setText("<html>"+ cantado[1] +"</html>");
+									
+									try {
+										Thread.sleep(800);
+									} catch (InterruptedException e) {
+										e.printStackTrace();
+									}
 									
 									trucoQueridoB8();
 									
@@ -4268,9 +4414,13 @@ public class Interfaz extends JFrame{
 								
 								else if(cantado[1].equals("no quiero")) {
 									
-									/***/
-									System.out.println("la IA no quiso");
-									/***/
+									texto.setText("<html>"+ cantado[1] +"</html>");
+									
+									try {
+										Thread.sleep(800);
+									} catch (InterruptedException e) {
+										e.printStackTrace();
+									}
 									
 									//EL JUGADOR GANA
 					    			
@@ -4356,9 +4506,15 @@ public class Interfaz extends JFrame{
 										/*SI LA IA QUIERE*/
 										
 										if(cantado[3].equals("quiero")) {
-											/***/
-											System.out.println("la IA quiso");
-											/***/
+											
+											texto.setText("<html>"+ cantado[3] +"</html>");
+											
+											try {
+												Thread.sleep(800);
+											} catch (InterruptedException e) {
+												e.printStackTrace();
+											}
+											
 											trucoQueridoB8();
 											
 										}
@@ -4366,9 +4522,15 @@ public class Interfaz extends JFrame{
 										/*SI LA IA NO QUIERE*/
 										
 										else {
-											/***/
-											System.out.println("la IA no quiso");
-											/***/
+											
+											texto.setText("<html>"+ cantado[3] +"</html>");
+											
+											try {
+												Thread.sleep(800);
+											} catch (InterruptedException e) {
+												e.printStackTrace();
+											}
+											
 											//EL JUGADOR GANA
 							    			
 											sistPuntuacion(cantado,j,MAQUINA);
@@ -4519,15 +4681,22 @@ public class Interfaz extends JFrame{
 				c1.setEnabled(false);
 				c2.setEnabled(false);
 				c3.setEnabled(false);
+				mazo.setEnabled(false);
 				
 				MAQUINA.yourTurnAccept(cantado);
 				
 				/*SI LA IA QUIERE*/
 				
 				if(cantado[1].equals("quiero")) {
-					/***/
-					System.out.println("la IA quiso");
-					/***/
+					
+					texto.setText("<html>"+ cantado[1] +"</html>");
+					
+					try {
+						Thread.sleep(800);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					
 					trucoQueridoB9();
 					
 				}
@@ -4536,9 +4705,14 @@ public class Interfaz extends JFrame{
 				
 				else if(cantado[1].equals("no quiero")) {
 					
-					/***/
-					System.out.println("la IA no quiso");
-					/***/
+					texto.setText("<html>"+ cantado[1] +"</html>");
+					
+					try {
+						Thread.sleep(800);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					
 					//EL JUGADOR GANA
 	    			
 					sistPuntuacion(cantado,j,MAQUINA);
@@ -4623,9 +4797,13 @@ public class Interfaz extends JFrame{
 						
 						if(cantado[3].equals("quiero")) {
 							
-							/***/
-							System.out.println("la IA no quiso");
-							/***/
+							texto.setText("<html>"+ cantado[3] +"</html>");
+							
+							try {
+								Thread.sleep(800);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
 							
 							trucoQueridoB9();
 						}
@@ -4634,9 +4812,13 @@ public class Interfaz extends JFrame{
 						
 						else {
 							
-							/***/
-							System.out.println("la IA no quiso");
-							/***/
+							texto.setText("<html>"+ cantado[3] +"</html>");
+							
+							try {
+								Thread.sleep(800);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
 							
 							//EL JUGADOR GANA
 			    			
@@ -4677,6 +4859,7 @@ public class Interfaz extends JFrame{
 					retruco.setEnabled(true);
 					quiero.setEnabled(true);
 					noQuiero.setEnabled(true);
+					mazo.setEnabled(false);
 					
 					accionUsuario = false;
 					Thread espero37 = new Thread() {
@@ -4741,9 +4924,14 @@ public class Interfaz extends JFrame{
 						/*SI LA IA QUIERE*/
 						
 						if(cantado[2].equals("quiero")) {
-							/***/
-							System.out.println("la IA quiso");
-							/***/
+							
+							texto.setText("<html>"+ cantado[2] +"</html>");
+							
+							try {
+								Thread.sleep(800);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
 							
 							trucoQueridoB10();
 							
@@ -4752,9 +4940,14 @@ public class Interfaz extends JFrame{
 						/*SI LA IA NO QUIERE*/
 						
 						else if(cantado[2].equals("no quiero")) {
-							/***/
-							System.out.println("la IA no quiso");
-							/***/
+							
+							texto.setText("<html>"+ cantado[2] +"</html>");
+							
+							try {
+								Thread.sleep(800);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
 							
 							//EL JUGADOR GANA
 			    			
@@ -4936,15 +5129,22 @@ public class Interfaz extends JFrame{
 						
 						else if(cantado[0].equals("truco")) {
 							
+							mazo.setEnabled(false);
+							
 							MAQUINA.yourTurnAccept(cantado);
 							
 							/*SI LA IA QUIERE*/
 							
 							if(cantado[1].equals("quiero")) {
 								
-								/***/
-								System.out.println("la IA quiso");
-								/***/
+								texto.setText("<html>"+ cantado[1] +"</html>");
+								
+								try {
+									Thread.sleep(800);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
+								
 								trucoQueridoB11();
 								
 							}
@@ -4952,9 +5152,15 @@ public class Interfaz extends JFrame{
 							/*SI LA IA NO QUIERE*/
 							
 							else if(cantado[1].equals("no quiero")) {
-								/***/
-								System.out.println("la IA no quiso");
-								/***/
+								
+								texto.setText("<html>"+ cantado[1] +"</html>");
+								
+								try {
+									Thread.sleep(800);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
+								
 								//EL JUGADOR GANA
 				    			
 								sistPuntuacion(cantado,j,MAQUINA);
@@ -5039,18 +5245,29 @@ public class Interfaz extends JFrame{
 									
 									if(cantado[3].equals("quiero")) {
 										
-										/***/
-										System.out.println("la IA quiso");
-										/***/
+										texto.setText("<html>"+ cantado[3] +"</html>");
+										
+										try {
+											Thread.sleep(800);
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
+										
 										trucoQueridoB11();
 									}
 									
 									/*SI LA IA NO QUIERE*/
 									
 									else {
-										/***/
-										System.out.println("la IA no quiso");
-										/***/
+										
+										texto.setText("<html>"+ cantado[3] +"</html>");
+										
+										try {
+											Thread.sleep(800);
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
+										
 										//EL JUGADOR GANA
 						    			
 										sistPuntuacion(cantado,j,MAQUINA);
@@ -5087,6 +5304,7 @@ public class Interfaz extends JFrame{
 								retruco.setEnabled(true);
 								quiero.setEnabled(true);
 								noQuiero.setEnabled(true);
+								mazo.setEnabled(false);
 								
 								accionUsuario = false;
 								Thread espero41 = new Thread() {
@@ -5152,9 +5370,14 @@ public class Interfaz extends JFrame{
 									
 									if(cantado[2].equals("quiero")) {
 										
-										/***/
-										System.out.println("la IA quiso");
-										/***/
+										texto.setText("<html>"+ cantado[2] +"</html>");
+										
+										try {
+											Thread.sleep(800);
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
+										
 										trucoQueridoB12();
 									}
 									
@@ -5162,9 +5385,14 @@ public class Interfaz extends JFrame{
 									
 									else if(cantado[2].equals("no quiero")) {
 										
-										/***/
-										System.out.println("la IA no quiso");
-										/***/
+										texto.setText("<html>"+ cantado[2] +"</html>");
+										
+										try {
+											Thread.sleep(800);
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
+										
 										//EL JUGADOR GANA
 						    			
 										sistPuntuacion(cantado,MAQUINA,j);
@@ -5316,9 +5544,13 @@ public class Interfaz extends JFrame{
 		
 		if(cantado[1].equals("quiero")) {
 			
-			/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-			System.out.println("la IA quiso");
-			/***/
+			texto.setText("<html>"+ cantado[1] +"</html>");
+			
+			try {
+				Thread.sleep(800);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			
 			//TENER EN CUENTA VARIABLES COMO CANTADO[] / LAS AUX Y OTRAS (EN RELACION A SU VALOR)
 			if(ronda%2==0) {
@@ -5373,6 +5605,8 @@ public class Interfaz extends JFrame{
     		
     		if(cantado[2].equals("quiero")) {
     			
+    			System.out.println("HOLA PRRO");
+    			
     			vale_4.setEnabled(false);
     			
     			if(ronda%2==0) {
@@ -5388,8 +5622,6 @@ public class Interfaz extends JFrame{
     		/*SI EL JUGADOR REVIRA*/
     		
     		else if(cantado[2].equals("vale cuatro")) {
-    			
-    			System.out.println("holaaaaaaa");
     			
     			texto.setText("<html>"+ cantado[2] +"</html>");
 				quiero.setEnabled(false);
@@ -5407,10 +5639,14 @@ public class Interfaz extends JFrame{
     			
     			if(cantado[3].equals("quiero")) {
     				
-					/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-    					System.out.println("la IA quiso");
-    				/***/
-    				
+					texto.setText("<html>"+ cantado[3] +"</html>");
+					
+					try {
+						Thread.sleep(800);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}	
+    					
 					if(ronda%2==0) {
 						
 						trucoQueridoRondasPares();
@@ -5425,10 +5661,15 @@ public class Interfaz extends JFrame{
     			
     			else {
 					
-    				/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-    					System.out.println("la IA no quiso");
-    				/***/
+					texto.setText("<html>"+ cantado[3] +"</html>");
+					
+					try {
+						Thread.sleep(800);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
     					
+    				
     				//EL JUGADOR GANA
 	    			
 					sistPuntuacion(cantado,j,MAQUINA);
@@ -5460,10 +5701,14 @@ public class Interfaz extends JFrame{
 		
 		else if(cantado[1].equals("no quiero")) {
 			
-			/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-				System.out.println("la IA no quiso");
-			/***/
+			texto.setText("<html>"+ cantado[1] +"</html>");
 			
+			try {
+				Thread.sleep(800);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+				
 			//EL JUGADOR GANA
 
 			sistPuntuacion(cantado,j,MAQUINA);
@@ -5518,6 +5763,7 @@ public class Interfaz extends JFrame{
 					
 					truco.setEnabled(true);
 					retruco.setEnabled(true);
+					mazo.setEnabled(false);
 										
 					accionUsuario = false;
 					Thread espero15 = new Thread() {
@@ -5582,9 +5828,13 @@ public class Interfaz extends JFrame{
 					
 					if(cantado[2].equals("quiero")) {	//BLOQUE 1
 						
-						/**PROVISORIO*/
-						System.out.println("la IA quiso");
-						/***/
+						texto.setText("<html>"+ cantado[2] +"</html>");
+						
+						try {
+							Thread.sleep(800);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 						
 						trucoQueridoBloque1();
 						
@@ -5594,9 +5844,13 @@ public class Interfaz extends JFrame{
 					
 					else if(cantado[2].equals("no quiero")) {
 						
-						/**PROVISORIO*/
-						System.out.println("la IA no quiso");
-						/***/
+						texto.setText("<html>"+ cantado[2] +"</html>");
+						
+						try {
+							Thread.sleep(800);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 						
 						//EL JUGADOR GANA
 
@@ -5738,6 +5992,7 @@ public class Interfaz extends JFrame{
 					texto.setText("<html>"+ cantado[0] +"</html>");
 					flecha2.setEnabled(false);
 					cantarTruco.setEnabled(false);
+					mazo.setEnabled(false);
 					
 					c1.setEnabled(false);
 		    		c2.setEnabled(false);
@@ -5749,9 +6004,13 @@ public class Interfaz extends JFrame{
 					
 					if(cantado[1].equals("quiero")) {		//BLOQUE 2
 						
-						/**PROVISORIO*/
-						System.out.println("la IA quiso");
-						/***/
+						texto.setText("<html>"+ cantado[1] +"</html>");
+						
+						try {
+							Thread.sleep(800);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 						
 						trucoQueridoBloque2();
 						
@@ -5761,9 +6020,13 @@ public class Interfaz extends JFrame{
 					
 					else if(cantado[1].equals("no quiero")) {
 						
-						/**PROVISORIO*/
-						System.out.println("la IA no quiso");
-						/***/
+						texto.setText("<html>"+ cantado[1] +"</html>");
+						
+						try {
+							Thread.sleep(800);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 						
 						//EL JUGADOR GANA
 
@@ -5848,10 +6111,14 @@ public class Interfaz extends JFrame{
 							
 							if(cantado[3].equals("quiero")) {		//BLOQUE 2
 								
-								/**PROVISORIO*/
-    							System.out.println("la IA quiso");
-    							/***/
-								
+    							texto.setText("<html>"+ cantado[3] +"</html>");
+    							
+    							try {
+    								Thread.sleep(800);
+    							} catch (InterruptedException e) {
+    								e.printStackTrace();
+    							}
+    							
 								trucoQueridoBloque2();
 								
 							}
@@ -5860,10 +6127,14 @@ public class Interfaz extends JFrame{
 							
 							else {
 								
-								/**PROVISORIO*/
-    							System.out.println("la IA no quiso");
-    							/***/
-								
+    							texto.setText("<html>"+ cantado[3] +"</html>");
+    							
+    							try {
+    								Thread.sleep(800);
+    							} catch (InterruptedException e) {
+    								e.printStackTrace();
+    							}
+    							
 								//EL JUGADOR GANA
 
     							sistPuntuacion(cantado,j,MAQUINA);
@@ -5954,6 +6225,7 @@ public class Interfaz extends JFrame{
 							
 							flecha2.setEnabled(false);
 							cantarTruco.setEnabled(false);
+							mazo.setEnabled(false);
 							
 				    		c1.setEnabled(false);
 				    		c2.setEnabled(false);
@@ -5965,10 +6237,14 @@ public class Interfaz extends JFrame{
 							
 							if(cantado[1].equals("quiero")) {			//BLOQUE 3
 								
-								/**PROVISORIO*/
-    							System.out.println("la IA quiso");
-    							/***/
-								
+    							texto.setText("<html>"+ cantado[1] +"</html>");
+    							
+    							try {
+    								Thread.sleep(800);
+    							} catch (InterruptedException e) {
+    								e.printStackTrace();
+    							}
+    							
 								trucoQueridoBloque3();
 								
 							}
@@ -5977,10 +6253,14 @@ public class Interfaz extends JFrame{
 							
 							else if(cantado[1].equals("no quiero")) {
 								
-								/**PROVISORIO*/
-    							System.out.println("la IA no quiso");
-    							/***/
-								
+    							texto.setText("<html>"+ cantado[1] +"</html>");
+    							
+    							try {
+    								Thread.sleep(800);
+    							} catch (InterruptedException e) {
+    								e.printStackTrace();
+    							}
+    							
 								//EL JUGADOR GANA
 								
     							sistPuntuacion(cantado,MAQUINA,j);
@@ -6064,10 +6344,14 @@ public class Interfaz extends JFrame{
 					
 									if(cantado[3].equals("quiero")) {		//BLOQUE 3
 										
-										/**PROVISORIO*/
-		    							System.out.println("la IA quiso");
-		    							/***/
-										
+		    							texto.setText("<html>"+ cantado[3] +"</html>");
+		    							
+		    							try {
+		    								Thread.sleep(800);
+		    							} catch (InterruptedException e) {
+		    								e.printStackTrace();
+		    							}
+		    							
 										trucoQueridoBloque3();
 										
 									}
@@ -6076,10 +6360,14 @@ public class Interfaz extends JFrame{
 									
 									else {
 										
-										/**PROVISORIO*/
-		    							System.out.println("la IA no quiso");
-		    							/***/
-										
+		    							texto.setText("<html>"+ cantado[3] +"</html>");
+		    							
+		    							try {
+		    								Thread.sleep(800);
+		    							} catch (InterruptedException e) {
+		    								e.printStackTrace();
+		    							}
+		    							
 										//EL JUGADOR GANA
 
 		    							sistPuntuacion(cantado,j,MAQUINA);
@@ -6112,6 +6400,7 @@ public class Interfaz extends JFrame{
 								texto.setText("<html>"+ cantado[0] +"</html>");
 	    						quiero.setEnabled(true);
 	    						noQuiero.setEnabled(true);
+	    						mazo.setEnabled(false);
 	    						
 	    						truco.setEnabled(true);
 	    						flecha2.setEnabled(false);
@@ -6186,10 +6475,14 @@ public class Interfaz extends JFrame{
 									
 									if(cantado[2].equals("quiero")) {	//BLOQUE 4
 										
-										/**PROVISORIO*/
-		    							System.out.println("la IA quiso");
-		    							/***/
-										
+		    							texto.setText("<html>"+ cantado[2] +"</html>");
+		    							
+		    							try {
+		    								Thread.sleep(800);
+		    							} catch (InterruptedException e) {
+		    								e.printStackTrace();
+		    							}
+		    							
 										trucoQueridoBloque4();
 										
 									}
@@ -6198,10 +6491,14 @@ public class Interfaz extends JFrame{
 									
 									else if(cantado[2].equals("no quiero")) {
 										
-										/**PROVISORIO*/
-		    							System.out.println("la IA no quiso");
-		    							/***/
-										
+		    							texto.setText("<html>"+ cantado[2] +"</html>");
+		    							
+		    							try {
+		    								Thread.sleep(800);
+		    							} catch (InterruptedException e) {
+		    								e.printStackTrace();
+		    							}
+		    							
 										//EL JUGADOR GANA
 
 		    							sistPuntuacion(cantado,MAQUINA,j);
@@ -6351,6 +6648,7 @@ public class Interfaz extends JFrame{
 				texto.setText("<html>"+ cantado[0] +"</html>");
 				quiero.setEnabled(true);
 				noQuiero.setEnabled(true);
+				mazo.setEnabled(false);
 				
 				truco.setEnabled(true);
 				retruco.setEnabled(true);
@@ -6418,9 +6716,13 @@ public class Interfaz extends JFrame{
 					
 					if(cantado[2].equals("quiero")) {
 						
-						/**PROVISORIO*/
-						System.out.println("la IA quiso");
-						/***/
+						texto.setText("<html>"+ cantado[2] +"</html>");
+						
+						try {
+							Thread.sleep(800);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 						
 						trucoQueridoBloque5();							//BLOQUE 5
 						
@@ -6430,9 +6732,13 @@ public class Interfaz extends JFrame{
 					
 					else if(cantado[2].equals("no quiero")) {
 						
-						/**PROVISORIO*/
-						System.out.println("la IA no quiso");
-						/***/
+						texto.setText("<html>"+ cantado[2] +"</html>");
+						
+						try {
+							Thread.sleep(800);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 						
 						//EL JUGADOR GANA
 
@@ -6570,6 +6876,7 @@ public class Interfaz extends JFrame{
 					
 					flecha2.setEnabled(false);
 					cantarTruco.setEnabled(false);
+					mazo.setEnabled(false);
 					
 					c1.setEnabled(false);
 		    		c2.setEnabled(false);
@@ -6581,9 +6888,13 @@ public class Interfaz extends JFrame{
 					
 					if(cantado[1].equals("quiero")) {				//BLOQUE 6
 						
-						/**PROVISORIO*/
-						System.out.println("la IA quiso");
-						/***/
+						texto.setText("<html>"+ cantado[1] +"</html>");
+						
+						try {
+							Thread.sleep(800);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 						
 						trucoQueridoBloque6();
 			    		
@@ -6593,9 +6904,13 @@ public class Interfaz extends JFrame{
 					
 					else if(cantado[1].equals("no quiero")) {
 						
-						/**PROVISORIO*/
-						System.out.println("la IA no quiso");
-						/***/
+						texto.setText("<html>"+ cantado[1] +"</html>");
+						
+						try {
+							Thread.sleep(800);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 						
 						//EL JUGADOR GANA
 
@@ -6678,10 +6993,14 @@ public class Interfaz extends JFrame{
 							
 							if(cantado[3].equals("quiero")) {
 								
-								/**PROVISORIO*/
-    							System.out.println("la IA quiso");
-    							/***/
-								
+    							texto.setText("<html>"+ cantado[3] +"</html>");
+    							
+    							try {
+    								Thread.sleep(800);
+    							} catch (InterruptedException e) {
+    								e.printStackTrace();
+    							}
+    							
 								trucoQueridoBloque6();							//BLOQUE 6
 								
 							}
@@ -6690,10 +7009,14 @@ public class Interfaz extends JFrame{
 							
 							else if(cantado[3].equals("no quiero")) {
 								
-								/**PROVISORIO*/
-    							System.out.println("la IA no quiso");
-    							/***/
-								
+    							texto.setText("<html>"+ cantado[3] +"</html>");
+    							
+    							try {
+    								Thread.sleep(800);
+    							} catch (InterruptedException e) {
+    								e.printStackTrace();
+    							}
+    							
 								//EL JUGADOR GANA
 
     							sistPuntuacion(cantado,j,MAQUINA);
@@ -6762,6 +7085,7 @@ public class Interfaz extends JFrame{
 	    					texto.setText("<html>"+ cantado[0] +"</html>");
     						quiero.setEnabled(true);
     						noQuiero.setEnabled(true);
+    						mazo.setEnabled(false);
     						
     						truco.setEnabled(true);
     						retruco.setEnabled(true);
@@ -6830,10 +7154,14 @@ public class Interfaz extends JFrame{
 		    					
 		    					if(cantado[2].equals("quiero")) {
 		    						
-		    						/**PROVISORIO*/
-	    							System.out.println("la IA quiso");
-	    							/***/
-		    						
+	    							texto.setText("<html>"+ cantado[2] +"</html>");
+	    							
+	    							try {
+	    								Thread.sleep(800);
+	    							} catch (InterruptedException e) {
+	    								e.printStackTrace();
+	    							}
+	    							
 		    						trucoQueridoBloque7();									//BLOQUE 7
 		    						
 		    					}
@@ -6842,10 +7170,14 @@ public class Interfaz extends JFrame{
 		    					
 		    					else if(cantado[2].equals("no quiero")) {
 		    						
-		    						/**PROVISORIO*/
-	    							System.out.println("la IA no quiso");
-	    							/***/
-		    						
+	    							texto.setText("<html>"+ cantado[2] +"</html>");
+	    							
+	    							try {
+	    								Thread.sleep(800);
+	    							} catch (InterruptedException e) {
+	    								e.printStackTrace();
+	    							}
+	    							
 		    						//EL JUGADOR GANA
 
 	    							sistPuntuacion(cantado,MAQUINA,j);
@@ -6982,6 +7314,7 @@ public class Interfaz extends JFrame{
 	    						
 	    						cantarTruco.setEnabled(false);
 	    						flecha2.setEnabled(false);
+	    						mazo.setEnabled(false);
 	    						
 	    						c1.setEnabled(false);
 	    						c2.setEnabled(false);
@@ -6993,9 +7326,13 @@ public class Interfaz extends JFrame{
 	    						
 	    						if(cantado[1].equals("quiero")) {			//BLOQUE 8
 	    							
-	    							/**PROVISORIO*/
-	    							System.out.println("la IA quiso");
-	    							/***/
+	    							texto.setText("<html>"+ cantado[1] +"</html>");
+	    							
+	    							try {
+	    								Thread.sleep(800);
+	    							} catch (InterruptedException e) {
+	    								e.printStackTrace();
+	    							}
 	    							
 	    							trucoQueridoBloque8();
 			    					
@@ -7005,9 +7342,13 @@ public class Interfaz extends JFrame{
 	    						
 	    						else if(cantado[1].equals("no quiero")) {
 	    							
-	    							/**PROVISORIO*/
-	    							System.out.println("la IA no quiso");
-	    							/***/
+	    							texto.setText("<html>"+ cantado[1] +"</html>");
+	    							
+	    							try {
+	    								Thread.sleep(800);
+	    							} catch (InterruptedException e) {
+	    								e.printStackTrace();
+	    							}
 	    							
 	    							//EL JUGADOR GANA
 
@@ -7093,9 +7434,13 @@ public class Interfaz extends JFrame{
 			    						
 			    						if(cantado[3].equals("quiero")) {
 			    							
-			    							/**PROVISORIO*/
-			    							System.out.println("la IA quiso");
-			    							/***/
+			    							texto.setText("<html>"+ cantado[3] +"</html>");
+			    							
+			    							try {
+			    								Thread.sleep(800);
+			    							} catch (InterruptedException e) {
+			    								e.printStackTrace();
+			    							}
 			    							
 			    							trucoQueridoBloque8();					//BLOQUE 8
 			    							
@@ -7105,9 +7450,13 @@ public class Interfaz extends JFrame{
 			    						
 			    						else {
 			    							
-			    							/**PROVISORIO*/
-			    							System.out.println("la IA no quiso");
-			    							/***/
+			    							texto.setText("<html>"+ cantado[3] +"</html>");
+			    							
+			    							try {
+			    								Thread.sleep(800);
+			    							} catch (InterruptedException e) {
+			    								e.printStackTrace();
+			    							}
 			    							
 			    							//EL JUGADOR GANA
 
@@ -7191,6 +7540,7 @@ public class Interfaz extends JFrame{
 				truco.setEnabled(false);
 				flecha2.setEnabled(false);
 				cantarTruco.setEnabled(false);
+				mazo.setEnabled(false);
 				
 				c1.setEnabled(false);
 				c2.setEnabled(false);
@@ -7202,9 +7552,13 @@ public class Interfaz extends JFrame{
 				
 				if(cantado[1].equals("quiero")) {					//BLOQUE 12
 					
-					/**PROVISORIO*/
-					System.out.println("la IA quiso");
-					/***/
+					texto.setText("<html>"+ cantado[1] +"</html>");
+					
+					try {
+						Thread.sleep(800);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 					
 					trucoQueridoBloque12();
 					
@@ -7214,9 +7568,13 @@ public class Interfaz extends JFrame{
 				
 				else if(cantado[1].equals("no quiero")) {
 					
-					/**PROVISORIO*/
-					System.out.println("la IA no quiso");
-					/***/
+					texto.setText("<html>"+ cantado[1] +"</html>");
+					
+					try {
+						Thread.sleep(800);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 					
 					sistPuntuacion(cantado,j,MAQUINA);
 					acumulador = String.valueOf(j.getPuntos());
@@ -7298,9 +7656,13 @@ public class Interfaz extends JFrame{
 						
 						if(cantado[3].equals("quiero")) {					//BLOQUE 12
 							
-							/**PROVISORIO*/
-							System.out.println("la IA quiso");
-							/***/
+							texto.setText("<html>"+ cantado[3] +"</html>");
+							
+							try {
+								Thread.sleep(800);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
 							
 							trucoQueridoBloque12();
 							
@@ -7310,9 +7672,13 @@ public class Interfaz extends JFrame{
 						
 						else {
 							
-							/**PROVISORIO*/
-							System.out.println("la IA no quiso");
-							/***/
+							texto.setText("<html>"+ cantado[3] +"</html>");
+							
+							try {
+								Thread.sleep(800);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
 							
 							//EL JUGADOR GANA
 							
@@ -7355,6 +7721,7 @@ public class Interfaz extends JFrame{
 					texto.setText("<html>"+ cantado[0] +"</html>");
 					quiero.setEnabled(true);
 					noQuiero.setEnabled(true);
+					mazo.setEnabled(false);
 					
 					truco.setEnabled(true);
 					flecha2.setEnabled(false);
@@ -7423,9 +7790,13 @@ public class Interfaz extends JFrame{
 						
 						if(cantado[2].equals("quiero")) {		//BLOQUE 9
 							
-							/**PROVISORIO*/
-							System.out.println("la IA quiso");
-							/***/
+							texto.setText("<html>"+ cantado[2] +"</html>");
+							
+							try {
+								Thread.sleep(800);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
 							
 							trucoQueridoBloque9();
 							
@@ -7435,9 +7806,13 @@ public class Interfaz extends JFrame{
 						
 						else if(cantado[2].equals("no quiero")) {
 							
-							/**PROVISORIO*/
-							System.out.println("la IA no quiso");
-							/***/
+							texto.setText("<html>"+ cantado[2] +"</html>");
+							
+							try {
+								Thread.sleep(800);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
 							
 							//EL JUGADOR GANA
 	
@@ -7534,6 +7909,7 @@ public class Interfaz extends JFrame{
 							texto.setText("<html>"+ cantado[0] +"</html>");
 							quiero.setEnabled(true);
 							noQuiero.setEnabled(true);
+							mazo.setEnabled(false);
 							
 							truco.setEnabled(true);
 							flecha2.setEnabled(true);
@@ -7605,9 +7981,13 @@ public class Interfaz extends JFrame{
 								
 								if(cantado[2].equals("quiero")) {				//BLOQUE 11
 									
-									/**PROVISORIO*/
-									System.out.println("la IA quiso");
-									/***/
+									texto.setText("<html>"+ cantado[2] +"</html>");
+									
+									try {
+										Thread.sleep(800);
+									} catch (InterruptedException e) {
+										e.printStackTrace();
+									}
 									
 									trucoQueridoBloque11();
 									
@@ -7617,9 +7997,13 @@ public class Interfaz extends JFrame{
 								
 								else if(cantado[2].equals("no quiero")) {
 									
-									/**PROVISORIO*/
-									System.out.println("la IA no quiso");
-									/***/
+									texto.setText("<html>"+ cantado[2] +"</html>");
+									
+									try {
+										Thread.sleep(800);
+									} catch (InterruptedException e) {
+										e.printStackTrace();
+									}
 									
 									//EL JUGADOR GANA
 									
@@ -7760,6 +8144,7 @@ public class Interfaz extends JFrame{
 								
 								flecha2.setEnabled(false);
 								cantarTruco.setEnabled(false);
+								mazo.setEnabled(false);
 								
 					    		c1.setEnabled(false);
 					    		c2.setEnabled(false);
@@ -7771,9 +8156,13 @@ public class Interfaz extends JFrame{
 								
 								if(cantado[1].equals("quiero")) {					//BLOQUE 10
 									
-									/**PROVISORIO*/
-									System.out.println("la IA quiso");
-									/***/
+									texto.setText("<html>"+ cantado[1] +"</html>");
+									
+									try {
+										Thread.sleep(800);
+									} catch (InterruptedException e) {
+										e.printStackTrace();
+									}
 									
 									trucoQueridoBloque10();
 								}
@@ -7782,9 +8171,13 @@ public class Interfaz extends JFrame{
 								
 								else if(cantado[1].equals("no quiero")) {
 									
-									/**PROVISORIO*/
-									System.out.println("la IA no quiso");
-									/***/
+									texto.setText("<html>"+ cantado[1] +"</html>");
+									
+									try {
+										Thread.sleep(800);
+									} catch (InterruptedException e) {
+										e.printStackTrace();
+									}
 									
 									//EL JUGADOR GANA
 		
@@ -7870,6 +8263,14 @@ public class Interfaz extends JFrame{
 				    	    			
 				    	    			if(cantado[3].equals("quiero")) {									//BLOQUE 10
 				    	    				
+				    	    				texto.setText("<html>"+ cantado[3] +"</html>");
+				    	    				
+				    	    				try {
+				    	    					Thread.sleep(800);
+				    	    				} catch (InterruptedException e) {
+				    	    					e.printStackTrace();
+				    	    				}
+				    	    				
 				    	    				trucoQueridoBloque10();
 				    	    				
 				    	    			}
@@ -7878,9 +8279,13 @@ public class Interfaz extends JFrame{
 				    	    			
 				    	    			else {
 				    	    				
-				    	    				/**PROVISORIO*/
-											System.out.println("la IA no quiso");
-											/***/
+				    	    				texto.setText("<html>"+ cantado[3] +"</html>");
+				    	    				
+				    	    				try {
+				    	    					Thread.sleep(800);
+				    	    				} catch (InterruptedException e) {
+				    	    					e.printStackTrace();
+				    	    				}
 											
 											sistPuntuacion(cantado,j,MAQUINA);
 											acumulador = String.valueOf(j.getPuntos());
@@ -8050,6 +8455,8 @@ public class Interfaz extends JFrame{
 	
 	public void trucoQueridoB11() {
 		
+		mazo.setEnabled(true);
+		
 		if(c1.getIcon() != null) {
 			c1.setEnabled(true);
 		}
@@ -8186,6 +8593,8 @@ public class Interfaz extends JFrame{
 			
 			mostrarTirada(tiraIA,true);
 			
+			mazo.setEnabled(true);
+			
 			if(c1.getIcon() != null) {
 				c1.setEnabled(true);
 			}
@@ -8280,6 +8689,8 @@ public class Interfaz extends JFrame{
 	
 	
 	public void trucoQueridoB9() {
+		
+		mazo.setEnabled(true);
 		
 		if(c1.getIcon() != null) {
 			c1.setEnabled(true);
@@ -8479,6 +8890,8 @@ public class Interfaz extends JFrame{
 	
 	public void trucoQueridoB8() {
 		
+		mazo.setEnabled(true);
+		
 		if(c1.getIcon() != null) {
 			c1.setEnabled(true);
 		}
@@ -8570,6 +8983,8 @@ public class Interfaz extends JFrame{
 		tiratmp[0] = tiraIA[1];
 		auxIA = tiraIA[1];
 		mostrarTirada(tiratmp, true);
+		
+		mazo.setEnabled(true);
 		
 		if(c1.getIcon() != null) {
 			c1.setEnabled(true);
@@ -8664,6 +9079,8 @@ public class Interfaz extends JFrame{
 		if(aux.returnOrden(auxIA) < aux.returnOrden(auxJ)) {
 			
 			mostrarTirada(tiraIA, true);
+			
+			mazo.setEnabled(true);
 			
 			if(c1.getIcon() != null) {
 				c1.setEnabled(true);
@@ -8773,6 +9190,8 @@ public class Interfaz extends JFrame{
 	
 	
 	public void trucoQueridoB5() {
+		
+		mazo.setEnabled(true);
 		
 		if(c1.getIcon() != null) {
 			c1.setEnabled(true);
@@ -8988,6 +9407,8 @@ public class Interfaz extends JFrame{
 	
 	public void trucoQueridoB3() {
 		
+		mazo.setEnabled(true);
+		
 		if(c1.getIcon() != null) {
 			c1.setEnabled(true);
 		}
@@ -9080,6 +9501,8 @@ public class Interfaz extends JFrame{
 	
 	
 	public void trucoQueridoB2() {
+		
+		mazo.setEnabled(true);
 		
 		if(c1.getIcon() != null) {
 			c1.setEnabled(true);
@@ -9242,6 +9665,8 @@ public class Interfaz extends JFrame{
 		tiratmp[0] = tiraIA[1];
 		mostrarTirada(tiratmp, true);
 		
+		mazo.setEnabled(true);
+		
 		if(c1.getIcon() != null) {
 			c1.setEnabled(true);
 		}
@@ -9401,6 +9826,7 @@ public class Interfaz extends JFrame{
 	public void trucoQueridoBloque12() {
 		
 		flecha2.setEnabled(true);
+		mazo.setEnabled(true);
 		
 		if(c1.getIcon() != null) {
 			c1.setEnabled(true);
@@ -9577,13 +10003,12 @@ public class Interfaz extends JFrame{
 	
 	public void trucoQueridoBloque11() {
 		
-		System.out.println("ESTOY EN EL BLOQUE 11");
-		
 		tiratmp[0] = tiraIA[1];
 		tiraIAnull = true;
 		mostrarTirada(tiratmp,tiraIAnull);
 		
 		flecha2.setEnabled(true);
+		mazo.setEnabled(true);
 		
 		if(c1.getIcon() != null) {
 			c1.setEnabled(true);
@@ -9671,6 +10096,7 @@ public class Interfaz extends JFrame{
 	public void trucoQueridoBloque10() {
 		
 		flecha2.setEnabled(true);
+		mazo.setEnabled(true);
 		
 		if(c1.getIcon() != null) {
 			c1.setEnabled(true);
@@ -9771,6 +10197,9 @@ public class Interfaz extends JFrame{
 			tiratmp[0] = tiraIA[1];
 			tiraIAnull = true;
 			mostrarTirada(tiratmp,tiraIAnull);
+			
+			flecha2.setEnabled(true);
+			mazo.setEnabled(true);
 			
 			if(c1.getIcon() != null) {
 				c1.setEnabled(true);
@@ -9882,6 +10311,7 @@ public class Interfaz extends JFrame{
 	public void trucoQueridoBloque8() {
 		
 		flecha2.setEnabled(true);
+		mazo.setEnabled(true);
 		
 		if(c1.getIcon() != null) {
 			c1.setEnabled(true);
@@ -9984,6 +10414,7 @@ public class Interfaz extends JFrame{
 		auxIA = tiraIA[0];
 		
 		flecha2.setEnabled(true);
+		mazo.setEnabled(true);
 		
 		if(c1.getIcon() != null) {
 			c1.setEnabled(true);
@@ -10070,6 +10501,7 @@ public class Interfaz extends JFrame{
 	public void trucoQueridoBloque6() {
 		
 		flecha2.setEnabled(true);
+		mazo.setEnabled(true);
 		
 		if(c1.getIcon() != null) {
 			c1.setEnabled(true);
@@ -10255,6 +10687,7 @@ public class Interfaz extends JFrame{
 		
 		truco.setEnabled(false);
 		flecha2.setEnabled(true);				//POR SI QUIERE IRSE AL MAZO
+		mazo.setEnabled(true);
 				
 		//TIRA LA IA
 		
@@ -10483,6 +10916,7 @@ public class Interfaz extends JFrame{
 	public void trucoQueridoBloque3() {
 		
 		flecha2.setEnabled(true);
+		mazo.setEnabled(true);
 		
 		if(c1.getIcon() != null) {
 			c1.setEnabled(true);
@@ -10577,6 +11011,7 @@ public class Interfaz extends JFrame{
 	public void trucoQueridoBloque2() {
 		
 		flecha2.setEnabled(true);
+		mazo.setEnabled(true);
 		
 		if(c1.getIcon() != null) {
 			c1.setEnabled(true);
@@ -10740,6 +11175,7 @@ public class Interfaz extends JFrame{
 		flecha2.setEnabled(true);				//POR SI QUIERE IRSE AL MAZO
 		quiero.setEnabled(false);
 		noQuiero.setEnabled(false);
+		mazo.setEnabled(true);
 				
 		//LA IA TIRA
 		tiraIAnull = true;
@@ -10895,6 +11331,7 @@ public class Interfaz extends JFrame{
 		accionUsuario = false;
 		truco.setEnabled(false);
 		flecha2.setEnabled(true);
+		mazo.setEnabled(true);
 				
 		Thread espero7 = new Thread() {
 			
@@ -12072,11 +12509,6 @@ public class Interfaz extends JFrame{
 	
 	public int cantaEnvidoJugador() {
 		
-		System.out.println("ESTOY DENTRO DE CANTA ENVIDO JUGADOR");
-		for(int i=0;i<5;i++) {
-			System.out.println(cantado[i]);
-		}
-		
 		quiero.setEnabled(false);
 		noQuiero.setEnabled(false);
 		
@@ -12096,9 +12528,13 @@ public class Interfaz extends JFrame{
 		
 		if(cantado[1].equals("quiero")) {
 			
-			/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-			System.out.println("la IA quiso");
-			/***/
+			texto.setText("<html>"+ cantado[1] +"</html>");
+			
+			try {
+				Thread.sleep(800);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			
 			//SE SUMAN PUNTOS
 			
@@ -12120,9 +12556,13 @@ public class Interfaz extends JFrame{
 		
 		else if(cantado[1].equals("no quiero")) {
 			
-			/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-			System.out.println("la IA no quiso");
-			/***/
+			texto.setText("<html>"+ cantado[1] +"</html>");
+			
+			try {
+				Thread.sleep(800);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			
 			sistPuntuacion(cantado,j,MAQUINA);
 			acumulador = String.valueOf(j.getPuntos());
@@ -12140,9 +12580,6 @@ public class Interfaz extends JFrame{
 		else if(cantado[1].equals("envido") || cantado[1].equals("real envido") || cantado[1].equals("falta envido")) {
 			
 			texto.setText("<html>"+ cantado[1] +"</html>");
-			/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-			System.out.println("la IA revira");
-			/***/
 			
 			if(cantado[1].equals("envido")) {
 				
@@ -12236,9 +12673,13 @@ public class Interfaz extends JFrame{
 		    		
 		    		if(cantado[3].equals("quiero")) {
 		    			
-						/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-	    				System.out.println("la IA quiso");
-	    				/***/
+		    			texto.setText("<html>"+ cantado[3] +"</html>");
+						
+	    				try {
+	    					Thread.sleep(800);
+	    				} catch (InterruptedException e) {
+	    					e.printStackTrace();
+	    				}
 		    			
 		    			//SE SUMAN PUNTOS
 		    			
@@ -12260,9 +12701,13 @@ public class Interfaz extends JFrame{
 		    		
 		    		else if(cantado[3].equals("no quiero")) {
 		    			
-		    			/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-	    				System.out.println("la IA quiso");
-	    				/***/
+		    			texto.setText("<html>"+ cantado[3] +"</html>");
+		    			
+	    				try {
+	    					Thread.sleep(800);
+	    				} catch (InterruptedException e) {
+	    					e.printStackTrace();
+	    				}
 		    			
 		    			//SE SUMAN PUNTOS
 		    			
@@ -12281,10 +12726,7 @@ public class Interfaz extends JFrame{
 		    		else if(cantado[3].equals("falta envido")) {
 		    			
 		    			texto.setText("<html>"+ cantado[3] +"</html>");
-						/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-						System.out.println("la IA revira");
-	    				/***/
-		    			
+						
 		    			quiero.setEnabled(true);
 	    				noQuiero.setEnabled(true);
 		    			
@@ -12430,13 +12872,17 @@ public class Interfaz extends JFrame{
 	    			
 	    			MAQUINA.yourTurnAccept(cantado);
 	    			
-	    			/* SI LA MAQUINA QUIERE */
+	    			/* SI LA IA QUIERE */
 	    			
 	    			if(cantado[3].equals("quiero")) {
 		    			
-						/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-	    				System.out.println("la IA quiso");
-	    				/***/
+	    				texto.setText("<html>"+ cantado[3] +"</html>");
+						
+	    				try {
+	    					Thread.sleep(800);
+	    				} catch (InterruptedException e) {
+	    					e.printStackTrace();
+	    				}
 	    				
 	    				//SE SUMAN PUNTOS
 		    			
@@ -12454,13 +12900,17 @@ public class Interfaz extends JFrame{
 						
 		    		}
 	    			
-	    			/*SI LA MAQUINA NO QUIERE*/
+	    			/*SI LA IA NO QUIERE*/
 	    			
 	    			else {
 	    				
-	    				/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-	    				System.out.println("la IA no quiso");
-	    				/***/
+	    				texto.setText("<html>"+ cantado[3] +"</html>");
+	    				
+	    				try {
+	    					Thread.sleep(800);
+	    				} catch (InterruptedException e) {
+	    					e.printStackTrace();
+	    				}
 	    				
 	    				//SE SUMAN PUNTOS
 	    				
@@ -12730,8 +13180,8 @@ public class Interfaz extends JFrame{
 		
 		/*SI EL JUGADOR NO QUIERE*/
 		
-		else if(cantado[1].equals("no quiero")) {
-				
+		else if(cantado[1].equals("no quiero")) {									
+			
 			sistPuntuacion(cantado,MAQUINA,j);
 			acumulador = String.valueOf(MAQUINA.getPuntos());
 			pts2.setText(acumulador);
@@ -12769,9 +13219,13 @@ public class Interfaz extends JFrame{
 			
 			if(cantado[2].equals("quiero")) {
 				
-				/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-				System.out.println("la IA quiso");
-				/***/
+				texto.setText("<html>"+ cantado[2] +"</html>");
+				
+				try {
+					Thread.sleep(800);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				
 				sistPuntuacion(cantado,MAQUINA,j);
 				acumulador = String.valueOf(j.getPuntos());
@@ -12790,9 +13244,13 @@ public class Interfaz extends JFrame{
 			
 			else if(cantado[2].equals("no quiero")) {
 				
-				/**PROVISORIO*/
-				System.out.println("la IA no quiso");
-				/***/
+				texto.setText("<html>"+ cantado[2] +"</html>");
+				
+				try {
+					Thread.sleep(800);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				
 				sistPuntuacion(cantado,MAQUINA,j);
 				acumulador = String.valueOf(j.getPuntos());
@@ -12807,12 +13265,6 @@ public class Interfaz extends JFrame{
 			//SI LA IA REVIRA
 			
 			else if(cantado[2].equals("real envido") || cantado[2].equals("falta envido")) {
-				
-				/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-				
-				System.out.println("la IA revira");
-				
-				/***/
 				
 				texto.setText("<html>"+ cantado[2] +"</html>");
 				quiero.setEnabled(true);
@@ -12906,9 +13358,13 @@ public class Interfaz extends JFrame{
 					
 					if(cantado[4].equals("quiero")) {
 						
-						/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-						System.out.println("la IA quiso");
-						/***/
+						texto.setText("<html>"+ cantado[4] +"</html>");
+						
+						try {
+							Thread.sleep(800);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 						
 						sistPuntuacion(cantado,MAQUINA,j);
 						acumulador = String.valueOf(j.getPuntos());
@@ -12923,11 +13379,15 @@ public class Interfaz extends JFrame{
 						
 					}
 					
-					else if(cantado[4].equals("no quiero")){
+					else{
 						
-						/**PROVISORIO PARA SABER EL ESTADO DE LA IA*/
-						System.out.println("la IA no quiso");
-						/***/
+						texto.setText("<html>"+ cantado[4] +"</html>");
+						
+						try {
+							Thread.sleep(800);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 						
 						sistPuntuacion(cantado,MAQUINA,j);
 						acumulador = String.valueOf(j.getPuntos());

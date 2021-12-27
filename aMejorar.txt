@@ -1,25 +1,11 @@
-1	-	cuando (en rondas pares) juego yo primero, y después le toca a la IA y canta el envido, a mi no me deja revirar (HECHO)
-
-2	-	hay veces que se canta truco, no se quiere y después canta retruco
-
-3	-	otras que canto truco digo quiero y se va al mazo
 
 4	-	error1.png
-	
-5	-	cuando se termina el juego y salta el anuncio, se puede seguir jugando (HECHO)
 
 6	-	Si me voy al mazo, no suma bien; hay veces que suma 4 puntos en vez de 1 o 2; otras veces se canto el envido y me voy al mazo y suma 2 en vez de 1
 		Hay veces que quiero un envido-envido y suma 3
 
-7	-	Hay veces donde se quiere algo, pero la IA no responde y se reparte
-
-8	-	Si me toca primero a mi y tiro dir, la IA no me canta envido aunque tenga, sino q canta directamente truco (HECHO)
-
-
-
 
 CHEQUEAR
 
-Agregar reset a IA y Jugador (ver si es al finalizar cada ronda o al final de una partida)
-
-Revisar variables como cantoPrimi
+1	-	Mostrar cartas de la IA si gan� un envido (OPCIONAL, EN TODO CASO, MOSTRARLAS POR CONSOLA)
+2	-	Si se canta algo y la IA esta a punto de perder (falta un punto para que pierda, o si no quiere algo cantado pierde, entonces que quiera el canto si o si.

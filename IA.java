@@ -139,11 +139,6 @@ public class IA extends Jugador{
 
     public void yourTurnAccept(String cantos[]){             //metodo que se invocaria cada vez que tiene que aceptar, rechazar o revirar la IA
         
-    	System.out.println("ESTOY DENTRO DE LA IA");
-    	for(int i=0;i<5;i++) {
-			System.out.println(cantos[i]);
-		}
-    	
     	int end = 0,puntosEnvido,cartasGood,manyNulls,totalCartasGood;
         manyNulls = cartasNull();
         puntosEnvido = getPuntosEnvido();
@@ -220,7 +215,7 @@ public class IA extends Jugador{
                     cantar(0,cantos);           //canto envido
                 }
             }
-            if(cartasGood == 1 || totalCartasGood > 1){
+            else if(cartasGood == 1 || totalCartasGood > 1){
                 cantar(6,cantos);           //quiero
             }
             else if(cartasGood >= 2){
