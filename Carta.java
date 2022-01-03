@@ -130,4 +130,7 @@ public class Carta{
         if(index <= 5)                                          //si mi carta es un 2 o mos grande
             return true;
     return false;}
+
+    @Override
+    public int hashCode(){return numero * (int)this.palo.charAt(0);}
 }
