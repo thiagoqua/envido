@@ -59,4 +59,13 @@ public class Mazo{
         Mazo aux = new Mazo();                                  
         cartas = aux.cartas;                                    
     }
+
+    public Carta search(int hcode){         //se le pasa un hashcode y devuelve la carta correspondiente
+        for(Carta tmp : cartas){
+            if(tmp != null){
+                if(tmp.hashCode() == hcode)
+                    return tmp;
+            }
+        }
+    return null;}
 }
