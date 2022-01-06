@@ -112,6 +112,18 @@ public class Interfaz extends JFrame{
 	private JPanel union;
 	private JPanel unionDer;
 	
+	/*COMPONENTES DE JUGAR PERSONA */
+	
+	private JButton cliente;
+	private JButton servidor;
+	private JButton volver2;
+	
+	/*COMPONENTES DE CLIENTE*/
+	
+	private JTextField texto_nombre2;
+	private JLabel ingrese_nombre2;
+	private JButton ok2;
+	
 	/*OBJETOS DE OTRAS CLASES*/
 	
 	private Jugador j;
@@ -266,6 +278,153 @@ public class Interfaz extends JFrame{
 				cp.revalidate();	//Debe invocarse cuando los subcomponentes del contenedor se modifican
 				cp.repaint();
 				cp.add(secundario);
+				
+				
+				jugarPersona.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						
+						/*SE CREA LA INTERFAZ DE JUEGO*/
+						
+						cp.removeAll();
+						cp.revalidate();
+						cp.repaint();
+						
+						cliente = new JButton("CLIENTE");
+						cliente.setPreferredSize(new Dimension(100,50));
+						servidor = new JButton("SERVIDOR");
+						volver2 = new JButton("VOLVER");
+						JPanel ventanaSec = new JPanel(new GridLayout(3,1,4,4));
+						ventanaSec.add(cliente);
+						ventanaSec.add(servidor);
+						ventanaSec.add(volver2);
+						
+						JPanel secundario = new JPanel();
+						secundario.setLayout(new GridBagLayout());
+						GridBagConstraints gbc2 = new GridBagConstraints();
+						
+						gbc2.gridx = 0;
+						gbc2.gridy = 0;
+						gbc2.gridwidth = 1;
+						gbc2.gridheight = 1;
+						secundario.add(banner,gbc2);
+						
+						gbc2.gridx = 0;
+						gbc2.gridy = 1;
+						gbc2.gridwidth = 1;
+						gbc2.gridheight = 1;
+						gbc2.weighty = 1.0;
+						secundario.add(ventanaSec,gbc2);
+						
+						gbc2.gridx = 0;
+						gbc2.gridy = 2;
+						gbc2.gridwidth = 1;
+						gbc2.gridheight = 1;
+						secundario.add(cartel,gbc2);
+						
+						cp.add(secundario);
+						
+						volver2.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								
+								/*CONTENEDOR PRINCIPAL*/
+								
+								cp.removeAll();
+								cp.revalidate();
+								cp.repaint();
+								cp.add(ventanaPrincipal());
+								
+								ActionListener();		
+								
+							}
+						});
+						
+						cliente.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								
+								ingrese_nombre2 = new JLabel("Ingrese direccion IP del servidor: ");
+								texto_nombre2 = new JTextField(texto_nombre2.getText());
+								texto_nombre2.setPreferredSize(new Dimension(100,20));
+								texto_nombre2.addKeyListener((KeyListener) new KeyListener() {
+									
+									public void keyTyped(KeyEvent e) {
+										if (texto_nombre2.getText().length()== 12) {
+											e.consume(); 
+										}
+								    }
+
+									@Override
+									public void keyPressed(KeyEvent e) {}
+
+									@Override
+									public void keyReleased(KeyEvent e) {} 
+									
+								});
+								
+								ok2 = new JButton("OK");
+								
+								JPanel menu2 = new JPanel();
+								menu2.setLayout(new BoxLayout(menu2, BoxLayout.X_AXIS));
+								menu2.add(ingrese_nombre2);
+								menu2.add(texto_nombre2);
+								menu2.add(ok2);
+								
+								JPanel principal2 = new JPanel();
+								principal2.setLayout(new GridBagLayout());
+								GridBagConstraints gbc3 = new GridBagConstraints();
+								
+								gbc3.gridx = 0;
+								gbc3.gridy = 0;
+								gbc3.gridwidth = 1;
+								gbc3.gridheight = 1;
+								principal2.add(banner,gbc3);
+								
+								gbc3.gridx = 0;
+								gbc3.gridy = 1;
+								gbc3.gridwidth = 1;
+								gbc3.gridheight = 1;
+								gbc3.weighty = 1.0;
+								principal2.add(menu2,gbc3);
+								
+								gbc3.gridx = 0;
+								gbc3.gridy = 2;
+								gbc3.gridwidth = 1;
+								gbc3.gridheight = 1;
+								principal2.add(cartel,gbc3);
+								
+								cp.removeAll();
+								cp.revalidate();
+								cp.repaint();
+								cp.add(principal2);
+								
+								ok2.addActionListener(new ActionListener() {
+									
+									@Override
+									public void actionPerformed(ActionEvent e) {
+										
+										//CHEQUEAR QUE AGREGAR ACA CUANDO ESCRIBE LA DIRECCION IP
+										
+//										cp.removeAll();
+//										cp.revalidate();
+//										cp.repaint();
+//										cp.add(ventanaPrincipal());
+//										
+//										ActionListener();
+										
+									}
+								});	//FIN OK
+								
+							}
+						});
+						
+					}
+					
+				});
 				
 				jugarMaquina.addActionListener(new ActionListener() {
 					
@@ -566,7 +725,7 @@ public class Interfaz extends JFrame{
 								
 								JFrame confirmar = new JFrame();
 						        
-								if(j.getPuntos() >= 30 || MAQUINA.getPuntos() >= 30) {		//TODO - IMPORTANTE LIMPIAR EL JUEGO PARA QUE SE PUEDA VOLVER A JUGAR EN CASO DE QUE SE QUIERA
+								if(j.getPuntos() >= 30 || MAQUINA.getPuntos() >= 30) {
 									
 									//RESTAURO CADA VARIABLE
 										
@@ -627,7 +786,7 @@ public class Interfaz extends JFrame{
 									
 									
 								}
-								else {										//TODO - ESTO TAMBIEN HAY QUE LIMPIARLO
+								else {
 								
 									int result = JOptionPane.showConfirmDialog(confirmar, "�Esta seguro que desea salir? El juego se daria como perdido.");
 	
@@ -870,6 +1029,7 @@ public class Interfaz extends JFrame{
 		contorno3 = BorderFactory.createLineBorder(Color.BLACK);
 		
 		texto_nombre = new JTextField("");
+		texto_nombre2 = new JTextField("");
 		
 		cp = getContentPane();
 		
@@ -1904,7 +2064,7 @@ public class Interfaz extends JFrame{
 					
 					c1.setEnabled(false);
 					c2.setEnabled(false);
-					c3.setEnabled(false);			//CONSIDERAR ESTO POR SI NO SE VA AL MAZO Y TIRA DIR. TODO
+					c3.setEnabled(false);
 					
 					//LA IA GANA
 					MAQUINA.truco = true;
