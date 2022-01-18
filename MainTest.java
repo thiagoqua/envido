@@ -8,8 +8,7 @@ public class MainTest {
         Carta tiraj2[] = new Carta[2];
         Mazo mazo = new Mazo();
         String cantado[] = new String[5];
-        
-        
+
         Interfaz pantalla = new Interfaz();
         
         // cantado[0] = CANTOS[0];     //j1

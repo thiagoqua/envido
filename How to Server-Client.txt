@@ -1,0 +1,7 @@
+Servidor:
+	1 - desactivar el firewall de red pública.
+	2 - fijarse los puertos que están en uso en la red, elegir uno que no esté en uso y ponerlo en el cliente.
+	3 - en la pagina del router (la mía 192.168.0.1) abrir el puerto elegido en Port Forward (poniendo la dirección IP local como dirección del servidor).
+Cliente:
+	1 - poner la dirección de IP pública del servidor.
+	2 - poner el puerto elegido por el servidor.
