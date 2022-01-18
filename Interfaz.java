@@ -12,16 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import javax.swing.JOptionPane;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.border.Border;
 
 import java.util.Arrays;
@@ -151,6 +142,8 @@ public class Interfaz extends JFrame{
     private int ronda;
     
     private boolean irseAlMazo;
+
+	private final int defaultPort = 5010; 			//puerto para comunicación socket
 
     //
     
@@ -324,7 +317,14 @@ public class Interfaz extends JFrame{
 						secundario.add(cartel,gbc2);
 						
 						cp.add(secundario);
-						
+
+						servidor.addActionListener(new ActionListener() {
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								EnvidoServer server = new EnvidoServer(defaultPort);
+							}
+						});
+
 						volver2.addActionListener(new ActionListener() {
 							
 							@Override
@@ -354,7 +354,7 @@ public class Interfaz extends JFrame{
 									
 									public void keyTyped(KeyEvent e) {
 										if (texto_nombre2.getText().length()== 12) {
-											e.consume(); 
+											e.consume();
 										}
 								    }
 
@@ -367,6 +367,14 @@ public class Interfaz extends JFrame{
 								});
 								
 								ok2 = new JButton("OK");
+
+								ok2.addActionListener(new ActionListener() {
+									@Override
+									public void actionPerformed(ActionEvent e) {
+										String ip = texto_nombre2.getText();
+										EnvidoClient cliente = new EnvidoClient(ip,defaultPort);
+									}
+								});
 								
 								JPanel menu2 = new JPanel();
 								menu2.setLayout(new BoxLayout(menu2, BoxLayout.X_AXIS));
