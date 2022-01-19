@@ -322,22 +322,68 @@ public class Interfaz extends JFrame{
 							@Override
 							public void actionPerformed(ActionEvent e) {
 								EnvidoServer server = new EnvidoServer(defaultPort);
-							}
-						});
-
-						volver2.addActionListener(new ActionListener() {
-							
-							@Override
-							public void actionPerformed(ActionEvent e) {
 								
-								/*CONTENEDOR PRINCIPAL*/
+								//AGREGAR UN SLEEP SI LLEGA A HABER PROBLEMAS CON EL MENSAJE DE SOCKETS (TANTO PARA SERVIDOR COMO PARA CLIENTE)
 								
 								cp.removeAll();
 								cp.revalidate();
 								cp.repaint();
-								cp.add(ventanaPrincipal());
 								
-								ActionListener();		
+								JLabel chatear;
+								JTextField chat;
+								chat = new JTextField("");
+								
+								chatear = new JLabel("Envie mensajes a su amigo: ");
+								chat = new JTextField(chat.getText());
+								chat.setPreferredSize(new Dimension(200,20));
+								
+								JButton ok3;
+								ok3 = new JButton("ENVIAR");
+								
+								JPanel menu2 = new JPanel();
+								menu2.setLayout(new BoxLayout(menu2, BoxLayout.X_AXIS));
+								menu2.add(chatear);
+								menu2.add(chat);
+								menu2.add(ok3);
+								
+								JPanel principal2 = new JPanel();
+								principal2.setLayout(new GridBagLayout());
+								GridBagConstraints gbc3 = new GridBagConstraints();
+								
+								gbc3.gridx = 0;
+								gbc3.gridy = 0;
+								gbc3.gridwidth = 1;
+								gbc3.gridheight = 1;
+								principal2.add(banner,gbc3);
+								
+								gbc3.gridx = 0;
+								gbc3.gridy = 1;
+								gbc3.gridwidth = 1;
+								gbc3.gridheight = 1;
+								gbc3.weighty = 1.0;
+								principal2.add(menu2,gbc3);
+								
+								gbc3.gridx = 0;
+								gbc3.gridy = 2;
+								gbc3.gridwidth = 1;
+								gbc3.gridheight = 1;
+								principal2.add(cartel,gbc3);
+								
+								cp.add(principal2);
+								
+								ok3.addActionListener(new ActionListener() {
+									
+									@Override
+									public void actionPerformed(ActionEvent e) {
+										
+										//CADA VEZ QUE SE APRETA 'OK' SE ENVIA EL MENSAJE A LA OTRA COMPUTADORA
+										//DESARROLLO DE LA PARTE DE SOCKETS
+										
+										//PARA SABER QUIEN ENVIA QUE MENSAJE, ADELANTE DEL MENSAJE PUEDE HABER UN SIMBOLO TIPO '#' PARA EL CLIENTE Y '$' PARA EL SERVIDOR
+										//O DIRECTAMENTE UN TEXTO QUE DIGA QUIEN ES CLIENTE O SERVIDOR
+										
+									}
+								});
 								
 							}
 						});
@@ -373,6 +419,67 @@ public class Interfaz extends JFrame{
 									public void actionPerformed(ActionEvent e) {
 										String ip = texto_nombre2.getText();
 										EnvidoClient cliente = new EnvidoClient(ip,defaultPort);
+										
+										cp.removeAll();
+										cp.revalidate();
+										cp.repaint();
+										
+										JLabel chatear;
+										JTextField chat;
+										chat = new JTextField("");
+										
+										chatear = new JLabel("Envie mensajes a su amigo: ");
+										chat = new JTextField(chat.getText());
+										chat.setPreferredSize(new Dimension(200,20));
+										
+										JButton ok3;
+										ok3 = new JButton("ENVIAR");
+										
+										JPanel menu2 = new JPanel();
+										menu2.setLayout(new BoxLayout(menu2, BoxLayout.X_AXIS));
+										menu2.add(chatear);
+										menu2.add(chat);
+										menu2.add(ok3);
+										
+										JPanel principal2 = new JPanel();
+										principal2.setLayout(new GridBagLayout());
+										GridBagConstraints gbc3 = new GridBagConstraints();
+										
+										gbc3.gridx = 0;
+										gbc3.gridy = 0;
+										gbc3.gridwidth = 1;
+										gbc3.gridheight = 1;
+										principal2.add(banner,gbc3);
+										
+										gbc3.gridx = 0;
+										gbc3.gridy = 1;
+										gbc3.gridwidth = 1;
+										gbc3.gridheight = 1;
+										gbc3.weighty = 1.0;
+										principal2.add(menu2,gbc3);
+										
+										gbc3.gridx = 0;
+										gbc3.gridy = 2;
+										gbc3.gridwidth = 1;
+										gbc3.gridheight = 1;
+										principal2.add(cartel,gbc3);
+										
+										cp.add(principal2);
+										
+										ok3.addActionListener(new ActionListener() {
+											
+											@Override
+											public void actionPerformed(ActionEvent e) {
+												
+												//CADA VEZ QUE SE APRETA 'OK' SE ENVIA EL MENSAJE A LA OTRA COMPUTADORA
+												//DESARROLLO DE LA PARTE DE SOCKETS
+												
+												//PARA SABER QUIEN ENVIA QUE MENSAJE, ADELANTE DEL MENSAJE PUEDE HABER UN SIMBOLO TIPO '#' PARA EL CLIENTE Y '$' PARA EL SERVIDOR
+													//O DIRECTAMENTE UN TEXTO QUE DIGA QUIEN ES CLIENTE O SERVIDOR
+												
+											}
+										});
+										
 									}
 								});
 								
@@ -410,22 +517,23 @@ public class Interfaz extends JFrame{
 								cp.repaint();
 								cp.add(principal2);
 								
-								ok2.addActionListener(new ActionListener() {
-									
-									@Override
-									public void actionPerformed(ActionEvent e) {
-										
-										//CHEQUEAR QUE AGREGAR ACA CUANDO ESCRIBE LA DIRECCION IP
-										
-//										cp.removeAll();
-//										cp.revalidate();
-//										cp.repaint();
-//										cp.add(ventanaPrincipal());
-//										
-//										ActionListener();
-										
-									}
-								});	//FIN OK
+							}
+						});
+						
+						
+						volver2.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								
+								/*CONTENEDOR PRINCIPAL*/
+								
+								cp.removeAll();
+								cp.revalidate();
+								cp.repaint();
+								cp.add(ventanaPrincipal());
+								
+								ActionListener();		
 								
 							}
 						});
