@@ -383,7 +383,7 @@ public class Interfaz extends JFrame{
 
 										server.send("servidor:" + chat.getText());
 
-										fueEnviadoS = true;
+										//fueEnviadoS = true;
 										
 										//CADA VEZ QUE SE APRETA 'OK' SE ENVIA EL MENSAJE A LA OTRA COMPUTADORA
 										//DESARROLLO DE LA PARTE DE SOCKETS
@@ -393,11 +393,8 @@ public class Interfaz extends JFrame{
 										
 									}
 								});
-								if(fueEnviadoS){
-									String recibo = server.receive();
-									System.out.println(recibo);
-									fueEnviadoS = false;
-								}
+								String recibo = server.receive();
+								System.out.println(recibo);
 								
 							}
 						});
@@ -497,11 +494,9 @@ public class Interfaz extends JFrame{
 											}
 										});
 										if(fueEnviadoC){
-											String recibo = server.receive();
+											String recibo = cliente.receive();
 											System.out.println(recibo);
-											fueEnviadoC = false;
 										}
-										
 									}
 								});
 								
