@@ -35,6 +35,7 @@ public class EnvidoServer{
 
     public void send(Object o){
         try{
+            listener = server.accept();
             dout = new DataOutputStream(listener.getOutputStream());
             dout.writeUTF(o.toString());
             dout.flush();
