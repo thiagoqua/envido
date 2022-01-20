@@ -152,6 +152,10 @@ public class Interfaz extends JFrame{
     private JPanel panel2;			//SIRVE PARA INTERCAMBIAR LA IMAGEN DE MAZO Y MANO
 	
 	private JTextField chat;
+
+	private Boolean fueEnviadoS = false;
+
+	private Boolean fueEnviadoC = false;
     
 	
 	public Interfaz() {
@@ -378,6 +382,8 @@ public class Interfaz extends JFrame{
 									public void actionPerformed(ActionEvent e) {
 
 										server.send("servidor:" + chat.getText());
+
+										fueEnviadoS = true;
 										
 										//CADA VEZ QUE SE APRETA 'OK' SE ENVIA EL MENSAJE A LA OTRA COMPUTADORA
 										//DESARROLLO DE LA PARTE DE SOCKETS
@@ -387,10 +393,11 @@ public class Interfaz extends JFrame{
 										
 									}
 								});
-								
-								String recibo = server.receive();
-
-								System.out.println(recibo);
+								if(fueEnviadoS){
+									String recibo = server.receive();
+									System.out.println(recibo);
+									fueEnviadoS = false;
+								}
 								
 							}
 						});
@@ -478,6 +485,8 @@ public class Interfaz extends JFrame{
 											public void actionPerformed(ActionEvent e) {
 
 												cliente.send(chat.getText());
+
+												fueEnviadoC = true;
 												
 												//CADA VEZ QUE SE APRETA 'OK' SE ENVIA EL MENSAJE A LA OTRA COMPUTADORA
 												//DESARROLLO DE LA PARTE DE SOCKETS
@@ -487,10 +496,11 @@ public class Interfaz extends JFrame{
 												
 											}
 										});
-										
-										String recibo = cliente.receive();
-
-										System.out.println(recibo);
+										if(fueEnviadoC){
+											String recibo = server.receive();
+											System.out.println(recibo);
+											fueEnviadoC = false;
+										}
 										
 									}
 								});
