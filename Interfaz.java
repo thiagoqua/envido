@@ -150,6 +150,8 @@ public class Interfaz extends JFrame{
     /*OTROS*/
     
     private JPanel panel2;			//SIRVE PARA INTERCAMBIAR LA IMAGEN DE MAZO Y MANO
+	
+	private JTextField chat;
     
 	
 	public Interfaz() {
@@ -330,7 +332,6 @@ public class Interfaz extends JFrame{
 								cp.repaint();
 								
 								JLabel chatear;
-								JTextField chat;
 								chat = new JTextField("");
 								
 								chatear = new JLabel("Envie mensajes a su amigo: ");
@@ -375,6 +376,8 @@ public class Interfaz extends JFrame{
 									
 									@Override
 									public void actionPerformed(ActionEvent e) {
+
+										server.send("servidor:" + chat.getText());
 										
 										//CADA VEZ QUE SE APRETA 'OK' SE ENVIA EL MENSAJE A LA OTRA COMPUTADORA
 										//DESARROLLO DE LA PARTE DE SOCKETS
@@ -384,6 +387,10 @@ public class Interfaz extends JFrame{
 										
 									}
 								});
+								
+								String recibo = server.receive();
+
+								System.out.println(recibo);
 								
 							}
 						});
@@ -425,7 +432,6 @@ public class Interfaz extends JFrame{
 										cp.repaint();
 										
 										JLabel chatear;
-										JTextField chat;
 										chat = new JTextField("");
 										
 										chatear = new JLabel("Envie mensajes a su amigo: ");
@@ -470,6 +476,8 @@ public class Interfaz extends JFrame{
 											
 											@Override
 											public void actionPerformed(ActionEvent e) {
+
+												cliente.send(chat.getText());
 												
 												//CADA VEZ QUE SE APRETA 'OK' SE ENVIA EL MENSAJE A LA OTRA COMPUTADORA
 												//DESARROLLO DE LA PARTE DE SOCKETS
@@ -479,6 +487,10 @@ public class Interfaz extends JFrame{
 												
 											}
 										});
+										
+										String recibo = cliente.receive();
+
+										System.out.println(recibo);
 										
 									}
 								});
