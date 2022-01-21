@@ -70,6 +70,8 @@ public class EnvidoServer{
         this.enable();              //si se conecto algun cliente es cuando abro los canales de entrada-salida
     return true;}
 
+    public boolean getIsConnected(){return isConnected;}
+
     public void close(){
         try{
             server.close();

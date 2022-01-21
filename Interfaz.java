@@ -337,9 +337,11 @@ public class Interfaz extends JFrame{
 								chatear = new JLabel("Envie mensajes a su amigo: ");
 								chat = new JTextField(chat.getText());
 								chat.setPreferredSize(new Dimension(200,20));
+								chat.setEnabled(false);
 								
 								JButton ok3;
 								ok3 = new JButton("ENVIAR");
+								ok3.setEnabled(false);
 								
 								JPanel menu2 = new JPanel();
 								menu2.setLayout(new BoxLayout(menu2, BoxLayout.X_AXIS));
@@ -371,6 +373,34 @@ public class Interfaz extends JFrame{
 								principal2.add(cartel,gbc3);
 								
 								cp.add(principal2);
+
+								Thread enableButtons = new Thread(){
+									@Override
+									public void run() {
+										while(true){
+											if(server.getIsConnected()){
+												chat.setEnabled(true);
+												ok3.setEnabled(true);
+												break;
+											}
+											else{
+												try{		
+													Thread.sleep(400);		//para evitar que el bucle se ejecute tan seguido
+												} catch(InterruptedException ie) {}
+											}
+										}
+									}
+								};
+								Thread respuesta = new Thread(){
+									public void run(){
+										while(true){
+											while((recibo = server.receive()) != null){
+												System.out.println(recibo);
+											}
+										}
+									}
+								};
+
 								ok3.addActionListener(new ActionListener() {
 									
 									@Override
@@ -381,18 +411,12 @@ public class Interfaz extends JFrame{
 										}
 										server.send("servidor: " + chat.getText());
 										System.out.println("yo: " + chat.getText());
+										chat.setText("");
 									}
 								});
-								Thread respuesta = new Thread(){
-									public void run(){
-										while(true){
-											while((recibo = server.receive()) != null){
-												System.out.println(recibo);
-											}
-										}
-									}
-								};
+								
 								respuesta.start();
+								enableButtons.start();
 							}
 						});
 						
@@ -483,6 +507,7 @@ public class Interfaz extends JFrame{
 												}
 												client.send("cliente: " + chat.getText());
 												System.out.println("yo: " + chat.getText());
+												chat.setText("");
 											}
 										});
 										Thread respuesta = new Thread(){
