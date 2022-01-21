@@ -143,7 +143,6 @@ public class Interfaz extends JFrame{
     
     private boolean irseAlMazo;
 
-	private final int defaultPort = 5010; 			//puerto para comunicación socket
 
     //
     
@@ -151,17 +150,16 @@ public class Interfaz extends JFrame{
     
     private JPanel panel2;			//SIRVE PARA INTERCAMBIAR LA IMAGEN DE MAZO Y MANO
 	
+	/*OBJETOS PARA SOCKETS*/
+	private final int defaultPort; 			//puerto para comunicación socket
 	private JTextField chat;
-
-	private Boolean fueEnviadoS = false;
-
-	private Boolean fueEnviadoC = false;
+	private String recibo;
     
 	
 	public Interfaz() {
-	
+		defaultPort = 5010;
+		recibo = new String();
 		interfazCreacion();
-	
 	}
 	
 	
@@ -329,8 +327,6 @@ public class Interfaz extends JFrame{
 							public void actionPerformed(ActionEvent e) {
 								EnvidoServer server = new EnvidoServer(defaultPort);
 								
-								//AGREGAR UN SLEEP SI LLEGA A HABER PROBLEMAS CON EL MENSAJE DE SOCKETS (TANTO PARA SERVIDOR COMO PARA CLIENTE)
-								
 								cp.removeAll();
 								cp.revalidate();
 								cp.repaint();
@@ -375,27 +371,28 @@ public class Interfaz extends JFrame{
 								principal2.add(cartel,gbc3);
 								
 								cp.add(principal2);
-								
 								ok3.addActionListener(new ActionListener() {
 									
 									@Override
-									public void actionPerformed(ActionEvent e) {
-
-										server.send("servidor:" + chat.getText());
-
-										//fueEnviadoS = true;
-										
-										//CADA VEZ QUE SE APRETA 'OK' SE ENVIA EL MENSAJE A LA OTRA COMPUTADORA
-										//DESARROLLO DE LA PARTE DE SOCKETS
-										
-										//PARA SABER QUIEN ENVIA QUE MENSAJE, ADELANTE DEL MENSAJE PUEDE HABER UN SIMBOLO TIPO '#' PARA EL CLIENTE Y '$' PARA EL SERVIDOR
-										//O DIRECTAMENTE UN TEXTO QUE DIGA QUIEN ES CLIENTE O SERVIDOR
-										
+									public void actionPerformed(ActionEvent e){
+										if(chat.getText().equalsIgnoreCase("exit")){
+											server.close();
+											System.exit(11);
+										}
+										server.send("servidor: " + chat.getText());
+										System.out.println("yo: " + chat.getText());
 									}
 								});
-								String recibo = server.receive();
-								System.out.println(recibo);
-								
+								Thread respuesta = new Thread(){
+									public void run(){
+										while(true){
+											while((recibo = server.receive()) != null){
+												System.out.println(recibo);
+											}
+										}
+									}
+								};
+								respuesta.start();
 							}
 						});
 						
@@ -429,7 +426,7 @@ public class Interfaz extends JFrame{
 									@Override
 									public void actionPerformed(ActionEvent e) {
 										String ip = texto_nombre2.getText();
-										EnvidoClient cliente = new EnvidoClient(ip,defaultPort);
+										EnvidoClient client = new EnvidoClient(ip,defaultPort);
 										
 										cp.removeAll();
 										cp.revalidate();
@@ -480,23 +477,23 @@ public class Interfaz extends JFrame{
 											
 											@Override
 											public void actionPerformed(ActionEvent e) {
-
-												cliente.send(chat.getText());
-
-												fueEnviadoC = true;
-												
-												//CADA VEZ QUE SE APRETA 'OK' SE ENVIA EL MENSAJE A LA OTRA COMPUTADORA
-												//DESARROLLO DE LA PARTE DE SOCKETS
-												
-												//PARA SABER QUIEN ENVIA QUE MENSAJE, ADELANTE DEL MENSAJE PUEDE HABER UN SIMBOLO TIPO '#' PARA EL CLIENTE Y '$' PARA EL SERVIDOR
-													//O DIRECTAMENTE UN TEXTO QUE DIGA QUIEN ES CLIENTE O SERVIDOR
-												
+												if(chat.getText().equalsIgnoreCase("exit")){
+													client.close();
+													System.exit(12);
+												}
+												client.send("cliente: " + chat.getText());
+												System.out.println("yo: " + chat.getText());
 											}
 										});
-										if(fueEnviadoC){
-											String recibo = cliente.receive();
-											System.out.println(recibo);
-										}
+										Thread respuesta = new Thread(){
+											public void run() {
+												while(true){
+													recibo = client.receive();
+													System.out.println(recibo);
+												}
+											};
+										};
+										respuesta.start();
 									}
 								});
 								

@@ -9,11 +9,13 @@ public class EnvidoClient{
     private Socket client;
     private DataInputStream din;
     private DataOutputStream dout;
+    private boolean isEnabled;
 
     public EnvidoClient(String ip,int port){
         try{
             client = new Socket(InetAddress.getByName(ip),port);
-            System.out.println("client succesfully connected");
+            System.out.println("cliente conectado al servidor de manera exitosa.");
+            isEnabled = false;
         } catch(IOException ioe){
             System.out.println("no pudimos crear el cliente. abortamos.");
             System.exit(2);
@@ -22,8 +24,9 @@ public class EnvidoClient{
 
     public String receive(){
         String readed = new String();
+        if(!isEnabled)
+            this.enable();
         try{
-            din = new DataInputStream(client.getInputStream());
             readed = din.readUTF();
         } catch(IOException ioe){
             System.out.println("no pudimos recibir el paquete. abortamos.");
@@ -32,8 +35,9 @@ public class EnvidoClient{
         return readed;}
 
     public void send(Object o){
+        if(!isEnabled)
+            this.enable();
         try{
-            dout = new DataOutputStream(client.getOutputStream());
             dout.writeUTF(o.toString());
             dout.flush();
         } catch(IOException ioe){
@@ -42,14 +46,24 @@ public class EnvidoClient{
         }
     }
 
+    public void enable(){
+        try{
+            din = new DataInputStream(client.getInputStream());
+            dout = new DataOutputStream(client.getOutputStream());
+        } catch(IOException ioe){
+            System.out.println("no pudimos habilitar el cliente. abortamos.");
+            System.exit(9);
+        }
+        isEnabled = true;
+    }
+
     public void close(){
         try{
             client.close();
             din.close();
             dout.close();
         } catch(IOException ioe){
-            System.out.println("no pudimos cerrar el cliente. abortamos.");
-            //System.exit(2);
+            System.out.println("no pudimos cerrar el cliente.");
         }
     }
 }
