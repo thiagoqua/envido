@@ -2,8 +2,8 @@ import java.util.Arrays;
 
 public class IA extends Jugador{
 
-    private short nroMano;                              //si se está jugando primera, segunda o tercera
-    private boolean puedoCantarEnvido;                  //la habilito desde main cuando estoy en la primer mano
+    private short nroMano;                          //si se está jugando primera, segunda o tercera
+    private boolean puedoCantarEnvido;
     private boolean mentimos;
 
     public IA(){
@@ -12,15 +12,15 @@ public class IA extends Jugador{
         //super(tag);
     }
 	
-    public void activatePuedoCantarEnvido(boolean cond){puedoCantarEnvido = cond;}
+    public void setPuedoCantarEnvido(boolean cond){puedoCantarEnvido = cond;}
 
-    public void reset(){                                        //lo invoco al finalizar cada ronda
+    public void reset(){
         nroMano = 1;
         puedoCantarEnvido = mentimos = false;
         super.reset();
     }
 
-    public Carta[] yourTurn(String cantos[],Carta tirada){      //metodo que se invocaría cada vez que le toca jugar a la IA
+    public Carta[] yourTurn(String cantos[],Carta tirada){      //turno de la IA de jugar
         super.bandera = true;
         yourTurnEnvido(cantos);
         super.bandera = false;
@@ -34,20 +34,20 @@ public class IA extends Jugador{
             if(puntosEnvido <= 24 && mentimos){                 //si no tengo puntos y puedo mentir
                 System.out.println("SE MIENTE PERRO");
                 super.cantoPrimi = true;
-                cantar(0,cantos);           //canto envido
+                cantar(0,cantos);                   //canto envido
             }
             else{
                 if(puntosEnvido > 24 && puntosEnvido < 29){
                     super.cantoPrimi = true;
-                    cantar(0,cantos);      //canto envido
+                    cantar(0,cantos);               //canto envido
                 }
                 else if(puntosEnvido >= 28 && puntosEnvido < 32){
                     super.cantoPrimi = true;
-                    cantar(1,cantos);       //canto real envido
+                    cantar(1,cantos);               //canto real envido
                 }
                 else if(puntosEnvido >= 32){
                     super.cantoPrimi = true;
-                    cantar(2,cantos);       //canto falta envido
+                    cantar(2,cantos);               //canto falta envido
                 }
                 puedoCantarEnvido = false;
             }
@@ -58,9 +58,9 @@ public class IA extends Jugador{
         int mato,cartasGood,manyNulls;
         manyNulls = cartasNull();
         Carta tiro[] = new Carta[2];
-        if(tirada == null){                             //si todavía no se tiraron cartas
-            if(nroMano == 1){                           //si estoy en la primer mano
-                if(Math.random() > 0.5)                 //va a ir alternando entre tirar alto y bajo en la primer mano cuando tiene que jugar
+        if(tirada == null){                         //si todavía no se tiraron cartas
+            if(nroMano == 1){
+                if(Math.random() > 0.5)             //va a ir alternando entre tirar alto y bajo en la primer mano
                     tiro[0] = tirarBajo();
                 else
                     tiro[0] = tirarAlto();
@@ -69,200 +69,196 @@ public class IA extends Jugador{
             }
             else{
                 checkIfMentimos();    
-                if((cartasGood = currentGoods()) > 0){     //si tengo cartas buenas
-                    if(!super.isCantado("truco",cantos)){     //si no esta cantado el truco
+                if((cartasGood = currentGoods()) > 0){
+                    if(!super.isCantado("truco",cantos)){
                         super.cantoPrimi = true;
-                        cantar(3,cantos);                   //canto truco
+                        cantar(3,cantos);           //canto truco
                     }
-                } else if(mentimos) {                    //si no tengo cartas buenas pero puedo mentir
+                } else if(mentimos) {               //si no tengo cartas buenas pero puedo mentir
                     super.cantoPrimi = true;
-                    cantar(3,cantos);                   //canto truco
+                    cantar(3,cantos);               //canto truco
                 }
                 tiro[0] = tirarAlto();                      
                 ++nroMano;
                 return tiro;
             }
         }
-        else{                                           //si el jugador ya tiro una carta
+        else{                                       //si el jugador ya tiro una carta
             mato = someKillsIt(tirada);
             checkIfMentimos();
-            if(mato == -1){                                 //si no la mato ni empardo tiro una baja
+            if(mato == -1){                                     //si no la mato ni empardo tiro una baja
                 tiro[0] = tirarBajo();
                 ++nroMano;
                 return tiro;
             }
-            else if(isParda(super.cartas[mato],tirada)){    //si la empardo
-                tiro[0] = super.tirar(mato);                //la empardo
+            else if(isParda(super.cartas[mato],tirada)){        //si la empardo
+                tiro[0] = super.tirar(mato);
                 ++nroMano;
                 return tiro;
             }
-            else{                                           //si la mato
-                tiro[0] = super.tirar(mato);                //la mato
-                manyNulls = cartasNull();                   //me vuelvo a fijar las nulas una vez ya tirada una carta
-                cartasGood = currentGoods();                //me fijo cuantas cartas buenas tengo despues de matar
+            else{                                               //si la mato
+                tiro[0] = super.tirar(mato);
+                manyNulls = cartasNull();           //me vuelvo a fijar cuantas cartas me quedan una vez ya tirada una carta
+                cartasGood = currentGoods();        //me fijo cuantas cartas buenas tengo despues de matar
                 checkIfMentimos();
-                if(cartasGood > 0){                         //si tengo cartas buenas
-                    if(!super.isCantado("truco",cantos)){   //si no esta cantado el truco
+                if(cartasGood > 0){                             //si tengo cartas buenas
+                    if(!super.isCantado("truco",cantos)){
                         super.cantoPrimi = true;
-                        cantar(3,cantos);                   //canto truco
+                        cantar(3,cantos);                       //canto truco
                     }
-                    if(manyNulls != 3){                     //si todavía tengo cartas una vez que tire
-                        tiro[1] = tirarAlto();              //reviento
+                    if(manyNulls != 3){                         //si todavía tengo cartas una vez que tire
+                        tiro[1] = tirarAlto();
                         ++nroMano;
                     }
-                    //si no tengo mas cartas es porque maté en 3ra, y por ende retorno 1 sola
+                    /*si no tengo mas cartas es porque maté en 3ra, y por ende retorno 1 sola*/
                     return tiro;
                 }
-                else if(mentimos){                          //si no tengo cartas buenas pero puedo mentir
-                    if(!super.isCantado("truco",cantos)){   //si no esta cantado el truco
+                else if(mentimos){                              //si no tengo cartas buenas pero puedo mentir
+                    if(!super.isCantado("truco",cantos)){
                         super.cantoPrimi = true;
-                        cantar(3,cantos);                   //canto truco
+                        cantar(3,cantos);
                     }
-                    if(manyNulls != 3){                     //si todavía tengo cartas una vez que tire
-                        tiro[1] = tirarBajo();              //tiro baja
+                    if(manyNulls != 3){
+                        tiro[1] = tirarBajo();
                         ++nroMano;
                     }
-                    //si no tengo mas cartas es porque maté en 3ra, y por ende retorno 1 sola
                     return tiro;
                 }
-                else{                                       //si no tengo cartas buenas y no puedo mentir
-                    if(manyNulls != 3){                     //si todavía tengo cartas una vez que tire
-                        tiro[1] = tirarBajo();              //tiro baja
+                else{                                           //si no tengo cartas buenas y no puedo mentir
+                    if(manyNulls != 3){
+                        tiro[1] = tirarBajo();
                         ++nroMano;
                     }
-                    //si no tengo mas cartas es porque maté en 3ra, y por ende retorno 1 sola
                     return tiro;
                 }
             }
         }
     }
 
-    public void yourTurnAccept(String cantos[]){             //metodo que se invocaria cada vez que tiene que aceptar, rechazar o revirar la IA
-        
+    public void yourTurnAccept(String cantos[]){                //turno de la IA de aceptar, rechazar o revirar la IA
     	int end = 0,puntosEnvido,cartasGood,manyNulls,totalCartasGood;
         manyNulls = cartasNull();
         puntosEnvido = getPuntosEnvido();
-        cartasGood = currentGoods();                             //por si el jugador me canta truco una vez que yo haya jugado todas mis cartas
+        cartasGood = currentGoods();                            //por si el jugador me canta truco una vez que yo haya jugado todas mis cartas
         totalCartasGood = totalGoods();
         checkIfMentimos();
-        while(cantos[end+1] != null && cantos[end+1] != ""){++end;}                    //accedo a lo ultimo que se canto
-        if(end > 0 && cantos[end-1].equals("envido") && cantos[end].equals("envido")){//si se canta envido envido
+        while(cantos[end+1] != null && cantos[end+1] != ""){++end;}
+        if(end > 0 && cantos[end-1].equals("envido") && cantos[end].equals("envido")){
             if(puntosEnvido > 26 && puntosEnvido <= 28){
-                cantar(6,cantos);           //quiero
+                cantar(6,cantos);                   //quiero
             }
             else if(puntosEnvido > 28 && puntosEnvido <= 31){
-                cantar(1,cantos);           //real envido
+                cantar(1,cantos);                   //real envido
             }
             else if(puntosEnvido > 31){
-                cantar(2,cantos);           //falta envido
+                cantar(2,cantos);                   //falta envido
             }
             else if(puntosEnvido < 25 && mentimos){
                 System.out.println("SE MIENTE PERRO.");
-                cantar(1,cantos);           //real envido
+                cantar(1,cantos);                   //real envido
             }
             else{
-                cantar(7,cantos);           //no quiero
+                cantar(7,cantos);                   //no quiero
             }
         }
         else if(cantos[end].equals("envido")){
             if(puntosEnvido > 24 && puntosEnvido <= 26){
-                cantar(6,cantos);           //quiero
+                cantar(6,cantos);                   //quiero
             }
             else if(puntosEnvido > 26 && puntosEnvido <= 28){
-                cantar(6,cantos);           //quiero
+                cantar(6,cantos);                   //quiero
             }
             else if(puntosEnvido > 28 && puntosEnvido <= 31){
-                cantar(1,cantos);           //real envido
+                cantar(1,cantos);                   //real envido
             }
             else if(puntosEnvido > 31){
-                cantar(2,cantos);           //falta envido
+                cantar(2,cantos);                   //falta envido
             }
-            else if(puntosEnvido <= 24 && mentimos){            //si no tengo puntos y puedo mentir
+            else if(puntosEnvido <= 24 && mentimos){
                 System.out.println("SE MIENTE PERRO.");
-                cantar(1,cantos);           //real envido                  //canto el real envido
+                cantar(1,cantos);                   //real envido
             }
             else{
-                cantar(7,cantos);           //no quiero
+                cantar(7,cantos);                   //no quiero
             }
         }
         else if(cantos[end].equals("real envido")){
             if(puntosEnvido > 28 && puntosEnvido <= 31){
-                cantar(6,cantos);           //quiero
+                cantar(6,cantos);                   //quiero
             }
             else if(puntosEnvido > 31){
-                cantar(2,cantos);           //falta envido
+                cantar(2,cantos);                   //falta envido
             }
-            else if(puntosEnvido <= 27 && mentimos){            //si no tengo puntos y puedo mentir
-                System.out.println("SE MIENTE PERRO.");
-                cantar(2,cantos);           //falta envido                 //canto la falta envido
+            else if(puntosEnvido <= 27 && mentimos){
+                cantar(2,cantos);                   //falta envido
             }
             else{
-                cantar(7,cantos);           //no quiero
+                cantar(7,cantos);                   //no quiero
             }
         }
         else if(cantos[end].equals("falta envido")){
             if(puntosEnvido > 31){
-                cantar(6,cantos);           //quiero
+                cantar(6,cantos);                   //quiero
             }
             else{
-                cantar(7,cantos);           //no quiero
+                cantar(7,cantos);                   //no quiero
             }
         }
         else if(cantos[end].equals("truco")){
             if(nroMano == 1 && puedoCantarEnvido){  //puedo cantar el envido antes ya que el jugador me canto truco apenas empieza
                 if(puntosEnvido >= 25){
-                    cantos[end] = null;         //vaceo la posicion para que funcione sist puntuacion
-                    cantar(0,cantos);           //canto envido
+                    cantos[end] = null;             //para que funcione sist puntuacion
+                    cantar(0,cantos);               //canto envido
                 }
             }
             else if(cartasGood == 1 || totalCartasGood > 1){
-                cantar(6,cantos);           //quiero
+                cantar(6,cantos);                   //quiero
             }
             else if(cartasGood >= 2){
-                cantar(4,cantos);           //retruco
+                cantar(4,cantos);                   //retruco
             }
-            else if(manyNulls == 3 && totalCartasGood > 1){  //si ya tire todas, mis cartas fueron buenas y me cantaron truco
+            else if(manyNulls == 3 && totalCartasGood > 1){     //si ya tire todas y mis cartas fueron buenas
                 cantar(3,cantos);
             }
-            else if(totalCartasGood < 1 && mentimos){                //si no tengo cartas buenas y puedo mentir
+            else if(totalCartasGood < 1 && mentimos){
                 System.out.println("SE MIENTE PERRO");
-                cantar(4,cantos);           //retruco                  //canto el retruco
+                cantar(4,cantos);                   //retruco
             }
             else{
-                cantar(7,cantos);           //no quiero
+                cantar(7,cantos);                   //no quiero
             }
         }
         else if(cantos[end].equals("retruco")){
             if(cartasGood == 2 || totalCartasGood >= 2){
-                cantar(6,cantos);           //quiero
+                cantar(6,cantos);                   //quiero
             }
             else if(cartasGood == 3 || totalCartasGood >= 2){
-                cantar(5,cantos);           //vale cuatro
+                cantar(5,cantos);                   //vale cuatro
             }
-            else if(cartasGood < 2 && mentimos){                //si no tengo cartas buenas y puedo mentir
+            else if(cartasGood < 2 && mentimos){
                 System.out.println("SE MIENTE PERRO");
-                cantar(5,cantos);           //vale cuatro                  //canto el vale cuatro
+                cantar(5,cantos);                   //vale cuatro
             }
-            else if(manyNulls == 3 && totalCartasGood > 1){  //si ya tire todas, mis cartas fueron buenas y me cantaron truco
+            else if(manyNulls == 3 && totalCartasGood > 1){
                 cantar(3,cantos);
             }
             else{
-                cantar(7,cantos);           //no quiero
+                cantar(7,cantos);                   //no quiero
             }
         }
         else if(cantos[end].equals("vale cuatro")){
             if(cartasGood == 3 || totalCartasGood >= 2){
-                cantar(6,cantos);           //quiero
+                cantar(6,cantos);                   //quiero
             }
             else{
-                cantar(7,cantos);           //no quiero
+                cantar(7,cantos);                   //no quiero
             }
         }
     }
 
-	private void cantar(int queCanto,String cantos[]){       //queCanto hace referencia al arreglo de cantos constantes
+	private void cantar(int queCanto,String cantos[]){          //queCanto hace referencia al indice del arreglo de cantos constantes
         int end = 0;
-        while(cantos[end] != null && cantos[end] != ""){++end;}                    //accedo a lo ultimo que se canto
+        while(cantos[end] != null && cantos[end] != ""){++end;}
         switch(queCanto){
             case 0:
                 cantos[end] = "envido";
@@ -291,9 +287,9 @@ public class IA extends Jugador{
         }
 	}
 	
-    private int someKillsIt(Carta aMatar){                  //retorna el indice de mi carta que mata a la del j2
+    private int someKillsIt(Carta aMatar){                      //retorna el indice de mis cartas que mata a la del j2
         int manyKillsIt = 0,index;
-        for(Carta temp : super.cartas){                     //me fijo cuantas de mis cartas matan a la que tiro j2
+        for(Carta temp : super.cartas){
             try{
                 if(temp != null && temp.mata(aMatar))
                     ++manyKillsIt;
@@ -301,8 +297,8 @@ public class IA extends Jugador{
                 continue;
             }
         }
-        if(manyKillsIt == 1){                               //si solamente una de mis cartas la mata
-            for(index = 0;index < 3;++index){               //la busco
+        if(manyKillsIt == 1){
+            for(index = 0;index < 3;++index){                   //busco a la unica carta que la mata
                 try{
                     if(super.cartas[index] != null && super.cartas[index].mata(aMatar))
                         return index;
@@ -311,9 +307,9 @@ public class IA extends Jugador{
                 }
             }
         }
-        else if(manyKillsIt == 2){                          //si dos de mis cartas la matan
+        else if(manyKillsIt == 2){
             int indexes[] = new int[2],i = 0;
-            for(index = 0;index < 3;++index){               //las busco
+            for(index = 0;index < 3;++index){
                 try{
                     if(super.cartas[index] != null && super.cartas[index].mata(aMatar)){
                         indexes[i] = index;
@@ -332,7 +328,7 @@ public class IA extends Jugador{
                 return indexes[0];
             }
         }
-        else if(manyKillsIt == 3){                          //si las 3 cartas la matan, retorno la mas baja
+        else if(manyKillsIt == 3){
             try{
                 if(!super.cartas[0].mata(super.cartas[1]) && !super.cartas[0].mata(super.cartas[2]))
                     return 0;
@@ -340,7 +336,7 @@ public class IA extends Jugador{
                     return 1;
                 else 
                     return 2;
-            } catch(PardaExeption pe){                      //si algunas de las cartas que las matan son iguales
+            } catch(PardaExeption pe){                          //si algunas de las cartas que las matan son iguales
                 if(super.cartas[0].getNumero() == pe.numeroCarta){
                     try{
                         if(!super.cartas[0].mata(super.cartas[1]))
@@ -358,26 +354,25 @@ public class IA extends Jugador{
                     }
                 }
                 else if(super.cartas[0].getNumero() == super.cartas[1].getNumero() && super.cartas[0].getNumero() == super.cartas[2].getNumero()){
-                    //si son las 3 iguales
-                    return 0;                               //devuelvo cualquiera
+                    return 0;                                   //devuelvo cualquiera
                 }
             }
         }
-    return someEmpardaIt(aMatar);}                          //si no la mato retorna -1
+    return someEmpardaIt(aMatar);}                              //si llegue hasta aca es porque ninguna la mata
 
-    private int someEmpardaIt(Carta aEmpardar){             //retorna el indice de la carta que emparda a la de j2
+    private int someEmpardaIt(Carta aEmpardar){
         for(int index = 0;index < 3;++index){
             try{
                 if(super.cartas[index] != null) {
-                	super.cartas[index].mata(aEmpardar);        //invoco a la funcion solamente esperando a la exepcion
+                	super.cartas[index].mata(aEmpardar);
                 }
             } catch(PardaExeption pe){
-                return index;                               //si la emparda, retorna el indice
+                return index;
             }
         }
-    return -1;}                                             //si no la mata ni emparda, devuelve -1
+    return -1;}                                                 //si no la mata ni emparda, devuelve -1
 
-    private boolean isParda(Carta mine,Carta enemy){       //devuelve true si se hizo parda
+    private boolean isParda(Carta mine,Carta enemy){
         try{
             mine.mata(enemy);
         } catch(PardaExeption pe){
@@ -385,16 +380,16 @@ public class IA extends Jugador{
         }
     return false;}
 
-    private Carta tirarBajo(){                              //tira la carta mas baja que tiene
+    private Carta tirarBajo(){
         int notNull,manyNulls;
         notNull = 0;
         manyNulls = cartasNull();
-        for(int i = 0;i < 3;++i){                           //me fijo cuantas cartas tengo actualmente no tiradas
+        for(int i = 0;i < 3;++i){
             if(super.cartas[i] != null)
-                notNull = i;                            //me guardo la que no es nula para tirarla si es la unica que me queda
+                notNull = i;                                    //me guardo la que no es nula para tirarla si es la unica que me queda
         }
         try{
-            if(manyNulls == 0){                             //si todavia no tire ninguna carta
+            if(manyNulls == 0){
                 if(!super.cartas[0].mata(super.cartas[1]) && !super.cartas[0].mata(super.cartas[2]))
                     return super.tirar(0);
                 else if(!super.cartas[1].mata(super.cartas[0]) && !super.cartas[1].mata(super.cartas[2]))
@@ -402,7 +397,7 @@ public class IA extends Jugador{
                 else 
                     return super.tirar(2);
             }
-            else if(manyNulls == 1){                        //si ya tire 1 carta y me quedan 2
+            else if(manyNulls == 1){
                 if(super.cartas[0] == null){
                     if(!super.cartas[1].mata(super.cartas[2]))
                         return super.tirar(1);
@@ -422,9 +417,9 @@ public class IA extends Jugador{
                         return super.tirar(1);
                 }
             }
-            else                                            //si ya tire 2 cartas y me queda 1
+            else
                 return super.tirar(notNull);
-        } catch(PardaExeption pe){
+        } catch(PardaExeption pe){                  //si hay cartas iguales, tiro una de esas
             for(int i=0;i<3;++i)
                 if(super.cartas[i] != null && super.cartas[i].getNumero() == pe.numeroCarta)
                     return super.tirar(i);
@@ -434,14 +429,14 @@ public class IA extends Jugador{
     private Carta tirarAlto(){
         int notNull,manyNulls;
         notNull = manyNulls = 0;
-        for(int i = 0;i < 3;++i){                           //me fijo cuantas cartas tengo actualmente no tiradas
+        for(int i = 0;i < 3;++i){
             if(super.cartas[i] == null)
                 ++manyNulls;
             else
-                notNull = i;                                //me guardo la que no es nula para tirarla si es la unica que me queda
+                notNull = i;
         }
         try{
-            if(manyNulls == 0){                             //si no tire ninguna carta
+            if(manyNulls == 0){
                 if(super.cartas[0].mata(super.cartas[1]) && super.cartas[0].mata(super.cartas[2]))
                     return super.tirar(0);
                 else if(super.cartas[1].mata(super.cartas[0]) && super.cartas[1].mata(super.cartas[2]))
@@ -449,7 +444,7 @@ public class IA extends Jugador{
                 else 
                     return super.tirar(2);
             }
-            else if(manyNulls == 1){                        //si tire 1 carta y me quedan 2
+            else if(manyNulls == 1){
                 if(super.cartas[0] == null){
                     if(super.cartas[1].mata(super.cartas[2]))
                         return super.tirar(1);
@@ -469,7 +464,7 @@ public class IA extends Jugador{
                         return super.tirar(1);
                 }
             }
-            else                                            //si tire 2 cartas y me queda 1
+            else
                 return super.tirar(notNull);
         } catch(PardaExeption pe){
             for(int i=0;i<3;++i)
@@ -478,23 +473,23 @@ public class IA extends Jugador{
         }
     return null;}
 
-    private int currentGoods(){                         //me dice cuantoas cartas buenas tengo que todavía no tiré
+    private int currentGoods(){
         int many = 0;
-        for(Carta temp : super.cartas)                          //me fijo cuantas cartas buenas tengo (para el truco)
+        for(Carta temp : super.cartas)
                 if(temp != null && temp.isGood())
                     ++many;
     return many;}
 
     private void checkIfMentimos(){
+        /*si se quiere que la IA mienta menos o más hay que modificar el valor con el que se compara aVer*/
         int aVer = (int)(Math.random() * 20);
-        //si se quiere que la IA mienta menos o más hay que modificar el valor con el que se compara aVer
         if(aVer <= 15)
             mentimos = true;
         else
             mentimos = false;
     }
 
-    private int totalGoods(){   //me dice cuantas cartas buenas tengo/tuve en total
+    private int totalGoods(){                       //me dice cuantas cartas buenas tengo/tuve en total
         int many = 0;
         for(Carta temp : super.copyCartas)
             if(temp.isGood())

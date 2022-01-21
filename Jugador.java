@@ -3,9 +3,9 @@ import java.util.Arrays;
 public class Jugador {
 	
 	protected int puntos;
-	protected String tag;					//nombre del jugador
-	protected boolean soy_mano;			//si el mazo está a la izquierda del jugador
-	protected boolean bandera;			//si es su turno durante la ronda
+	protected String tag;
+	protected boolean soy_mano;						//si el mazo está a la izquierda del jugador
+	protected boolean bandera;						//si es su turno durante la ronda
 	protected boolean cantoPrimi;
 	protected boolean truco;
 	public Carta cartas[];
@@ -18,8 +18,7 @@ public class Jugador {
 		this.puntos = 0;
 		this.soy_mano = false;
 		this.bandera = false;
-		this.cantoPrimi = false;	/* cuando se inicialize el arreglo de cantos, el jugador que cante primero inicializa
-		esta variable en true para poder sacar bien los puntos después */
+		this.cantoPrimi = false;	
 		this.truco = false;			//se debe activar cuando gano el truco
 		this.cartas = new Carta[3];
 		this.copyCartas = new Carta[3];
@@ -51,8 +50,7 @@ public class Jugador {
 	public void setMano(boolean m) {this.soy_mano = m;}	
 
 	public void setAmbasManos(boolean miMano,Jugador j2){
-		setMano(miMano);						//seteo mi mano
-		j2.setMano(!miMano);					//seteo la mano del otro jugador con la opuesta a la mía
+		setMano(miMano);
 	}
 	
 	/* METODOS VARIOS */
@@ -68,7 +66,7 @@ public class Jugador {
 			this.puntos = 30;
 	}
 
-	public void addPuntosF(Jugador j2){		//agrega puntos si se canta la falta envido. el que la invoca es el que la ganó.
+	public void addPuntosF(Jugador j2){		//agrega puntos de la falta envido. el que la invoca debe ser el que la ganó.
 		if(isWinning(j2))
 			puntos = 30;
 		else
@@ -80,9 +78,9 @@ public class Jugador {
 		cartas[index] = null;
 	return temp;}
 
-	public boolean envido(Jugador j2){
+	public boolean envido(Jugador j2){				//retorna true si el que llama gana el envido
 		if(getPuntosEnvido() == j2.getPuntosEnvido())
-			return soy_mano;				//si el jugador que invoca es mano gana el envido
+			return soy_mano;
 	return getPuntosEnvido() > j2.getPuntosEnvido();}
 
 	public int getPuntosEnvido(){
@@ -91,7 +89,7 @@ public class Jugador {
 		if(copyCartas[0].getPalo().equals(copyCartas[1].getPalo()) && copyCartas[1].getPalo().equals(copyCartas[2].getPalo())){	//caso flor
 			int c1,c2,c3;
 			c1 = copyCartas[0].getNumero(); c2 = copyCartas[1].getNumero(); c3 = copyCartas[2].getNumero();
-			//si alguna carta es 10, 11 o 12 no suma para los puntos
+			/*si alguna carta es 10, 11 o 12 no suma para los puntos*/
 			if(c1 >= 10 && c1 <= 12)
 				c1 = 0;
 			if(c2 >= 10 && c2 <= 12)
@@ -99,18 +97,18 @@ public class Jugador {
 			if(c3 >= 10 && c3 <= 12)
 				c3 = 0;
 			
-			if(c1 >= c2 && c1 >= c3)		//la primer mas grande
-				if(c2 >= c3)				//la segunda mas grande
+			if(c1 >= c2 && c1 >= c3)				//la primer mas grande
+				if(c2 >= c3)						//la segunda mas grande
 					puntos = c1 + c2 + 20;
-				else						//la segunda mas grande
+				else								//la segunda mas grande
 					puntos = c1 + c3 + 20;
-			else if(c2 >= c1 && c2 >= c3){	//la primer mas grande
-				if(c1 >= c3)				//la segunda mas grande
+			else if(c2 >= c1 && c2 >= c3){			//la primer mas grande
+				if(c1 >= c3)						//la segunda mas grande
 					puntos = c1 + c2 + 20;
-				else						//la segunda mas grande
+				else								//la segunda mas grande
 					puntos = c2 + c3 + 20;
 			}
-			else{							//la primer carta mas grande es la tercera
+			else{									//la primer carta mas grande es la tercera
 				if(c1 >= c2)
 					puntos = c1 + c3 + 20;
 				else
@@ -120,7 +118,6 @@ public class Jugador {
 		else if(copyCartas[0].getPalo().equals(copyCartas[1].getPalo())){
 			int c1,c2;
 			c1 = copyCartas[0].getNumero(); c2 = copyCartas[1].getNumero();
-			//si alguna carta es 10, 11 o 12 no suma para los puntos
 			if(c1 >= 10 && c1 <= 12)
 				c1 = 0;
 			if(c2 >= 10 && c2 <= 12)
@@ -130,7 +127,6 @@ public class Jugador {
 		else if(copyCartas[0].getPalo().equals(copyCartas[2].getPalo())){
 			int c1,c2;
 			c1 = copyCartas[0].getNumero(); c2 = copyCartas[2].getNumero();
-			//si alguna carta es 10, 11 o 12 no suma para los puntos
 			if(c1 >= 10 && c1 <= 12)
 				c1 = 0;
 			if(c2 >= 10 && c2 <= 12)
@@ -140,17 +136,15 @@ public class Jugador {
 		else if(copyCartas[1].getPalo().equals(copyCartas[2].getPalo())){
 			int c1,c2;
 			c1 = copyCartas[1].getNumero(); c2 = copyCartas[2].getNumero();
-			//si alguna carta es 10, 11 o 12 no suma para los puntos
 			if(c1 >= 10 && c1 <= 12)
 				c1 = 0;
 			if(c2 >= 10 && c2 <= 12)
 				c2 = 0;
 			puntos = c1 + c2 + 20;
 		}
-		else{			//no tiene copyCartas del mismo palo
+		else{										//no tiene cartas del mismo palo
 			int c1,c2,c3;
 			c1 = copyCartas[0].getNumero(); c2 = copyCartas[1].getNumero(); c3 = copyCartas[2].getNumero();
-			//si la carta es 10, 11 o 12 no suma para los puntos
 			if(c1 >= 10 && c1 <= 12)
 				c1 = 0;
 			if(c2 >= 10 && c2 <= 12)
@@ -158,20 +152,20 @@ public class Jugador {
 			if(c3 >= 10 && c3 <= 12)
 				c3 = 0;
 	
-			if(c1 >= c2 && c1 >= c3)		//la primer carta es la mas grande
+			if(c1 >= c2 && c1 >= c3)				//la primer carta es la mas grande
 				puntos = c1;
-			else if(c2 >= c1 && c2 >= c3)	//la segunda carta es la mas grande
+			else if(c2 >= c1 && c2 >= c3)			//la segunda carta es la mas grande
 				puntos = c2;	
-			else							//la tercer carta es la más grande
+			else									//la tercer carta es la más grande
 				puntos = c3;
 		}
 	return puntos;}
 
-	public void ganeTruco(){				//la activo si gano el jugador gana el truco
+	public void ganeTruco(){
 		truco = true;
 	}
 
-	public void reset(){	//vaceo y reseteo los valores
+	public void reset(){
 		Arrays.fill(cartas,null);
 		Arrays.fill(copyCartas,null);
 		soy_mano = bandera = cantoPrimi = truco = false;
@@ -184,7 +178,6 @@ public class Jugador {
     return false;}
 
 	public void voyMazo(String cantos[],Jugador j2,boolean cantoEnvido){
-		//sumo los correspondientes puntos
 		if(cantoEnvido == false && cantos[0] == "") {
 			j2.addPuntos(2);
 		}

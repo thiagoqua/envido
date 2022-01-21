@@ -1492,7 +1492,7 @@ public class Interfaz extends JFrame{
 					mazo.setEnabled(false);
 					//LA MAQUINA YA NO PUEDE CANTAR CUANDO LE TOQUE A ELLA
 					cantoEnvido = true;
-					MAQUINA.activatePuedoCantarEnvido(false);
+					MAQUINA.setPuedoCantarEnvido(false);
 					
 					cantaEnvidoJugador();		//DENTRO DE ESTA FUNCION HAY OTRAS PARA EL TRUCO Y TIRARDIR
 					
@@ -1504,7 +1504,7 @@ public class Interfaz extends JFrame{
 					
 					cantarTruco.setEnabled(false);
 					
-					MAQUINA.activatePuedoCantarEnvido(true);
+					MAQUINA.setPuedoCantarEnvido(true);
 					
 					mazo.setEnabled(false);
 					
@@ -1538,7 +1538,7 @@ public class Interfaz extends JFrame{
 					cantado[0] = "truco";
 					texto.setText("<html>"+ cantado[0] +"</html>");
 					
-					MAQUINA.activatePuedoCantarEnvido(false);
+					MAQUINA.setPuedoCantarEnvido(false);
 					//MAQUINA.yourTurnAccept(cantado);
 					
 					//SE DESARROLLA LA FUNCION DEL TRUCO
@@ -1573,7 +1573,7 @@ public class Interfaz extends JFrame{
     				c2.setEnabled(false);
     				c3.setEnabled(false);
     				
-    				MAQUINA.activatePuedoCantarEnvido(true);
+    				MAQUINA.setPuedoCantarEnvido(true);
 						
 					//LA IA PUEDE CANTAR ENVIDO
 					MAQUINA.yourTurnEnvido(cantado);
@@ -1596,7 +1596,7 @@ public class Interfaz extends JFrame{
 					}
 					
 					Arrays.fill(cantado,"");
-					MAQUINA.activatePuedoCantarEnvido(false);
+					MAQUINA.setPuedoCantarEnvido(false);
 					
 					tiraIA = null;
 					tiraIA = MAQUINA.yourTurnTruco(cantado, auxJ);	
@@ -1646,7 +1646,7 @@ public class Interfaz extends JFrame{
 										
 				/*LA IA EMPIEZA (RONDA 1 Y RONDAS IMPARES) */
 				
-				MAQUINA.activatePuedoCantarEnvido(true);		//nota: decidir si quiero que sea true o false
+				MAQUINA.setPuedoCantarEnvido(true);		//nota: decidir si quiero que sea true o false
 				tiraIA = MAQUINA.yourTurn(cantado,null);
 				auxIA = tiraIA[0];
 				
@@ -11697,7 +11697,7 @@ public class Interfaz extends JFrame{
 				c3.setEnabled(false);
 				
 				tiraIA = null;
-				MAQUINA.activatePuedoCantarEnvido(false);
+				MAQUINA.setPuedoCantarEnvido(false);
 				tiraIA = MAQUINA.yourTurn(cantado, null);			//OJO, LA MAQUINA NO DEBERIA CANTAR MAS PORQUE YA SE CANTO ANTES (MANEJARME CON UN ARREGLO DE CANTADOS PARALELO)
 				tiraIAnull = true;
 				mostrarTirada(tiraIA,tiraIAnull);
@@ -11878,7 +11878,7 @@ public class Interfaz extends JFrame{
 				
 				//LA IA TIRA
 				
-				MAQUINA.activatePuedoCantarEnvido(false);
+				MAQUINA.setPuedoCantarEnvido(false);
 				tiraIA = null;
 				//chequear de hacer null tiraIA 
 				tiraIA = MAQUINA.yourTurn(cantado, null);

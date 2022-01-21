@@ -8,7 +8,7 @@ public class Carta{
         this(0,"");
     }
 
-    public Carta(int numero,String palo){   //sino ya seteo el número y el palo
+    public Carta(int numero,String palo){
         this.numero = numero;
         this.palo = new String(palo);
     }
@@ -17,15 +17,11 @@ public class Carta{
 
     public String getPalo(){return palo;}
     
-    public void setNumero(int numero) {
-		this.numero = numero;
-	}
+    public void setNumero(int numero) {this.numero = numero;}
 
-	public void setPalo(String palo) {
-		this.palo = palo;
-	}
+	public void setPalo(String palo) {this.palo = palo;}
 
-    public static Carta builder(Carta c){          //crea y devuelve una copia de la carta que se le pasa
+    public static Carta builder(Carta c){
         Carta temp = new Carta();
         temp.numero = c.numero;
         temp.palo = c.palo;
@@ -95,10 +91,10 @@ public class Carta{
         int indexOfGiven,indexOfMine;
         Carta auxx = builder(given);
         Carta auxmine = builder(this);
-        if(ORDEN[0] == null)                                    //si no esta inicializado el arreglo de orden
+        if(ORDEN[0] == null)
             initOrden();
         indexOfGiven = indexOfMine = -1;
-        //le borro el palo ya que da lo mismo si lo tiene o no para el ORDEN
+        /*le borro el palo ya que da lo mismo si lo tiene o no para el orden*/
         if(!auxx.equals(ORDEN[0]) && !auxx.equals(ORDEN[1]) && !auxx.equals(ORDEN[2]) && !auxx.equals(ORDEN[3]))
             auxx.setPalo("");
         if(!auxmine.equals(ORDEN[0]) && !auxmine.equals(ORDEN[1]) && !auxmine.equals(ORDEN[2]) && !auxmine.equals(ORDEN[3]))
@@ -122,12 +118,12 @@ public class Carta{
         Carta mine = new Carta();
         mine.setNumero(numero);
         mine.setPalo(palo);
-        if(ORDEN[0] == null)                                    //si no esta inicializado el arreglo de orden
+        if(ORDEN[0] == null)
             initOrden();
-        for(index = 0;index < ORDEN.length;++index)             //busco el orden de mi carta
+        for(index = 0;index < ORDEN.length;++index)
             if(mine.equals(ORDEN[index]))
                 break;
-        if(index <= 5)                                          //si mi carta es un 2 o mos grande
+        if(index <= 5)                              //si mi carta es un 2 o mos grande
             return true;
     return false;}
 
