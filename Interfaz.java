@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.security.Principal;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -73,6 +74,7 @@ public class Interfaz extends JFrame{
 	
 	/*COMPONENTES DE LA VENTANA PRINCIPAL*/
 	
+	private JPanel principal;
 	private JLabel portada;
 	private JButton jugar;
 	private JButton config;
@@ -159,6 +161,7 @@ public class Interfaz extends JFrame{
 	public Interfaz() {
 		defaultPort = 5010;
 		recibo = new String();
+		principal = new JPanel();
 		interfazCreacion();
 	}
 	
@@ -187,7 +190,6 @@ public class Interfaz extends JFrame{
 		inicio.add(config);
 		inicio.add(salir);
 		
-		JPanel principal = new JPanel();
 		principal.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 		
@@ -374,6 +376,28 @@ public class Interfaz extends JFrame{
 								
 								cp.add(principal2);
 
+								chat.addKeyListener(new KeyListener(){
+									@Override
+									public void keyTyped(KeyEvent e) {}
+
+									@Override
+									public void keyPressed(KeyEvent e) {
+										if(e.getKeyCode() == 10){
+											if(chat.getText().equalsIgnoreCase("exit")){
+												server.close();
+												principal.removeAll();
+												System.exit(11);
+											}
+											server.send("servidor: " + chat.getText());
+											System.out.println("yo: " + chat.getText());
+											chat.setText("");
+										}
+									}
+
+									@Override
+									public void keyReleased(KeyEvent e) {}
+								});
+
 								Thread enableButtons = new Thread(){
 									@Override
 									public void run() {
@@ -402,7 +426,6 @@ public class Interfaz extends JFrame{
 								};
 
 								ok3.addActionListener(new ActionListener() {
-									
 									@Override
 									public void actionPerformed(ActionEvent e){
 										if(chat.getText().equalsIgnoreCase("exit")){
@@ -496,6 +519,28 @@ public class Interfaz extends JFrame{
 										principal2.add(cartel,gbc3);
 										
 										cp.add(principal2);
+
+										chat.addKeyListener(new KeyListener(){
+											@Override
+											public void keyTyped(KeyEvent e) {}
+		
+											@Override
+											public void keyPressed(KeyEvent e) {
+												if(e.getKeyCode() == 10){
+													if(chat.getText().equalsIgnoreCase("exit")){
+														client.close();
+														principal.removeAll();
+														System.exit(11);
+													}
+													client.send("servidor: " + chat.getText());
+													System.out.println("yo: " + chat.getText());
+													chat.setText("");
+												}
+											}
+		
+											@Override
+											public void keyReleased(KeyEvent e) {}
+										});
 										
 										ok3.addActionListener(new ActionListener() {
 											
@@ -504,6 +549,7 @@ public class Interfaz extends JFrame{
 												if(chat.getText().equalsIgnoreCase("exit")){
 													client.close();
 													System.exit(12);
+													
 												}
 												client.send("cliente: " + chat.getText());
 												System.out.println("yo: " + chat.getText());
