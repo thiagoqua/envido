@@ -350,6 +350,7 @@ public class Interfaz extends JFrame{
 								chat.setEnabled(false);
 								
 								caja_mensajes = new JTextArea();
+								caja_mensajes.setEditable(false);
 								
 								barrita = new JScrollPane(caja_mensajes);  
 								barrita.setPreferredSize(new Dimension(400,400));
@@ -368,9 +369,6 @@ public class Interfaz extends JFrame{
 								JPanel principal2 = new JPanel();
 								principal2.setLayout(new GridBagLayout());
 								GridBagConstraints gbc3 = new GridBagConstraints();
-								
-								chat.setEnabled(true);
-								ok3.setEnabled(true);
 								
 								gbc3.gridx = 0;
 								gbc3.gridy = 1;
@@ -405,7 +403,7 @@ public class Interfaz extends JFrame{
 												cp.removeAll();
 												System.exit(11);
 											}
-											server.send("Servidor: " + chat.getText());
+											server.send("Servidor: " + chat.getText() + System.lineSeparator());
 											caja_mensajes.append("Yo: " + chat.getText() + System.lineSeparator());
 											chat.setText("");
 										}
@@ -436,6 +434,7 @@ public class Interfaz extends JFrame{
 									public void run(){
 										while(true){
 											while((recibo = server.receive()) != null){
+												caja_mensajes.append(recibo);
 												System.out.println(recibo);
 											}
 										}
@@ -449,8 +448,8 @@ public class Interfaz extends JFrame{
 											server.close();
 											System.exit(11);
 										}
-										server.send("Servidor: " + chat.getText());
-										caja_mensajes.append("Yo: " + chat.getText());
+										server.send("Servidor: " + chat.getText() + System.lineSeparator());
+										caja_mensajes.append("Yo: " + chat.getText() + System.lineSeparator());
 										chat.setText("");
 									}
 								});
@@ -477,7 +476,11 @@ public class Interfaz extends JFrame{
 								    }
 
 									@Override
-									public void keyPressed(KeyEvent e) {}
+									public void keyPressed(KeyEvent e) {
+										if(e.getKeyCode() == 10){
+											//PARA GUARDAR IP CON ENTER
+										}
+									}
 
 									@Override
 									public void keyReleased(KeyEvent e) {} 
@@ -501,6 +504,7 @@ public class Interfaz extends JFrame{
 										cartel.setText("Escriba 'exit' en consola para abortar el programa.");
 										
 										caja_mensajes = new JTextArea("");
+										caja_mensajes.setEditable(false);
 
 										barrita = new JScrollPane(caja_mensajes);  
 										barrita.setPreferredSize(new Dimension(400,400));
@@ -556,8 +560,8 @@ public class Interfaz extends JFrame{
 														cp.removeAll();
 														System.exit(11);
 													}
-													client.send("Cliente: " + chat.getText());
-													caja_mensajes.append("Yo: " + chat.getText());
+													client.send("Cliente: " + chat.getText()  + System.lineSeparator());
+													caja_mensajes.append("Yo: " + chat.getText() + System.lineSeparator());
 													chat.setText("");
 												}
 											}
@@ -575,8 +579,8 @@ public class Interfaz extends JFrame{
 													System.exit(12);
 													
 												}
-												client.send("Cliente: " + chat.getText());
-												caja_mensajes.append("Yo: " + chat.getText());
+												client.send("Cliente: " + chat.getText() + System.lineSeparator());
+												caja_mensajes.append("Yo: " + chat.getText() + System.lineSeparator());
 												chat.setText("");
 											}
 										});
@@ -584,6 +588,7 @@ public class Interfaz extends JFrame{
 											public void run() {
 												while(true){
 													recibo = client.receive();
+													caja_mensajes.append(recibo);
 													System.out.println(recibo);
 												}
 											};
@@ -13826,7 +13831,7 @@ public class Interfaz extends JFrame{
 		
 		if(j.getPuntosEnvido() > MAQUINA.getPuntosEnvido() || (j.getPuntosEnvido() == MAQUINA.getPuntosEnvido() && j.soy_mano == true)) {
 			
-			JOptionPane.showMessageDialog(null, "¡GANASTE!", "ENVIDO", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "ï¿½GANASTE!", "ENVIDO", JOptionPane.INFORMATION_MESSAGE);
 			
 		}
 		

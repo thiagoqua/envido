@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import javax.swing.JOptionPane;
+
 public class EnvidoServer{
 
     private ServerSocket server;
@@ -31,7 +33,7 @@ public class EnvidoServer{
         try{
             readed = din.readUTF();
         } catch(IOException ioe){
-            System.out.println("no pudimos recibir el paquete. abortamos.");
+            JOptionPane.showMessageDialog(null,"No pudimos recibir el paquete. abortamos.","AVISO DE CONEXION",JOptionPane.INFORMATION_MESSAGE);
             System.exit(6);
         }
     return readed;}
@@ -41,7 +43,7 @@ public class EnvidoServer{
             dout.writeUTF(o.toString());
             dout.flush();
         } catch(IOException ioe){
-            System.out.println("no pudimos enviar el paquete. abortamos.");
+            JOptionPane.showMessageDialog(null,"No pudimos enviar el paquete. abortamos.","AVISO DE CONEXION",JOptionPane.INFORMATION_MESSAGE);
             System.exit(7);
         }
     }
@@ -61,8 +63,10 @@ public class EnvidoServer{
         try{
             listener = server.accept();
             if(listener.isConnected()){
-                System.out.println("cliente con ip '" + listener.getInetAddress() + "' conectado al puerto " +
+                String suc = new String("cliente con ip '" + listener.getInetAddress() + "' conectado al puerto " +
                 listener.getPort() + " de manera exitosa.");
+                System.out.println(suc);
+                JOptionPane.showMessageDialog(null,suc,"AVISO DE CONEXION",JOptionPane.INFORMATION_MESSAGE);
             }
             else
                 return false;

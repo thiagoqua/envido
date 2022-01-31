@@ -29,7 +29,7 @@ public class EnvidoClient{
         try{
             readed = din.readUTF();
         } catch(IOException ioe){
-            System.out.println("no pudimos recibir el paquete. abortamos.");
+            JOptionPane.showMessageDialog(null,"No pudimos recibir el paquete. abortamos.","AVISO DE CONEXION",JOptionPane.INFORMATION_MESSAGE);
             System.exit(3);
         }
         return readed;}
@@ -41,7 +41,7 @@ public class EnvidoClient{
             dout.writeUTF(o.toString());
             dout.flush();
         } catch(IOException ioe){
-            System.out.println("no pudimos enviar el paquete. abortamos.");
+            JOptionPane.showMessageDialog(null,"No pudimos enviar el paquete. abortamos.","AVISO DE CONEXION",JOptionPane.INFORMATION_MESSAGE);
             System.exit(4);
         }
     }
