@@ -135,7 +135,7 @@ public class IA extends Jugador{
         }
     }
 
-    public void yourTurnAccept(String cantos[]){                //turno de la IA de aceptar, rechazar o revirar la IA
+    public void yourTurnAccept(String cantos[], Jugador j){                //turno de la IA de aceptar, rechazar o revirar la IA
     	int end = 0,puntosEnvido,cartasGood,manyNulls,totalCartasGood;
         manyNulls = cartasNull();
         puntosEnvido = getPuntosEnvido();
@@ -143,7 +143,10 @@ public class IA extends Jugador{
         totalCartasGood = totalGoods();
         checkIfMentimos();
         while(cantos[end+1] != null && cantos[end+1] != ""){++end;}
-        if(end > 0 && cantos[end-1].equals("envido") && cantos[end].equals("envido")){
+        if(j.getPuntos() >= 28){
+        	 cantar(6,cantos);  
+        }
+        else if(end > 0 && cantos[end-1].equals("envido") && cantos[end].equals("envido")){
             if(puntosEnvido > 26 && puntosEnvido <= 28){
                 cantar(6,cantos);                   //quiero
             }

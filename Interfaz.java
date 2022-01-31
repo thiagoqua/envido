@@ -1593,7 +1593,7 @@ public class Interfaz extends JFrame{
 					
 					//LA MAQUINA PUEDE CANTAR PREVIAMENTE ENVIDO ANTES DEL TRUCO
 					
-					MAQUINA.yourTurnAccept(cantado);
+					MAQUINA.yourTurnAccept(cantado,j);
 					
 					if(cantado[0].equals("envido") || cantado[0].equals("real envido") || cantado[0].equals("falta envido")) {
 						
@@ -1622,7 +1622,7 @@ public class Interfaz extends JFrame{
 					texto.setText("<html>"+ cantado[0] +"</html>");
 					
 					MAQUINA.setPuedoCantarEnvido(false);
-					//MAQUINA.yourTurnAccept(cantado);
+					//MAQUINA.yourTurnAccept(cantado,j);
 					
 					//SE DESARROLLA LA FUNCION DEL TRUCO
 					truco2();
@@ -2034,7 +2034,7 @@ public class Interfaz extends JFrame{
 			noQuiero.setEnabled(false);
 			retruco.setEnabled(false);
 			
-			MAQUINA.yourTurnAccept(cantado);
+			MAQUINA.yourTurnAccept(cantado,j);
 			
 			/*SI LA IA QUIERE*/
 			
@@ -3321,7 +3321,7 @@ public class Interfaz extends JFrame{
 					noQuiero.setEnabled(false);
 					retruco.setEnabled(false);
 					
-					MAQUINA.yourTurnAccept(cantado);
+					MAQUINA.yourTurnAccept(cantado,j);
 					
 					/*SI LA IA QUIERE*/
 					
@@ -3495,7 +3495,7 @@ public class Interfaz extends JFrame{
 					
 					cantarTruco.setEnabled(false);
 					
-					MAQUINA.yourTurnAccept(cantado);
+					MAQUINA.yourTurnAccept(cantado,j);
 					
 					/*SI LA IA QUIERE*/
 					
@@ -3606,7 +3606,7 @@ public class Interfaz extends JFrame{
 							noQuiero.setEnabled(false);
 							vale_4.setEnabled(false);
 							
-							MAQUINA.yourTurnAccept(cantado);
+							MAQUINA.yourTurnAccept(cantado,j);
 							
 							/*SI LA IA QUIERE*/
 							
@@ -3717,7 +3717,7 @@ public class Interfaz extends JFrame{
 							c3.setEnabled(false);
 							mazo.setEnabled(false);
 							
-							MAQUINA.yourTurnAccept(cantado);
+							MAQUINA.yourTurnAccept(cantado,j);
 							
 							/*LA IA QUIERE*/
 							
@@ -3823,7 +3823,7 @@ public class Interfaz extends JFrame{
 								
 								else if(cantado[2].equals("vale cuatro")) {
 									
-									MAQUINA.yourTurnAccept(cantado);
+									MAQUINA.yourTurnAccept(cantado,j);
 									
 									/*SI LA IA QUIERE*/
 									
@@ -3947,7 +3947,7 @@ public class Interfaz extends JFrame{
 									noQuiero.setEnabled(false);
 									retruco.setEnabled(false);
 									
-									MAQUINA.yourTurnAccept(cantado);
+									MAQUINA.yourTurnAccept(cantado,j);
 									
 									/*SI LA IA QUIERE*/
 									
@@ -4189,7 +4189,7 @@ public class Interfaz extends JFrame{
 				c3.setEnabled(false);
 				mazo.setEnabled(false);
 				
-				MAQUINA.yourTurnAccept(cantado);
+				MAQUINA.yourTurnAccept(cantado,j);
 				
 				/*SI LA IA QUIERE*/
 				
@@ -4294,7 +4294,7 @@ public class Interfaz extends JFrame{
 						noQuiero.setEnabled(false);
 						vale_4.setEnabled(false);
 						
-						MAQUINA.yourTurnAccept(cantado);
+						MAQUINA.yourTurnAccept(cantado,j);
 						
 						/*SI LA IA QUIERE*/
 						
@@ -4426,7 +4426,7 @@ public class Interfaz extends JFrame{
 						quiero.setEnabled(false);
 						noQuiero.setEnabled(false);
 						
-						MAQUINA.yourTurnAccept(cantado);
+						MAQUINA.yourTurnAccept(cantado,j);
 						
 						/*SI LA IA QUIERE*/
 						
@@ -4617,7 +4617,7 @@ public class Interfaz extends JFrame{
 								noQuiero.setEnabled(false);
 								retruco.setEnabled(false);
 								
-								MAQUINA.yourTurnAccept(cantado);
+								MAQUINA.yourTurnAccept(cantado,j);
 								
 								/*SI LA IA QUIERE*/
 								
@@ -4790,7 +4790,7 @@ public class Interfaz extends JFrame{
 								c3.setEnabled(false);
 								mazo.setEnabled(false);
 								
-								MAQUINA.yourTurnAccept(cantado);
+								MAQUINA.yourTurnAccept(cantado,j);
 								
 								/*SI LA IA QUIERE*/
 								
@@ -4899,7 +4899,7 @@ public class Interfaz extends JFrame{
 										noQuiero.setEnabled(false);
 										vale_4.setEnabled(false);
 										
-										MAQUINA.yourTurnAccept(cantado);
+										MAQUINA.yourTurnAccept(cantado,j);
 										
 										/*SI LA IA QUIERE*/
 										
@@ -5081,7 +5081,7 @@ public class Interfaz extends JFrame{
 				c3.setEnabled(false);
 				mazo.setEnabled(false);
 				
-				MAQUINA.yourTurnAccept(cantado);
+				MAQUINA.yourTurnAccept(cantado,j);
 				
 				/*SI LA IA QUIERE*/
 				
@@ -5189,7 +5189,7 @@ public class Interfaz extends JFrame{
 						quiero.setEnabled(false);
 						noQuiero.setEnabled(false);
 						
-						MAQUINA.yourTurnAccept(cantado);
+						MAQUINA.yourTurnAccept(cantado,j);
 						
 						/*SI LA IA QUIERE*/
 						
@@ -5317,7 +5317,7 @@ public class Interfaz extends JFrame{
 						quiero.setEnabled(false);
 						noQuiero.setEnabled(false);
 						
-						MAQUINA.yourTurnAccept(cantado);
+						MAQUINA.yourTurnAccept(cantado,j);
 						
 						/*SI LA IA QUIERE*/
 						
@@ -5529,7 +5529,7 @@ public class Interfaz extends JFrame{
 							
 							mazo.setEnabled(false);
 							
-							MAQUINA.yourTurnAccept(cantado);
+							MAQUINA.yourTurnAccept(cantado,j);
 							
 							/*SI LA IA QUIERE*/
 							
@@ -5637,7 +5637,7 @@ public class Interfaz extends JFrame{
 									quiero.setEnabled(false);
 									noQuiero.setEnabled(false);
 									
-									MAQUINA.yourTurnAccept(cantado);
+									MAQUINA.yourTurnAccept(cantado,j);
 									
 									/*SI LA IA QUIERE*/
 									
@@ -5762,7 +5762,7 @@ public class Interfaz extends JFrame{
 									quiero.setEnabled(false);
 									noQuiero.setEnabled(false);
 									
-									MAQUINA.yourTurnAccept(cantado);
+									MAQUINA.yourTurnAccept(cantado,j);
 									
 									/*SI LA IA QUIERE*/
 									
@@ -5936,7 +5936,7 @@ public class Interfaz extends JFrame{
 		quiero.setEnabled(false);
 		noQuiero.setEnabled(false);
 		
-		MAQUINA.yourTurnAccept(cantado);
+		MAQUINA.yourTurnAccept(cantado,j);
 		
 		/*SI LA IA QUIERE*/
 		
@@ -6031,7 +6031,7 @@ public class Interfaz extends JFrame{
 	    		c2.setEnabled(false);
 	    		c3.setEnabled(false);
     			
-    			MAQUINA.yourTurnAccept(cantado);
+    			MAQUINA.yourTurnAccept(cantado,j);
     			
     			/*SI LA IA QUIERE*/
     			
@@ -6220,7 +6220,7 @@ public class Interfaz extends JFrame{
 					noQuiero.setEnabled(false);
 					retruco.setEnabled(false);
 					
-					MAQUINA.yourTurnAccept(cantado);
+					MAQUINA.yourTurnAccept(cantado,j);
 					
 					/* SI LA IA QUIERE*/
 					
@@ -6396,7 +6396,7 @@ public class Interfaz extends JFrame{
 		    		c2.setEnabled(false);
 		    		c3.setEnabled(false);
 					
-					MAQUINA.yourTurnAccept(cantado);
+					MAQUINA.yourTurnAccept(cantado,j);
 					
 					/*SI LA IA QUIERE*/
 					
@@ -6503,7 +6503,7 @@ public class Interfaz extends JFrame{
 							noQuiero.setEnabled(false);
 							vale_4.setEnabled(false);
 							
-							MAQUINA.yourTurnAccept(cantado);
+							MAQUINA.yourTurnAccept(cantado,j);
 							
 							/*SI LA IA QUIERE*/
 							
@@ -6629,7 +6629,7 @@ public class Interfaz extends JFrame{
 				    		c2.setEnabled(false);
 				    		c3.setEnabled(false);
 							
-							MAQUINA.yourTurnAccept(cantado);
+							MAQUINA.yourTurnAccept(cantado,j);
 							
 							/*SI LA IA QUIERE*/
 							
@@ -6736,7 +6736,7 @@ public class Interfaz extends JFrame{
 									quiero.setEnabled(false);
 									noQuiero.setEnabled(false);
 									
-									MAQUINA.yourTurnAccept(cantado);
+									MAQUINA.yourTurnAccept(cantado,j);
 									
 									/*SI LA IA QUIERE*/
 					
@@ -6867,7 +6867,7 @@ public class Interfaz extends JFrame{
 									
 									retruco.setEnabled(false);
 									
-									MAQUINA.yourTurnAccept(cantado);
+									MAQUINA.yourTurnAccept(cantado,j);
 									
 									/*SI LA IA QUIERE*/
 									
@@ -7108,7 +7108,7 @@ public class Interfaz extends JFrame{
 					noQuiero.setEnabled(false);
 					retruco.setEnabled(false);
 					
-					MAQUINA.yourTurnAccept(cantado);
+					MAQUINA.yourTurnAccept(cantado,j);
 					
 					/*SI LA IA QUIERE*/
 					
@@ -7280,7 +7280,7 @@ public class Interfaz extends JFrame{
 		    		c2.setEnabled(false);
 		    		c3.setEnabled(false);
 					
-					MAQUINA.yourTurnAccept(cantado);
+					MAQUINA.yourTurnAccept(cantado,j);
 					
 					/*SI LA IA QUIERE*/
 					
@@ -7546,7 +7546,7 @@ public class Interfaz extends JFrame{
 		    					noQuiero.setEnabled(false);
 		    					retruco.setEnabled(false);
 		    					
-		    					MAQUINA.yourTurnAccept(cantado);
+		    					MAQUINA.yourTurnAccept(cantado,j);
 		    					
 		    					/*SI LA IA QUIERE*/
 		    					
@@ -7718,7 +7718,7 @@ public class Interfaz extends JFrame{
 	    						c2.setEnabled(false);
 	    						c3.setEnabled(false);
 	    						
-	    						MAQUINA.yourTurnAccept(cantado);
+	    						MAQUINA.yourTurnAccept(cantado,j);
 	    						
 	    						/*SI LA IA QUIERE*/
 	    						
@@ -7826,7 +7826,7 @@ public class Interfaz extends JFrame{
 			    						noQuiero.setEnabled(false);
 			    						vale_4.setEnabled(false);
 			    						
-			    						MAQUINA.yourTurnAccept(cantado);
+			    						MAQUINA.yourTurnAccept(cantado,j);
 			    						
 			    						/*SI LA IA QUIERE*/
 			    						
@@ -7944,7 +7944,7 @@ public class Interfaz extends JFrame{
 				c2.setEnabled(false);
 				c3.setEnabled(false);
 				
-				MAQUINA.yourTurnAccept(cantado);
+				MAQUINA.yourTurnAccept(cantado,j);
 				
 				/*SI LA IA QUIERE*/
 				
@@ -8048,7 +8048,7 @@ public class Interfaz extends JFrame{
 						noQuiero.setEnabled(false);
 						vale_4.setEnabled(false);
 						
-						MAQUINA.yourTurnAccept(cantado);
+						MAQUINA.yourTurnAccept(cantado,j);
 						
 						/*SI LA IA QUIERE*/
 						
@@ -8182,7 +8182,7 @@ public class Interfaz extends JFrame{
 						noQuiero.setEnabled(false);
 						retruco.setEnabled(false);
 						
-						MAQUINA.yourTurnAccept(cantado);
+						MAQUINA.yourTurnAccept(cantado,j);
 						
 						/*SI LA IA QUIERE*/
 						
@@ -8373,7 +8373,7 @@ public class Interfaz extends JFrame{
 								noQuiero.setEnabled(false);
 								retruco.setEnabled(false);
 								
-								MAQUINA.yourTurnAccept(cantado);
+								MAQUINA.yourTurnAccept(cantado,j);
 								
 								/*SI LA IA QUIERE*/
 								
@@ -8548,7 +8548,7 @@ public class Interfaz extends JFrame{
 					    		c2.setEnabled(false);
 					    		c3.setEnabled(false);
 								
-								MAQUINA.yourTurnAccept(cantado);
+								MAQUINA.yourTurnAccept(cantado,j);
 								
 								/*SI LA IA QUIERE*/
 								
@@ -8655,7 +8655,7 @@ public class Interfaz extends JFrame{
 				    	    			noQuiero.setEnabled(false);
 				    	    			vale_4.setEnabled(false);
 				    	    			
-				    	    			MAQUINA.yourTurnAccept(cantado);
+				    	    			MAQUINA.yourTurnAccept(cantado,j);
 				    	    			
 				    	    			/*SI LA IA QUIERE*/
 				    	    			
@@ -12920,7 +12920,7 @@ public class Interfaz extends JFrame{
 		real_envido.setEnabled(false);
 		falta_envido.setEnabled(false);
 				
-		MAQUINA.yourTurnAccept(cantado);
+		MAQUINA.yourTurnAccept(cantado,j);
 		
 		/*SI LA IA QUIERE*/
 		
@@ -13069,7 +13069,7 @@ public class Interfaz extends JFrame{
 	    			real_envido.setEnabled(false);
 	    			falta_envido.setEnabled(false);
 	    			
-	    			MAQUINA.yourTurnAccept(cantado);
+	    			MAQUINA.yourTurnAccept(cantado,j);
 	    			
 	    			//SI LA IA QUIERE
 		    		
@@ -13278,7 +13278,7 @@ public class Interfaz extends JFrame{
 	    			
 	    			falta_envido.setEnabled(false);
 	    			
-	    			MAQUINA.yourTurnAccept(cantado);
+	    			MAQUINA.yourTurnAccept(cantado,j);
 	    			
 	    			/* SI LA IA QUIERE */
 	    			
@@ -13627,7 +13627,7 @@ public class Interfaz extends JFrame{
 				falta_envido.setEnabled(false);
 			}
 			
-			MAQUINA.yourTurnAccept(cantado);
+			MAQUINA.yourTurnAccept(cantado,j);
 			
 			//SI LA IA QUIERE
 			
@@ -13770,7 +13770,7 @@ public class Interfaz extends JFrame{
 					quiero.setEnabled(false);
 					noQuiero.setEnabled(false);
 					
-					MAQUINA.yourTurnAccept(cantado);
+					MAQUINA.yourTurnAccept(cantado,j);
 					
 					//SI LA IA QUIERE
 					
