@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.security.Principal;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -76,9 +75,12 @@ public class Interfaz extends JFrame{
 	
 	private JPanel principal;
 	private JLabel portada;
+	private JLabel portadawsp;
 	private JButton jugar;
 	private JButton config;
 	private JButton salir;
+	
+	private JPanel inicio;
 	
 	/*COMPONENTES DE JUGAR, LUEGO DE CLICKEAR*/
 	
@@ -156,36 +158,37 @@ public class Interfaz extends JFrame{
 	private final int defaultPort; 			//puerto para comunicaciÃ³n socket
 	private JTextField chat;
 	private String recibo;
-    
+    private JTextArea caja_mensajes;
+    private JScrollPane barrita;
 	
 	public Interfaz() {
+
 		defaultPort = 5010;
 		recibo = new String();
 		principal = new JPanel();
 		interfazCreacion();
+		
 	}
 	
 	
 	public JPanel ventanaPrincipal() {
 		
-		
 		/* BOTONES DE VENTANA PRINCIPAL */
-		
-		//
 		
 		portada = new JLabel();
 		portada.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/bannerTruco.png")).getImage().getScaledInstance(315, 210, Image.SCALE_SMOOTH)));
-
+		
+		portadawsp = new JLabel();
+		portadawsp.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/wsp+.png")).getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH)));
+		
 		banner = new JPanel();
 		banner.add(portada);
-		
-		//
 		
 		jugar = new JButton("JUGAR");
 		jugar.setPreferredSize(new Dimension(100,50));
 		salir = new JButton("SALIR");
 		config = new JButton("CONFIGURACION");
-		JPanel inicio = new JPanel(new GridLayout(3,1,4,4));
+		inicio = new JPanel(new GridLayout(3,1,4,4));
 		inicio.add(jugar);
 		inicio.add(config);
 		inicio.add(salir);
@@ -242,8 +245,8 @@ public class Interfaz extends JFrame{
 				/* BOTONES DE VENTANA SECUNDARIA */
 				
 				jugarMaquina = new JButton("JUGAR CONTRA MAQUINA");
-				jugarMaquina.setPreferredSize(new Dimension(100,50));
-				jugarPersona = new JButton("JUGAR CONTRA PERSONA");
+				jugarMaquina.setPreferredSize(new Dimension(200,50));
+				jugarPersona = new JButton("MENSAJERIA");
 				volver = new JButton("VOLVER");
 				JPanel ventanaSec = new JPanel(new GridLayout(3,1,4,4));
 				ventanaSec.add(jugarMaquina);
@@ -290,6 +293,9 @@ public class Interfaz extends JFrame{
 						cp.revalidate();
 						cp.repaint();
 						
+						banner.remove(portada);
+						banner.add(portadawsp);
+						
 						cliente = new JButton("CLIENTE");
 						cliente.setPreferredSize(new Dimension(100,50));
 						servidor = new JButton("SERVIDOR");
@@ -299,30 +305,30 @@ public class Interfaz extends JFrame{
 						ventanaSec.add(servidor);
 						ventanaSec.add(volver2);
 						
-						JPanel secundario = new JPanel();
-						secundario.setLayout(new GridBagLayout());
+						JPanel terciario = new JPanel();
+						terciario.setLayout(new GridBagLayout());
 						GridBagConstraints gbc2 = new GridBagConstraints();
 						
 						gbc2.gridx = 0;
 						gbc2.gridy = 0;
 						gbc2.gridwidth = 1;
 						gbc2.gridheight = 1;
-						secundario.add(banner,gbc2);
+						terciario.add(banner,gbc2);
 						
 						gbc2.gridx = 0;
 						gbc2.gridy = 1;
 						gbc2.gridwidth = 1;
 						gbc2.gridheight = 1;
 						gbc2.weighty = 1.0;
-						secundario.add(ventanaSec,gbc2);
+						terciario.add(ventanaSec,gbc2);
 						
 						gbc2.gridx = 0;
 						gbc2.gridy = 2;
 						gbc2.gridwidth = 1;
 						gbc2.gridheight = 1;
-						secundario.add(cartel,gbc2);
+						terciario.add(cartel,gbc2);
 						
-						cp.add(secundario);
+						cp.add(terciario);
 
 						servidor.addActionListener(new ActionListener() {
 							@Override
@@ -333,13 +339,21 @@ public class Interfaz extends JFrame{
 								cp.revalidate();
 								cp.repaint();
 								
-								JLabel chatear;
-								chat = new JTextField("");
+								cartel.setText("Escriba 'exit' en consola para abortar el programa.");
 								
+								JLabel chatear;
 								chatear = new JLabel("Envie mensajes a su amigo: ");
+								
+								chat = new JTextField("");								
 								chat = new JTextField(chat.getText());
 								chat.setPreferredSize(new Dimension(200,20));
 								chat.setEnabled(false);
+								
+								caja_mensajes = new JTextArea();
+								
+								barrita = new JScrollPane(caja_mensajes);  
+								barrita.setPreferredSize(new Dimension(400,400));
+								barrita.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 								
 								JButton ok3;
 								ok3 = new JButton("ENVIAR");
@@ -355,11 +369,8 @@ public class Interfaz extends JFrame{
 								principal2.setLayout(new GridBagLayout());
 								GridBagConstraints gbc3 = new GridBagConstraints();
 								
-								gbc3.gridx = 0;
-								gbc3.gridy = 0;
-								gbc3.gridwidth = 1;
-								gbc3.gridheight = 1;
-								principal2.add(banner,gbc3);
+								chat.setEnabled(true);
+								ok3.setEnabled(true);
 								
 								gbc3.gridx = 0;
 								gbc3.gridy = 1;
@@ -367,6 +378,12 @@ public class Interfaz extends JFrame{
 								gbc3.gridheight = 1;
 								gbc3.weighty = 1.0;
 								principal2.add(menu2,gbc3);
+								
+								gbc3.gridx = 0;
+								gbc3.gridy = 0;
+								gbc3.gridwidth = 1;
+								gbc3.gridheight = 1;
+								principal2.add(barrita,gbc3);
 								
 								gbc3.gridx = 0;
 								gbc3.gridy = 2;
@@ -385,11 +402,11 @@ public class Interfaz extends JFrame{
 										if(e.getKeyCode() == 10){
 											if(chat.getText().equalsIgnoreCase("exit")){
 												server.close();
-												principal.removeAll();
+												cp.removeAll();
 												System.exit(11);
 											}
-											server.send("servidor: " + chat.getText());
-											System.out.println("yo: " + chat.getText());
+											server.send("Servidor: " + chat.getText());
+											caja_mensajes.append("Yo: " + chat.getText() + System.lineSeparator());
 											chat.setText("");
 										}
 									}
@@ -432,8 +449,8 @@ public class Interfaz extends JFrame{
 											server.close();
 											System.exit(11);
 										}
-										server.send("servidor: " + chat.getText());
-										System.out.println("yo: " + chat.getText());
+										server.send("Servidor: " + chat.getText());
+										caja_mensajes.append("Yo: " + chat.getText());
 										chat.setText("");
 									}
 								});
@@ -481,6 +498,13 @@ public class Interfaz extends JFrame{
 										
 										JLabel chatear;
 										chat = new JTextField("");
+										cartel.setText("Escriba 'exit' en consola para abortar el programa.");
+										
+										caja_mensajes = new JTextArea("");
+
+										barrita = new JScrollPane(caja_mensajes);  
+										barrita.setPreferredSize(new Dimension(400,400));
+										barrita.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 										
 										chatear = new JLabel("Envie mensajes a su amigo: ");
 										chat = new JTextField(chat.getText());
@@ -500,17 +524,17 @@ public class Interfaz extends JFrame{
 										GridBagConstraints gbc3 = new GridBagConstraints();
 										
 										gbc3.gridx = 0;
-										gbc3.gridy = 0;
-										gbc3.gridwidth = 1;
-										gbc3.gridheight = 1;
-										principal2.add(banner,gbc3);
-										
-										gbc3.gridx = 0;
 										gbc3.gridy = 1;
 										gbc3.gridwidth = 1;
 										gbc3.gridheight = 1;
 										gbc3.weighty = 1.0;
 										principal2.add(menu2,gbc3);
+										
+										gbc3.gridx = 0;
+										gbc3.gridy = 0;
+										gbc3.gridwidth = 1;
+										gbc3.gridheight = 1;
+										principal2.add(barrita,gbc3);
 										
 										gbc3.gridx = 0;
 										gbc3.gridy = 2;
@@ -529,11 +553,11 @@ public class Interfaz extends JFrame{
 												if(e.getKeyCode() == 10){
 													if(chat.getText().equalsIgnoreCase("exit")){
 														client.close();
-														principal.removeAll();
+														cp.removeAll();
 														System.exit(11);
 													}
-													client.send("servidor: " + chat.getText());
-													System.out.println("yo: " + chat.getText());
+													client.send("Cliente: " + chat.getText());
+													caja_mensajes.append("Yo: " + chat.getText());
 													chat.setText("");
 												}
 											}
@@ -551,8 +575,8 @@ public class Interfaz extends JFrame{
 													System.exit(12);
 													
 												}
-												client.send("cliente: " + chat.getText());
-												System.out.println("yo: " + chat.getText());
+												client.send("Cliente: " + chat.getText());
+												caja_mensajes.append("Yo: " + chat.getText());
 												chat.setText("");
 											}
 										});
@@ -610,6 +634,10 @@ public class Interfaz extends JFrame{
 							
 							@Override
 							public void actionPerformed(ActionEvent e) {
+								
+								banner.remove(portadawsp);
+								
+								inicio.removeAll();
 								
 								/*CONTENEDOR PRINCIPAL*/
 								
@@ -1089,6 +1117,8 @@ public class Interfaz extends JFrame{
 						
 						/*CONTENEDOR PRINCIPAL*/
 						
+						inicio.removeAll();
+						
 						cp.removeAll();
 						cp.revalidate();
 						cp.repaint();
@@ -1172,6 +1202,8 @@ public class Interfaz extends JFrame{
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
+						
+						inicio.removeAll();
 						
 						cp.removeAll();
 						cp.revalidate();
@@ -12906,6 +12938,8 @@ public class Interfaz extends JFrame{
 			acumulador = String.valueOf(MAQUINA.getPuntos());
 			pts2.setText(acumulador);
 			
+			mensajeSaliente();
+			
 			envido.setEnabled(false);
 			reiniciarMenuCantos();
 			
@@ -12994,6 +13028,8 @@ public class Interfaz extends JFrame{
 	    			acumulador = String.valueOf(MAQUINA.getPuntos());
 	    			pts2.setText(acumulador);
 	    			
+	    			mensajeSaliente();
+	    			
 	    			envido.setEnabled(false);
 	    			
 	    			reiniciarMenuCantos();
@@ -13051,6 +13087,8 @@ public class Interfaz extends JFrame{
 	    				acumulador = String.valueOf(MAQUINA.getPuntos());
 	    				pts2.setText(acumulador);
 						
+	    				mensajeSaliente();
+	    				
 	    				envido.setEnabled(false);
 	    				
 						reiniciarMenuCantos();
@@ -13129,7 +13167,9 @@ public class Interfaz extends JFrame{
 			    			acumulador = "";
 			    			acumulador = String.valueOf(MAQUINA.getPuntos());
 			    			pts2.setText(acumulador);
-
+			    			
+			    			mensajeSaliente();
+			    			
 							envido.setEnabled(false);
 			    			reiniciarMenuCantos();
 			    			puntosMaximosSuperados();
@@ -13203,7 +13243,9 @@ public class Interfaz extends JFrame{
 	    			acumulador = "";
 	    			acumulador = String.valueOf(MAQUINA.getPuntos());
 	    			pts2.setText(acumulador);
-
+	    			
+	    			mensajeSaliente();
+	    			
 					envido.setEnabled(false);
 	    			reiniciarMenuCantos();
 	    			puntosMaximosSuperados();
@@ -13253,7 +13295,9 @@ public class Interfaz extends JFrame{
 	    				acumulador = "";
 	    				acumulador = String.valueOf(MAQUINA.getPuntos());
 	    				pts2.setText(acumulador);
-
+	    				
+	    				mensajeSaliente();
+	    				
 						envido.setEnabled(false);
 		    			reiniciarMenuCantos();
 		    			puntosMaximosSuperados();
@@ -13310,7 +13354,9 @@ public class Interfaz extends JFrame{
 					acumulador = "";
 					acumulador = String.valueOf(MAQUINA.getPuntos());
 					pts2.setText(acumulador);
-
+					
+					mensajeSaliente();
+					
 					envido.setEnabled(false);
 	    			reiniciarMenuCantos();
 	    			puntosMaximosSuperados();
@@ -13533,6 +13579,8 @@ public class Interfaz extends JFrame{
 			acumulador = String.valueOf(MAQUINA.getPuntos());
 			pts2.setText(acumulador);
 			
+			mensajeSaliente();
+			
 			reiniciarMenuCantos();
 			
 			puntosMaximosSuperados();
@@ -13594,6 +13642,8 @@ public class Interfaz extends JFrame{
 				acumulador = "";
 				acumulador = String.valueOf(MAQUINA.getPuntos());
 				pts2.setText(acumulador);											    				
+				
+				mensajeSaliente();
 				
 				reiniciarMenuCantos();
 				
@@ -13686,6 +13736,8 @@ public class Interfaz extends JFrame{
 					acumulador = String.valueOf(MAQUINA.getPuntos());
 					pts2.setText(acumulador);
 					
+					mensajeSaliente();
+					
 					reiniciarMenuCantos();
 					
 					puntosMaximosSuperados();
@@ -13734,6 +13786,8 @@ public class Interfaz extends JFrame{
 						acumulador = String.valueOf(MAQUINA.getPuntos());
 						pts2.setText(acumulador);
 						
+						mensajeSaliente();
+						
 						reiniciarMenuCantos();
 						
 						puntosMaximosSuperados();
@@ -13765,6 +13819,23 @@ public class Interfaz extends JFrame{
 			
 		}
 		
+	}
+	
+	
+	public void mensajeSaliente() {
+		
+		if(j.getPuntosEnvido() > MAQUINA.getPuntosEnvido() || (j.getPuntosEnvido() == MAQUINA.getPuntosEnvido() && j.soy_mano == true)) {
+			
+			JOptionPane.showMessageDialog(null, "¡GANASTE!", "ENVIDO", JOptionPane.INFORMATION_MESSAGE);
+			
+		}
+		
+		else {
+			
+			JOptionPane.showMessageDialog(null, "PERDISTE...", "ENVIDO", JOptionPane.INFORMATION_MESSAGE);
+			
+		}
+				
 	}
 	
 	//FUNCION QUE SERVIRA PARA LLAMAR UN HILO EN VEZ DE CREAR MUCHOS DE FORMA INDIVIDUAL

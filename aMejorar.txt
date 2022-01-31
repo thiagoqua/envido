@@ -7,5 +7,13 @@
 
 CHEQUEAR
 
-1	-	Mostrar cartas de la IA si ganó un envido (OPCIONAL, EN TODO CASO, MOSTRARLAS POR CONSOLA)
-2	-	Si se canta algo y la IA esta a punto de perder (falta un punto para que pierda, o si no quiere algo cantado pierde, entonces que quiera el canto si o si.
+1	-	Si se canta algo y la IA esta a punto de perder (falta un punto para que pierda, 
+		o si no quiere algo cantado pierde, entonces que quiera el canto si o si.
+		
+2	-	Si se apreta el boton volver situado en cliente-servidor, devolver al usuario a la seccion de jugar-contra-maquina - mensajeria.
+3	-	Si el cliente tarda en conectarse, mostrar un pop up que diga "Tiempo de espera agotado."
+
+(HECHO)		-	Mostrar si el jugador gano o perdio un envido.
+(HECHO)		-	Agregar textField para que se vean los mensajes del cliente-servidor por interfaz.
+(HECHO)		-	Agregar un cartel para indicarle al cliente-servidor que se pueden ir de la mensajeria con "exit".
+
