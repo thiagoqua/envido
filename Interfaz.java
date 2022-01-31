@@ -470,16 +470,16 @@ public class Interfaz extends JFrame{
 								texto_nombre2.addKeyListener((KeyListener) new KeyListener() {
 									
 									public void keyTyped(KeyEvent e) {
-										if (texto_nombre2.getText().length()== 12) {
-											e.consume();
+										if (texto_nombre2.getText().length() > 16){
+											System.exit(16);
 										}
 								    }
 
 									@Override
 									public void keyPressed(KeyEvent e) {
-										if(e.getKeyCode() == 10){
-											//PARA GUARDAR IP CON ENTER
-										}
+										// if(e.getKeyCode() == 10){
+										// 	//PARA GUARDAR IP CON ENTER
+										// }
 									}
 
 									@Override

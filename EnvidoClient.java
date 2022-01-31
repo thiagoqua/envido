@@ -3,6 +3,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import javax.swing.JOptionPane;
 
 public class EnvidoClient{
 
