@@ -477,9 +477,110 @@ public class Interfaz extends JFrame{
 
 									@Override
 									public void keyPressed(KeyEvent e) {
-										// if(e.getKeyCode() == 10){
-										// 	//PARA GUARDAR IP CON ENTER
-										// }
+										if(e.getKeyCode() == 10){
+											String ip = texto_nombre2.getText();
+											EnvidoClient client = new EnvidoClient(ip,defaultPort);
+											
+											cp.removeAll();
+											cp.revalidate();
+											cp.repaint();
+											
+											JLabel chatear;
+											chat = new JTextField("");
+											cartel.setText("Escriba 'exit' en consola para abortar el programa.");
+											
+											caja_mensajes = new JTextArea("");
+											caja_mensajes.setEditable(false);
+
+											barrita = new JScrollPane(caja_mensajes);  
+											barrita.setPreferredSize(new Dimension(400,400));
+											barrita.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+											
+											chatear = new JLabel("Envie mensajes a su amigo: ");
+											chat = new JTextField(chat.getText());
+											chat.setPreferredSize(new Dimension(200,20));
+											
+											JButton ok3;
+											ok3 = new JButton("ENVIAR");
+											
+											JPanel menu2 = new JPanel();
+											menu2.setLayout(new BoxLayout(menu2, BoxLayout.X_AXIS));
+											menu2.add(chatear);
+											menu2.add(chat);
+											menu2.add(ok3);
+											
+											JPanel principal2 = new JPanel();
+											principal2.setLayout(new GridBagLayout());
+											GridBagConstraints gbc3 = new GridBagConstraints();
+											
+											gbc3.gridx = 0;
+											gbc3.gridy = 1;
+											gbc3.gridwidth = 1;
+											gbc3.gridheight = 1;
+											gbc3.weighty = 1.0;
+											principal2.add(menu2,gbc3);
+											
+											gbc3.gridx = 0;
+											gbc3.gridy = 0;
+											gbc3.gridwidth = 1;
+											gbc3.gridheight = 1;
+											principal2.add(barrita,gbc3);
+											
+											gbc3.gridx = 0;
+											gbc3.gridy = 2;
+											gbc3.gridwidth = 1;
+											gbc3.gridheight = 1;
+											principal2.add(cartel,gbc3);
+											
+											cp.add(principal2);
+
+											chat.addKeyListener(new KeyListener(){
+												@Override
+												public void keyTyped(KeyEvent e) {}
+			
+												@Override
+												public void keyPressed(KeyEvent e) {
+													if(e.getKeyCode() == 10){
+														if(chat.getText().equalsIgnoreCase("exit")){
+															client.close();
+															cp.removeAll();
+															System.exit(11);
+														}
+														client.send("Cliente: " + chat.getText()  + System.lineSeparator());
+														caja_mensajes.append("Yo: " + chat.getText() + System.lineSeparator());
+														chat.setText("");
+													}
+												}
+			
+												@Override
+												public void keyReleased(KeyEvent e) {}
+											});
+											
+											ok3.addActionListener(new ActionListener() {
+												
+												@Override
+												public void actionPerformed(ActionEvent e) {
+													if(chat.getText().equalsIgnoreCase("exit")){
+														client.close();
+														System.exit(12);
+														
+													}
+													client.send("Cliente: " + chat.getText() + System.lineSeparator());
+													caja_mensajes.append("Yo: " + chat.getText() + System.lineSeparator());
+													chat.setText("");
+												}
+											});
+											Thread respuesta = new Thread(){
+												public void run() {
+													while(true){
+														recibo = client.receive();
+														caja_mensajes.append(recibo);
+														System.out.println(recibo);
+													}
+												};
+											};
+											respuesta.start();
+										}
 									}
 
 									@Override
