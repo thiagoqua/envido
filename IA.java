@@ -135,16 +135,16 @@ public class IA extends Jugador{
         }
     }
 
-    public void yourTurnAccept(String cantos[], Jugador j){                //turno de la IA de aceptar, rechazar o revirar la IA
-    	int end = 0,puntosEnvido,cartasGood,manyNulls,totalCartasGood;
+    public void yourTurnAccept(String cantos[],Jugador j){                //turno de la IA de aceptar, rechazar o revirar la IA
+    	int end = 0,puntosEnvido,cartasGood,manyNulls,tiradasGood;
         manyNulls = cartasNull();
         puntosEnvido = getPuntosEnvido();
         cartasGood = currentGoods();                            //por si el jugador me canta truco una vez que yo haya jugado todas mis cartas
-        totalCartasGood = totalGoods();
+        tiradasGood = tiradasGood();
         checkIfMentimos();
         while(cantos[end+1] != null && cantos[end+1] != ""){++end;}
         System.out.println("end: " + end);
-        if(j.getPuntos() >= 28){
+        if(j.getPuntos() >= 28){                                //a todo lo que cante le digo que si
         	 cantar(6,cantos);  
         }
         else if(end > 0 && cantos[end-1].equals("envido") && cantos[end].equals("envido")){
@@ -215,16 +215,14 @@ public class IA extends Jugador{
                     cantar(0,cantos);               //canto envido
                 }
             }
-            else if(cartasGood == 1 || totalCartasGood > 1){
-                cantar(6,cantos);                   //quiero
-            }
-            else if(cartasGood >= 2){
+            else if((cartasGood >= 1 && tiradasGood >= 1) || (manyNulls == 3 && tiradasGood >= 2)){
+            //(si me queda más de una carta buena y tuve buenas cartas)
                 cantar(4,cantos);                   //retruco
             }
-            else if(manyNulls == 3 && totalCartasGood > 1){     //si ya tire todas y mis cartas fueron buenas
-                cantar(3,cantos);
+            else if(cartasGood == 1 || tiradasGood == 1){
+                cantar(6,cantos);                   //quiero
             }
-            else if(totalCartasGood < 1 && mentimos){
+            else if(tiradasGood == 0 && cartasGood == 0 && mentimos){
                 System.out.println("SE MIENTE PERRO");
                 cantar(4,cantos);                   //retruco
             }
@@ -233,25 +231,22 @@ public class IA extends Jugador{
             }
         }
         else if(cantos[end].equals("retruco")){
-            if(cartasGood == 2 || totalCartasGood >= 2){
+            if(cartasGood >= 2 || tiradasGood >= 2){
                 cantar(6,cantos);                   //quiero
             }
-            else if(cartasGood == 3 || totalCartasGood >= 2){
+            else if((cartasGood >= 2 || tiradasGood >= 1) || (manyNulls == 3 && tiradasGood >= 2)){
                 cantar(5,cantos);                   //vale cuatro
             }
             else if(cartasGood < 2 && mentimos){
                 System.out.println("SE MIENTE PERRO");
                 cantar(5,cantos);                   //vale cuatro
             }
-            else if(manyNulls == 3 && totalCartasGood > 1){
-                cantar(3,cantos);
-            }
             else{
                 cantar(7,cantos);                   //no quiero
             }
         }
         else if(cantos[end].equals("vale cuatro")){
-            if(cartasGood == 3 || totalCartasGood >= 2){
+            if((cartasGood >= 2 || tiradasGood >= 1) || (manyNulls == 3 && tiradasGood >= 2)){
                 cantar(6,cantos);                   //quiero
             }
             else{
@@ -493,11 +488,13 @@ public class IA extends Jugador{
             mentimos = false;
     }
 
-    private int totalGoods(){                       //me dice cuantas cartas buenas tengo/tuve en total
+    private int tiradasGood(){                       //me dice cuantas cartas buenas tengo/tuve en total
         int many = 0;
-        for(Carta temp : super.copyCartas)
-            if(temp.isGood())
-                ++many;
+        for (int i = 0;i < 3;++i){
+            if(super.cartas[i] == null)
+                if(super.copyCartas[i].isGood())
+                    ++many;
+        }
     return many;}
 
     private int cartasNull(){

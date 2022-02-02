@@ -1,4 +1,3 @@
-
 PULIR
 
 1	-	Si se apreta el boton volver situado en cliente-servidor, devolver al usuario a la seccion de jugar-contra-maquina - mensajeria.
@@ -15,12 +14,10 @@ CHEQUEAR
 
 1	-	Si me voy al mazo hay veces que suma mal.
 		
-		PRUEBAS: cuando hay envido-no quiero/quiero y luego me voy al mazo sin que se cante truco, suma 2 en vez de 1.
+		PRUEBAS: (error encontrado falta correccion) cuando hay envido-no quiero/quiero y luego me voy al mazo sin que se cante truco, suma 2 en vez de 1.
 		
 				se canto envido-quiero y luego me fui al mazo cuando la IA me canto truco y me gano... suma 4 en vez de 2.
 				
 				si me voy al mazo sin tirar (y sin que haya una carta en la mesa y no se haya cantado nada), suma 4 en vez de 2.
 			
 2	-	hay veces que el sist puntuacion suma mal: me canto un truco-no quiero y sumo 2 en vez de 1. (revisar tiraDir y tiraDir2 por las dudas)
-
-3	-	se empardo primera, la IA tenia un 3, le cante truco y no quiso

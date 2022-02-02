@@ -178,7 +178,7 @@ public class Jugador {
     return false;}
 
 	public void voyMazo(String cantos[],Jugador j2,boolean cantoEnvido){
-		if(cantoEnvido == false && cantos[0] == "") {
+		if(!cantoEnvido && (cantos[0] == "" || cantos[0] == null)){
 			j2.addPuntos(2);
 		}
 		else if(isCantado("truco",cantos)){
