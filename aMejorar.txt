@@ -1,18 +1,26 @@
 
-4	-	error1.png
+PULIR
 
-6	-	Si me voy al mazo, no suma bien; hay veces que suma 4 puntos en vez de 1 o 2; otras veces se canto el envido y me voy al mazo y suma 2 en vez de 1
-		Hay veces que quiero un envido-envido y suma 3
+1	-	Si se apreta el boton volver situado en cliente-servidor, devolver al usuario a la seccion de jugar-contra-maquina - mensajeria.
+
+2	-	Eliminar de los JButtons el color grisaceo, asi como hicimos en el jtextarea
+
+3	-	Ver la forma de corregir la barra izquierda de cantos, ya que hay nombres que se superponen al iniciar una nueva ronda
+			(no rompe el programa, pero es molesto).
+			
+4	-	quitar los settext que muestran los quiero, no quiero, y ponerlos dentro de los botones
 
 
 CHEQUEAR
 
-(HECHO)	-	Si se canta algo y la IA esta a punto de perder (falta un punto para que pierda, 
-		o si no quiere algo cantado pierde, entonces que quiera el canto si o si.
+1	-	Si me voy al mazo hay veces que suma mal.
 		
-2	-	Si se apreta el boton volver situado en cliente-servidor, devolver al usuario a la seccion de jugar-contra-maquina - mensajeria.
+		PRUEBAS: cuando hay envido-no quiero/quiero y luego me voy al mazo sin que se cante truco, suma 2 en vez de 1.
+		
+				se canto envido-quiero y luego me fui al mazo cuando la IA me canto truco y me gano... suma 4 en vez de 2.
+				
+				si me voy al mazo sin tirar (y sin que haya una carta en la mesa y no se haya cantado nada), suma 4 en vez de 2.
+			
+2	-	hay veces que el sist puntuacion suma mal: me canto un truco-no quiero y sumo 2 en vez de 1. (revisar tiraDir y tiraDir2 por las dudas)
 
-(HECHO)		-	Mostrar si el jugador gano o perdio un envido.
-(HECHO)		-	Agregar textField para que se vean los mensajes del cliente-servidor por interfaz.
-(HECHO)		-	Agregar un cartel para indicarle al cliente-servidor que se pueden ir de la mensajeria con "exit".
-
+3	-	se empardo primera, la IA tenia un 3, le cante truco y no quiso

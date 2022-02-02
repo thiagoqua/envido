@@ -143,6 +143,7 @@ public class IA extends Jugador{
         totalCartasGood = totalGoods();
         checkIfMentimos();
         while(cantos[end+1] != null && cantos[end+1] != ""){++end;}
+        System.out.println("end: " + end);
         if(j.getPuntos() >= 28){
         	 cantar(6,cantos);  
         }

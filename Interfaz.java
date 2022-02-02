@@ -899,11 +899,14 @@ public class Interfaz extends JFrame{
 										acumulador = "";
 									
 									//REMUEVO LA INTERFAZ DE JUEGO
-									cp.removeAll();
-									cp.revalidate();
-									cp.repaint();
-									
-									interfazCreacion();
+										inicio.removeAll();
+										
+										cp.removeAll();
+										cp.revalidate();
+										cp.repaint();
+										cp.add(ventanaPrincipal());
+										
+										ActionListener();
 									
 									
 								}
@@ -964,11 +967,14 @@ public class Interfaz extends JFrame{
 										acumulador = "";
 									
 										//REMUEVO LA INTERFAZ DE JUEGO
+										inicio.removeAll();
+										
 										cp.removeAll();
 										cp.revalidate();
 										cp.repaint();
-//										
-										interfazCreacion();
+										cp.add(ventanaPrincipal());
+										
+										ActionListener();
 										
 							        }
 							        
@@ -6453,7 +6459,6 @@ public class Interfaz extends JFrame{
 						
 						//LA IA GANA
 
-						//sistPuntuacion(cantadoTruco,j,MAQUINA);
 						MAQUINA.addPuntos(1);
 						acumulador = String.valueOf(MAQUINA.getPuntos());
 						pts2.setText(acumulador);
@@ -6548,7 +6553,7 @@ public class Interfaz extends JFrame{
     							
 								//EL JUGADOR GANA
 								
-    							sistPuntuacion(cantado,MAQUINA,j);
+    							sistPuntuacion(cantado,j,MAQUINA);
     							acumulador = String.valueOf(j.getPuntos());
     							pts1.setText(acumulador);
     							
@@ -7211,7 +7216,6 @@ public class Interfaz extends JFrame{
 					
 					else if(cantado[1].equals("retruco")){
 						
-						texto.setText("<html>"+ cantado[1] +"</html>");
 						quiero.setEnabled(true);
 						noQuiero.setEnabled(true);
 						
@@ -7273,6 +7277,8 @@ public class Interfaz extends JFrame{
 							quiero.setEnabled(false);
 							noQuiero.setEnabled(false);
 							vale_4.setEnabled(false);
+							
+							MAQUINA.yourTurnAccept(cantado, j);
 							
 							/*SI LA IA QUIERE*/
 							
@@ -13582,7 +13588,7 @@ public class Interfaz extends JFrame{
 					envido.setEnabled(false);
 				}
 				
-				System.out.println(cantado[0]);
+				System.out.println(cantado[0]);				//TODO - QUITAR ESTO
 				System.out.println(cantado[1]);
 				System.out.println(cantado[2]);
 				
