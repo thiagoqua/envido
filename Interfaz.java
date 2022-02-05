@@ -21,6 +21,8 @@ public class Interfaz extends JFrame{
 	
 	private static final long serialVersionUID = 1L;
 	
+	private Thread juego;
+	
 	/*BOTONES PARA CANTAR*/
 	
 	private JButton flecha;
@@ -147,7 +149,7 @@ public class Interfaz extends JFrame{
     
     private boolean irseAlMazo;
 
-
+    private boolean botonRendirse;
     //
     
     /*OTROS*/
@@ -162,10 +164,9 @@ public class Interfaz extends JFrame{
     private JScrollPane barrita;
 	
 	public Interfaz() {
-
+		
 		defaultPort = 5010;
-		recibo = new String();
-		principal = new JPanel();
+		
 		interfazCreacion();
 		
 	}
@@ -277,9 +278,9 @@ public class Interfaz extends JFrame{
 				secundario.add(cartel,gbc2);
 				
 				cp.removeAll();
+				cp.add(secundario);
 				cp.revalidate();	//Debe invocarse cuando los subcomponentes del contenedor se modifican
 				cp.repaint();
-				cp.add(secundario);
 				
 				
 				jugarPersona.addActionListener(new ActionListener() {
@@ -290,8 +291,7 @@ public class Interfaz extends JFrame{
 						/*SE CREA LA INTERFAZ DE JUEGO*/
 						
 						cp.removeAll();
-						cp.revalidate();
-						cp.repaint();
+
 						
 						banner.remove(portada);
 						banner.add(portadawsp);
@@ -329,6 +329,9 @@ public class Interfaz extends JFrame{
 						terciario.add(cartel,gbc2);
 						
 						cp.add(terciario);
+						
+						cp.revalidate();
+						cp.repaint();
 
 						servidor.addActionListener(new ActionListener() {
 							@Override
@@ -534,11 +537,13 @@ public class Interfaz extends JFrame{
 								/*CONTENEDOR PRINCIPAL*/
 								
 								cp.removeAll();
-								cp.revalidate();
-								cp.repaint();
-								cp.add(ventanaPrincipal());
+//								cp.add(ventanaPrincipal());
+//								cp.revalidate();
+//								cp.repaint();
 								
-								ActionListener();		
+//								ActionListener();
+								
+								interfazCreacion();
 								
 							}
 						});
@@ -776,6 +781,10 @@ public class Interfaz extends JFrame{
 								}	
 								texto.setText("<html>"+ cantado[i] +"</html>");
 								accionUsuario = true;
+								
+								for(i=0;i<5;i++) {
+									System.out.println( i + ". " + cantado[i]);
+								}	
 							}
 						});
 						
@@ -810,6 +819,10 @@ public class Interfaz extends JFrame{
 											break;
 										}
 									}
+								}
+								
+								for(int i=0;i<5;i++) {
+									System.out.println( i + ". " + cantado[i]);
 								}
 								
 								accionUsuario = true;
@@ -878,6 +891,7 @@ public class Interfaz extends JFrame{
 										//RESTAURAR EL MENU IZQUIERDO
 										flecha2.setEnabled(true);
 										flecha.setEnabled(true);
+										
 										reiniciarMenuCantos();
 										
 										//RESTAURAR TEXTO EN VACIO
@@ -897,85 +911,37 @@ public class Interfaz extends JFrame{
 										
 										cantoEnvido = false;
 										acumulador = "";
-									
+										
+										rendirse.setText("RENDIRSE");
+										
 									//REMUEVO LA INTERFAZ DE JUEGO
 										inicio.removeAll();
 										
 										cp.removeAll();
-										cp.revalidate();
-										cp.repaint();
-										cp.add(ventanaPrincipal());
+//										cp.add(ventanaPrincipal());
+//										cp.revalidate();
+//										cp.repaint();
 										
-										ActionListener();
+//										ActionListener();
+										
+										interfazCreacion();
 									
 									
 								}
 								else {
 								
-									int result = JOptionPane.showConfirmDialog(confirmar, "�Esta seguro que desea salir? El juego se daria como perdido.");
+									int result = JOptionPane.showConfirmDialog(confirmar, "Esta seguro que desea salir? El juego se daria como perdido.");
 	
 							        if (result == 0) {
 							        	
-							        	//RESTAURO CADA VARIABLE
-										
-										MAQUINA.reset();
-										j.reset();
-									
-										//REPONGO LAS CARTAS
-										mazoCartas.reponer();
-										
-										//RESTAURAR POR LAS DUDAS LAS CARTAS QUE SE REPARTIERON
-										for(int i=0;i<3;++i){
-								            MAQUINA.cartas[i] = null;
-											j.cartas[i] = null;
-											MAQUINA.copyCartas[i] = null;
-											j.copyCartas[i] = null;
-										}
-									
-										for(int i=0;i<5;i++) {
-							        		cantado[i] = "";
-							        	}
-										
-										//RESTAURAR EN CERO LAS CARTAS SOBRE LA MESA
-										l1.setIcon(null); l2.setIcon(null); l3.setIcon(null);
-										l4.setIcon(null); l5.setIcon(null); l6.setIcon(null);
-										
-										//RESTAURAR EN CERO LAS CARTAS DEL JUGADOR
-										c1.setIcon(null); c2.setIcon(null); c3.setIcon(null);
-										
-										//RESTAURAR EL MENU IZQUIERDO
-										flecha2.setEnabled(true);
-										flecha.setEnabled(true);
-										reiniciarMenuCantos();
-										
-										//RESTAURAR TEXTO EN VACIO
-										texto.setText("<html>"+ "" +"</html>");
-										pts1.setText("0");
-										pts2.setText("0");
-									
-										//RESTAURO PUNTOS DEL JUGADOR
-										j.puntos = 0;
-										MAQUINA.puntos = 0;
-										
-										//REINICIO EL NRO DE RONDAS
-										ronda=1;
-										
-										//INVERTIR IMAGENES DE MANO Y MAZO
-										invertirManoMazo();
-										
-										cantoEnvido = false;
-										acumulador = "";
-									
-										//REMUEVO LA INTERFAZ DE JUEGO
-										inicio.removeAll();
-										
-										cp.removeAll();
-										cp.revalidate();
-										cp.repaint();
-										cp.add(ventanaPrincipal());
-										
-										ActionListener();
-										
+							        	jugando = false;
+							        	
+							        	botonRendirse = true;
+							        	
+							        	//HALLAR LA FORMA DE DETENER EL HILO ACTUAL Y EL HILO PRINCIPAL
+							        	
+							        	//QUIEN DICE QUE NECESITO EL HILO PRINCIPAL, TRANQUILAMENTE PODRIA SACARLO (CREO)
+							        	
 							        }
 							        
 							        else if (result == 1) {}
@@ -988,7 +954,7 @@ public class Interfaz extends JFrame{
 						//TODO - INICIO DEL JUEGO
 						jugando = true;
 						
-						Thread juego = new Thread() {
+						juego = new Thread() {
 							
 					    	@Override
 					    	public void run() {
@@ -1018,11 +984,13 @@ public class Interfaz extends JFrame{
 						inicio.removeAll();
 						
 						cp.removeAll();
-						cp.revalidate();
-						cp.repaint();
-						cp.add(ventanaPrincipal());
+//						cp.add(ventanaPrincipal());
+//						cp.revalidate();
+//						cp.repaint();
 						
-						ActionListener();
+//						ActionListener();
+						
+						interfazCreacion();
 						
 					}
 				});	//FIN ACTION-LISTENER VOLVER
@@ -1092,10 +1060,12 @@ public class Interfaz extends JFrame{
 				principal2.add(cartel,gbc3);
 				
 				cp.removeAll();
-				cp.revalidate();
-				cp.repaint();
+				
 				cp.add(principal2);
 				
+				cp.revalidate();
+				cp.repaint();
+			
 				ok.addActionListener(new ActionListener() {
 					
 					@Override
@@ -1104,11 +1074,13 @@ public class Interfaz extends JFrame{
 						inicio.removeAll();
 						
 						cp.removeAll();
-						cp.revalidate();
-						cp.repaint();
-						cp.add(ventanaPrincipal());
+//						cp.add(ventanaPrincipal());
+//						cp.revalidate();
+//						cp.repaint();
 						
-						ActionListener();
+//						ActionListener();
+						
+						interfazCreacion();
 						
 					}
 				});	//FIN OK
@@ -1121,6 +1093,9 @@ public class Interfaz extends JFrame{
 	
 	
 	public void interfazCreacion() {
+	
+		recibo = new String();
+		principal = new JPanel();
 		
 		/*INICIALIZACION DE OBJETOS DE OTRAS CLASES*/
 		
@@ -1144,7 +1119,8 @@ public class Interfaz extends JFrame{
 	    acumulador = "";
 	    irseAlMazo = false;
 	    ronda = 1;
-		cantoEnvido = false;   
+		cantoEnvido = false;  
+		botonRendirse = false;
 	    
 		/*CREACION DE VENTANA BASICA*/
 		setIconImage(new ImageIcon(getClass().getResource("/images/icon.jpg")).getImage());
@@ -1166,6 +1142,8 @@ public class Interfaz extends JFrame{
 		
 		cp.add(ventanaPrincipal());
 		
+		cp.revalidate();
+		cp.repaint();
 
 		/*CREACION DE MENU DE BOTONES IZQUIERDO*/
 		
@@ -1490,6 +1468,8 @@ public class Interfaz extends JFrame{
 					
 					if(cantado[0].equals("envido") || cantado[0].equals("real envido") || cantado[0].equals("falta envido")) {
 						
+						cantoEnvido = true;
+						
 						mazo.setEnabled(false);
 						texto.setText("<html>"+ cantado[0] +"</html>");
 						
@@ -1555,6 +1535,8 @@ public class Interfaz extends JFrame{
 					MAQUINA.yourTurnEnvido(cantado);
 					
 					if(cantado[0].equals("envido") || cantado[0].equals("real envido") || cantado[0].equals("falta envido")) {
+						
+						cantoEnvido = true;
 						
 						mazo.setEnabled(false);
 						texto.setText("<html>"+ cantado[0] +"</html>");
@@ -1751,6 +1733,8 @@ public class Interfaz extends JFrame{
 	    		
 	    		if(cantado[0].equals("envido") || cantado[0].equals("real envido") || cantado[0].equals("falta envido")) {
 	    			
+	    			cantoEnvido = true;
+	    			
 	    			cantaEnvidoJugador();
 		    		
 	    		}
@@ -1850,6 +1834,75 @@ public class Interfaz extends JFrame{
 			
 		} //FIN WHILE JUEGO
 	
+		
+		if(botonRendirse == true) {					//TODO - EN VEZ DE RESTAURAR DENTRO DE RENDIRSE, LO HAGO AFUERA LUEGO DE QUE SALGA DEL BUCLE
+			
+			botonRendirse = false;
+			
+			//RESTAURO CADA VARIABLE
+			
+			MAQUINA.reset();
+			j.reset();
+		
+			//REPONGO LAS CARTAS
+			mazoCartas.reponer();
+			
+			//RESTAURAR POR LAS DUDAS LAS CARTAS QUE SE REPARTIERON
+			for(int i=0;i<3;++i){
+	            MAQUINA.cartas[i] = null;
+				j.cartas[i] = null;
+				MAQUINA.copyCartas[i] = null;
+				j.copyCartas[i] = null;
+			}
+		
+			for(int i=0;i<5;i++) {
+        		cantado[i] = "";
+        	}
+			
+			//RESTAURAR EN CERO LAS CARTAS SOBRE LA MESA
+			l1.setIcon(null); l2.setIcon(null); l3.setIcon(null);
+			l4.setIcon(null); l5.setIcon(null); l6.setIcon(null);
+			
+			//RESTAURAR EN CERO LAS CARTAS DEL JUGADOR
+			c1.setIcon(null); c2.setIcon(null); c3.setIcon(null);
+			
+			//RESTAURAR EL MENU IZQUIERDO
+			flecha2.setEnabled(true);
+			flecha.setEnabled(true);
+			reiniciarMenuCantos();
+			
+			//RESTAURAR TEXTO EN VACIO
+			texto.setText("<html>"+ "" +"</html>");
+			pts1.setText("0");
+			pts2.setText("0");
+		
+			//RESTAURO PUNTOS DEL JUGADOR
+			j.puntos = 0;
+			MAQUINA.puntos = 0;
+			
+			//REINICIO EL NRO DE RONDAS
+			ronda=1;
+			
+			//INVERTIR IMAGENES DE MANO Y MAZO
+			invertirManoMazo();
+			
+			cantoEnvido = false;
+			acumulador = "";
+																						
+			//REMUEVO LA INTERFAZ DE JUEGO
+			inicio.removeAll();
+			
+			cp.removeAll();
+//			cp.add(ventanaPrincipal());
+//			cp.revalidate();
+//			cp.repaint();
+			
+//			ActionListener();
+			
+			interfazCreacion();
+			
+		}
+		
 		System.out.println("\n\nFIN FIN FINNNNN !!!!!!!\n\n");
 		
 	}
@@ -12705,7 +12758,7 @@ public class Interfaz extends JFrame{
     }
        
 	
-	public void reiniciarMenuCantos() {
+	public void reiniciarMenuCantos() {		//TODO - HAY QUE REMOVER EL DEL TRUCO TAMBIEN
 		
 		cp.remove(menuCantosE);
 		cp.add(menu,BorderLayout.WEST);
@@ -12739,6 +12792,7 @@ public class Interfaz extends JFrame{
 			flecha.setEnabled(true);
 			flecha2.setEnabled(true);
 			
+			texto.setEnabled(true);
 			texto.setText("<html>"+ "EL JUGADOR GANO" +"</html>");
 			
 			rendirse.setText("MENU");			
@@ -13573,7 +13627,7 @@ public class Interfaz extends JFrame{
 			
 			//SI LA IA REVIRA
 			
-			else if(cantado[2].equals("real envido") || cantado[2].equals("falta envido")) {
+			else if(cantado[2].equals("real envido") || cantado[2].equals("falta envido")) {	//TODO - AGREGAR UNA CONDICION MAS, QUE CANTADO[1] NO SEA FALTA ENVIDO
 				
 				texto.setText("<html>"+ cantado[2] +"</html>");
 				quiero.setEnabled(true);
@@ -13586,6 +13640,8 @@ public class Interfaz extends JFrame{
 				}
 				else {
 					envido.setEnabled(false);
+					real_envido.setEnabled(false);
+					falta_envido.setEnabled(false);
 				}
 				
 				System.out.println(cantado[0]);				//TODO - QUITAR ESTO
@@ -13724,7 +13780,7 @@ public class Interfaz extends JFrame{
 		
 		if(j.getPuntosEnvido() > MAQUINA.getPuntosEnvido() || (j.getPuntosEnvido() == MAQUINA.getPuntosEnvido() && j.soy_mano == true)) {
 			
-			JOptionPane.showMessageDialog(null, "�GANASTE!", "ENVIDO", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "GANASTE!", "ENVIDO", JOptionPane.INFORMATION_MESSAGE);
 			
 		}
 		

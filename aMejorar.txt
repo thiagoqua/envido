@@ -5,19 +5,23 @@ PULIR
 2	-	Eliminar de los JButtons el color grisaceo, asi como hicimos en el jtextarea
 
 3	-	Ver la forma de corregir la barra izquierda de cantos, ya que hay nombres que se superponen al iniciar una nueva ronda
-			(no rompe el programa, pero es molesto).
+			(no rompe el programa, pero es molesto). (CREO QUE TENGO QUE ELIMINAR EL MENUCANTOST PARA ESO)
 			
 4	-	quitar los settext que muestran los quiero, no quiero, y ponerlos dentro de los botones
 
+5	-	"Jugador gano" aparece por momentos y luego se va; esto sucede a veces cuando gano y solo queda opcion de ir al menu
+
 
 CHEQUEAR
-
-1	-	Si me voy al mazo hay veces que suma mal.
-		
-		PRUEBAS: (error encontrado falta correccion) cuando hay envido-no quiero/quiero y luego me voy al mazo sin que se cante truco, suma 2 en vez de 1.
-		
-				se canto envido-quiero y luego me fui al mazo cuando la IA me canto truco y me gano... suma 4 en vez de 2.
-				
-				si me voy al mazo sin tirar (y sin que haya una carta en la mesa y no se haya cantado nada), suma 4 en vez de 2.
 			
 2	-	hay veces que el sist puntuacion suma mal: me canto un truco-no quiero y sumo 2 en vez de 1. (revisar tiraDir y tiraDir2 por las dudas)
+
+3	-	Si la IA gano primera y le canto truco en segunda, me ha pasado que no quiere. Si tiene al menos una carta buena o dos cartas mayores a 10 que quiera
+
+ERROR IMAGEN
+
+(HECHO)	-	Cuando la IA me canta envido, no importa que boton aprete, se contabiliza dos veces (real envido, falta envido, etc.)
+
+Nuevo problema: cuando me rindo, se rompe el programa, pero su codigo es igual al que esta arriba, cuando la partida termina de forma natural.
+
+	Posible solucion: detener el hilo, ya que no lo termino (como cuando alguno de los dos gana y eso si pasa)
