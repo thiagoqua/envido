@@ -482,7 +482,7 @@ public class IA extends Jugador{
     private void checkIfMentimos(){
         /*si se quiere que la IA mienta menos o más hay que modificar el valor con el que se compara aVer*/
         int aVer = (int)(Math.random() * 20);
-        if(aVer <= 15)
+        if(aVer <= 18)
             mentimos = true;
         else
             mentimos = false;
