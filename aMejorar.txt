@@ -1,27 +1,38 @@
 PULIR
 
-1	-	Si se apreta el boton volver situado en cliente-servidor, devolver al usuario a la seccion de jugar-contra-maquina - mensajeria.
+(OPCIONAL)	-	Si se apreta el boton volver situado en cliente-servidor, devolver al usuario a la seccion de jugar-contra-maquina - mensajeria.
 
-2	-	Eliminar de los JButtons el color grisaceo, asi como hicimos en el jtextarea
-
-3	-	Ver la forma de corregir la barra izquierda de cantos, ya que hay nombres que se superponen al iniciar una nueva ronda
-			(no rompe el programa, pero es molesto). (CREO QUE TENGO QUE ELIMINAR EL MENUCANTOST PARA ESO)
+(OPCIONAL)	-	Que el usuario decida si 15 0 30 puntos.
 			
-4	-	quitar los settext que muestran los quiero, no quiero, y ponerlos dentro de los botones
+(LOS QUIERO/NOQUIERO DEL JUGADOR NO SE AGREGAN)	-	quitar los settext que muestran los quiero, no quiero, y ponerlos dentro de los botones
 
-5	-	"Jugador gano" aparece por momentos y luego se va; esto sucede a veces cuando gano y solo queda opcion de ir al menu
 
+(HECHO)	-	Ver la forma de corregir la barra izquierda de cantos, ya que hay nombres que se superponen al iniciar una nueva ronda
+			(no rompe el programa, pero es molesto).
+			
+			IMPORTANTE: si nunca toco los cantos, entonces voy a estar agregando MENU continuamente (aunque es dificil q pase siempre)
+			
+
+
+(HECHO (ATADO CON ALAMBRE)	-	ERROR LINEA 8265 O BUSCAR POR " Espero que el jugador quiera/no quiera truco (me gano primera y gane segunda, pero antes de tirar, canto) "
+
+(HECHO) (ATADO CON ALAMBRE)	-	Si el jugador canta truco en tercera y la IA no quiere, no aparece su cartel y no suma los puntos para el jugador. Linea 8459
+		Revisar por " Espero que el jugador tire en tercera (me gano primera y le gane segunda) "
+		
+		CONCLUSION
+		
+		Cuando la IA y el jugador no tiraron tercera y el jugador canta truco, APARENTEMENTE todo esta bien.
+		Cuando la IA tiro todo y al jugador le falta tirar tercera y canta truco, hay veces que tira error y otras no.
+		
+		SOLUCION: si es un caso aislado, forzar que solo haya un solo canto de truco en el arreglo
+		
+3	-	Revisar boton RENDIRSE
+
+(HECHO)	-	Revisar irme al mazo con 30 puntos en IA
 
 CHEQUEAR
-			
-2	-	hay veces que el sist puntuacion suma mal: me canto un truco-no quiero y sumo 2 en vez de 1. (revisar tiraDir y tiraDir2 por las dudas)
 
-3	-	Si la IA gano primera y le canto truco en segunda, me ha pasado que no quiere. Si tiene al menos una carta buena o dos cartas mayores a 10 que quiera
+La IA tiro todas las cartas, y la ultima que tiro fue un 3. Le cante truco y no quiso (a todo esto, me mostro el cartel y sumo puntos), pero ahora
+	el problema esta en que la IA no quiere con una carta alta.
 
-ERROR IMAGEN
 
-(HECHO)	-	Cuando la IA me canta envido, no importa que boton aprete, se contabiliza dos veces (real envido, falta envido, etc.)
-
-Nuevo problema: cuando me rindo, se rompe el programa, pero su codigo es igual al que esta arriba, cuando la partida termina de forma natural.
-
-	Posible solucion: detener el hilo, ya que no lo termino (como cuando alguno de los dos gana y eso si pasa)

@@ -614,28 +614,20 @@ public class Interfaz extends JFrame{
 							
 							@Override
 							public void actionPerformed(ActionEvent e) {
-								if(j.getPuntos() >= 30 || MAQUINA.getPuntos() >= 30) {
-									
-									
-									
-								}
-								else {
-									
-									mazo.setEnabled(false);
-									
-									j.voyMazo(cantado, MAQUINA, cantoEnvido);
-									
-									//AGREGO LOS PUNTOS DE IRSE AL MAZO DE FORMA VISIBLE EN LA INTERFAZ
-									acumulador = "";
-									acumulador = String.valueOf(MAQUINA.getPuntos());
-									pts2.setText(acumulador);
-									puntosMaximosSuperados();		//TODO - CHEQUEAR QUE ESTO NO ROMPA EL PROGRAMA
-									
-									irseAlMazo = true;
-									
-									accionUsuario = true;
-									
-								}
+																	
+								mazo.setEnabled(false);
+								
+								j.voyMazo(cantado, MAQUINA, cantoEnvido);
+								
+								//AGREGO LOS PUNTOS DE IRSE AL MAZO DE FORMA VISIBLE EN LA INTERFAZ
+								acumulador = "";
+								acumulador = String.valueOf(MAQUINA.getPuntos());
+								pts2.setText(acumulador);
+								puntosMaximosSuperados();
+								
+								irseAlMazo = true;
+								
+								accionUsuario = true;
 								
 							}
 							
@@ -672,9 +664,11 @@ public class Interfaz extends JFrame{
 							
 							@Override
 							public void actionPerformed(ActionEvent e) {
-//								for(int i=0;i<5;i++) {
-//									cantado[i] = null;
-//								}
+									
+								for(int i=0;i<5;i++) {
+									cantado[i]="";
+								}	
+								
 								cantado[0] = "truco";
 								texto.setText("<html>"+ cantado[0] +"</html>");
 								accionUsuario = true;
@@ -782,9 +776,6 @@ public class Interfaz extends JFrame{
 								texto.setText("<html>"+ cantado[i] +"</html>");
 								accionUsuario = true;
 								
-								for(i=0;i<5;i++) {
-									System.out.println( i + ". " + cantado[i]);
-								}	
 							}
 						});
 						
@@ -819,10 +810,6 @@ public class Interfaz extends JFrame{
 											break;
 										}
 									}
-								}
-								
-								for(int i=0;i<5;i++) {
-									System.out.println( i + ". " + cantado[i]);
 								}
 								
 								accionUsuario = true;
@@ -892,7 +879,7 @@ public class Interfaz extends JFrame{
 										flecha2.setEnabled(true);
 										flecha.setEnabled(true);
 										
-										reiniciarMenuCantos();
+										reiniciarMenu();
 										
 										//RESTAURAR TEXTO EN VACIO
 										texto.setText("<html>"+ "" +"</html>");
@@ -938,9 +925,15 @@ public class Interfaz extends JFrame{
 							        	
 							        	botonRendirse = true;
 							        	
+							        	
+							        	
 							        	//HALLAR LA FORMA DE DETENER EL HILO ACTUAL Y EL HILO PRINCIPAL
 							        	
-							        	//QUIEN DICE QUE NECESITO EL HILO PRINCIPAL, TRANQUILAMENTE PODRIA SACARLO (CREO)
+							        	
+							        	//1. COMBINAR TODOS LOS HILOS EN UNA FUNCION Y EN ESA FUNCION LLAMAR CONTINUAMENTE A PUNTOSMAXIMOSSUPERADOS()
+							        			//SI APRETO "RENDIRSE" AGREGO 30 A LA IA, Y PUNTOSMAXIMOSSUPERADOS() BLOQUEA TODO Y LO UNICO QUE ME QUEDA ES IRME AL MENU
+							        	
+							        	
 							        	
 							        }
 							        
@@ -1368,6 +1361,9 @@ public class Interfaz extends JFrame{
 			
     		MAQUINA.truco = false; j.truco = false;
     		mazo.setEnabled(true);
+    		
+    		//RESTAURAR TEXTO EN VACIO
+			texto.setText("<html>"+ "" +"</html>");
     		
 			/*SE REPARTEN CARTAS PARA JUGADOR E IA*/
 			
@@ -1804,11 +1800,8 @@ public class Interfaz extends JFrame{
 				//RESTAURAR EL MENU IZQUIERDO
 				flecha2.setEnabled(true);
 				flecha.setEnabled(true);
-				reiniciarMenuCantos();
-				
-				//RESTAURAR TEXTO EN VACIO
-				texto.setText("<html>"+ "" +"</html>");
-			
+				reiniciarMenu();
+							
 			ronda+=1;
 			
 			cantoEnvido = false;
@@ -1869,7 +1862,7 @@ public class Interfaz extends JFrame{
 			//RESTAURAR EL MENU IZQUIERDO
 			flecha2.setEnabled(true);
 			flecha.setEnabled(true);
-			reiniciarMenuCantos();
+			reiniciarMenu();
 			
 			//RESTAURAR TEXTO EN VACIO
 			texto.setText("<html>"+ "" +"</html>");
@@ -1900,6 +1893,17 @@ public class Interfaz extends JFrame{
 //			ActionListener();
 			
 			interfazCreacion();
+			
+		}
+		
+		if(MAQUINA.getPuntos() >= 30) {
+			
+			texto.setText("<html>"+ "LA IA GANO" +"</html>");
+			
+		}
+		else if(j.getPuntos() >= 30){
+			
+			texto.setText("<html>"+ "EL JUGADOR GANO" +"</html>");
 			
 		}
 		
@@ -3820,6 +3824,8 @@ public class Interfaz extends JFrame{
 						
 						else {
 							
+							cantarTruco.setEnabled(false);
+							
 							auxJ = queCartaFueTirada();
 							
 							tiraIA = null;
@@ -5634,6 +5640,8 @@ public class Interfaz extends JFrame{
 						
 						else {
 							
+							cantarTruco.setEnabled(false);
+							
 							auxJ = queCartaFueTirada();
 							
 							tiraIA = null;
@@ -5949,8 +5957,6 @@ public class Interfaz extends JFrame{
     		
     		if(cantado[2].equals("quiero")) {
     			
-    			System.out.println("HOLA PRRO");
-    			
     			vale_4.setEnabled(false);
     			
     			if(ronda%2==0) {
@@ -5967,7 +5973,6 @@ public class Interfaz extends JFrame{
     		
     		else if(cantado[2].equals("vale cuatro")) {
     			
-    			texto.setText("<html>"+ cantado[2] +"</html>");
 				quiero.setEnabled(false);
 				noQuiero.setEnabled(false);
 				
@@ -6210,10 +6215,6 @@ public class Interfaz extends JFrame{
 					
 					else if(cantado[2].equals("vale cuatro")){
 						
-						/**PROVISORIO*/
-						System.out.println("la IA revira");
-						/***/
-						
 						texto.setText("<html>"+ cantado[2] +"</html>");
 						quiero.setEnabled(true);
 						noQuiero.setEnabled(true);
@@ -6333,7 +6334,6 @@ public class Interfaz extends JFrame{
 				
 	    		else if(cantado[0].equals("truco")) {
 					
-					texto.setText("<html>"+ cantado[0] +"</html>");
 					flecha2.setEnabled(false);
 					cantarTruco.setEnabled(false);
 					mazo.setEnabled(false);
@@ -6566,6 +6566,8 @@ public class Interfaz extends JFrame{
 						
 	    	    		else if(cantado[0].equals("truco")) {
 							
+	    	    			System.out.println("HOLA HOLAAA");
+	    	    			
 							flecha2.setEnabled(false);
 							cantarTruco.setEnabled(false);
 							mazo.setEnabled(false);
@@ -6579,6 +6581,8 @@ public class Interfaz extends JFrame{
 							/*SI LA IA QUIERE*/
 							
 							if(cantado[1].equals("quiero")) {			//BLOQUE 3
+								
+								System.out.println("QUIERO PAPAAAA");
 								
     							texto.setText("<html>"+ cantado[1] +"</html>");
     							
@@ -6595,6 +6599,8 @@ public class Interfaz extends JFrame{
 							/*SI LA IA NO QUIERE*/
 							
 							else if(cantado[1].equals("no quiero")) {
+								
+								System.out.println("NO QUIERO PAPAAAA");
 								
     							texto.setText("<html>"+ cantado[1] +"</html>");
     							
@@ -6730,6 +6736,8 @@ public class Interfaz extends JFrame{
 						/*EL JUGADOR PUEDE TIRAR CARTA DIRECTAMENTE*/
 						
 						else {
+							
+							cantarTruco.setEnabled(false);
 							
 							auxJ = queCartaFueTirada();
 							
@@ -7268,6 +7276,8 @@ public class Interfaz extends JFrame{
 					/*SI LA IA REVIRA*/
 					
 					else if(cantado[1].equals("retruco")){
+						
+						texto.setText("<html>"+ cantado[1] +"</html>");
 						
 						quiero.setEnabled(true);
 						noQuiero.setEnabled(true);
@@ -8246,6 +8256,8 @@ public class Interfaz extends JFrame{
 							cantado[0] = "truco";
 						}
 						
+						cantado[1] = "";
+						
 						/*LA IA CANTA TRUCO*/
 						
 						if(cantado[0].equals("truco")) {
@@ -8286,6 +8298,12 @@ public class Interfaz extends JFrame{
 								//Thread.sleep(1000);
 							}catch(InterruptedException e) {}
 							
+							
+							System.out.println(cantado[0]);
+							System.out.println(cantado[1]);
+							System.out.println(cantado[2]);
+							System.out.println(cantado[3]);
+							
 							/*SI EL JUGADOR QUIERE*/
 							
 							if(cantado[1].equals("quiero")) {							//BLOQUE 11
@@ -8301,6 +8319,8 @@ public class Interfaz extends JFrame{
 							
 							else if(cantado[1].equals("no quiero")) {
 								//LA IA GANA
+								
+								System.out.println("ENTRE A NO QUIERO");
 								
 								sistPuntuacion(cantado,MAQUINA,j);
 								acumulador = String.valueOf(MAQUINA.getPuntos());
@@ -8494,6 +8514,8 @@ public class Interfaz extends JFrame{
 					    		c2.setEnabled(false);
 					    		c3.setEnabled(false);
 								
+					    		cantado[1] = "";		//SE FUERZA A QUE SOLO HAYA UN CANTO DE TRUCO, YA QUE LO DUPLICA
+					    		
 								MAQUINA.yourTurnAccept(cantado,j);
 								
 								/*SI LA IA QUIERE*/
@@ -8514,6 +8536,8 @@ public class Interfaz extends JFrame{
 								/*SI LA IA NO QUIERE*/
 								
 								else if(cantado[1].equals("no quiero")) {
+									
+									System.out.println("NO QUISE PAPAAAA");
 									
 									texto.setText("<html>"+ cantado[1] +"</html>");
 									
@@ -12758,9 +12782,19 @@ public class Interfaz extends JFrame{
     }
        
 	
-	public void reiniciarMenuCantos() {		//TODO - HAY QUE REMOVER EL DEL TRUCO TAMBIEN
+	public void reiniciarMenuCantos() {
 		
 		cp.remove(menuCantosE);
+		cp.add(menu,BorderLayout.WEST);
+		cp.revalidate();
+		cp.repaint();
+		
+	}
+	
+	public void reiniciarMenu() {
+		
+		cp.remove(menuCantosE);
+		cp.remove(menuCantosT);
 		cp.add(menu,BorderLayout.WEST);
 		cp.revalidate();
 		cp.repaint();
@@ -12793,7 +12827,6 @@ public class Interfaz extends JFrame{
 			flecha2.setEnabled(true);
 			
 			texto.setEnabled(true);
-			texto.setText("<html>"+ "EL JUGADOR GANO" +"</html>");
 			
 			rendirse.setText("MENU");			
 			
@@ -12822,7 +12855,7 @@ public class Interfaz extends JFrame{
 			flecha.setEnabled(true);
 			flecha2.setEnabled(true);
 			
-			texto.setText("<html>"+ "LA IA GANO" +"</html>");
+			texto.setEnabled(true);
 			
 			rendirse.setText("MENU");
 			
@@ -13794,6 +13827,10 @@ public class Interfaz extends JFrame{
 	
 	//FUNCION QUE SERVIRA PARA LLAMAR UN HILO EN VEZ DE CREAR MUCHOS DE FORMA INDIVIDUAL
 	public void llamadaHilos() {
+		
+		
+		
+		
 		
 	}
 
