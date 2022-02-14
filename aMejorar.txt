@@ -26,7 +26,7 @@ PULIR
 		
 		SOLUCION: si es un caso aislado, forzar que solo haya un solo canto de truco en el arreglo
 		
-3	-	Revisar boton RENDIRSE
+(HECHO)	-	Revisar boton RENDIRSE
 
 (HECHO)	-	Revisar irme al mazo con 30 puntos en IA
 

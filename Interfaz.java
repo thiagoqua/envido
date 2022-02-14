@@ -568,6 +568,8 @@ public class Interfaz extends JFrame{
 						
 						/*SE SETEAN ALGUNAS CONFIGS PEQUE�AS*/
 						
+						System.out.println(texto_nombre.getText());
+						
 						j1.setText(texto_nombre.getText());			//SE ESTABLECE EL NOMBRE ESCRITO POR EL JUGADOR
 						j2.setText("BOT EASY");						//NOMBRE DE LA IA
 						
@@ -921,19 +923,16 @@ public class Interfaz extends JFrame{
 	
 							        if (result == 0) {
 							        	
-							        	jugando = false;
-							        	
-							        	botonRendirse = true;
-							        	
-							        	
+							        	MAQUINA.puntos = 30;
 							        	
 							        	//HALLAR LA FORMA DE DETENER EL HILO ACTUAL Y EL HILO PRINCIPAL
-							        	
 							        	
 							        	//1. COMBINAR TODOS LOS HILOS EN UNA FUNCION Y EN ESA FUNCION LLAMAR CONTINUAMENTE A PUNTOSMAXIMOSSUPERADOS()
 							        			//SI APRETO "RENDIRSE" AGREGO 30 A LA IA, Y PUNTOSMAXIMOSSUPERADOS() BLOQUEA TODO Y LO UNICO QUE ME QUEDA ES IRME AL MENU
 							        	
+							        	botonRendirse = true;
 							        	
+							        	accionUsuario = true;
 							        	
 							        }
 							        
@@ -953,7 +952,22 @@ public class Interfaz extends JFrame{
 					    	public void run() {
 						
 					    		funcionJuego();
-									
+								
+					    		puntosMaximosSuperados();
+					    		
+					    		if(MAQUINA.getPuntos() >= 30) {
+					    			
+					    			texto.setText("<html>"+ "LA IA GANO" +"</html>");
+					    			
+					    		}
+					    		else if(j.getPuntos() >= 30){
+					    			
+					    			texto.setText("<html>"+ "EL JUGADOR GANO" +"</html>");
+					    			
+					    		}
+					    		
+					    		System.out.println("\n\nFIN\n\n");
+					    		
 					    	}
 							
 					    };
@@ -1001,6 +1015,8 @@ public class Interfaz extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				
 				/*CAMBIAR NOMBRE*/
+				
+				texto_nombre = new JTextField("");
 				
 				ingrese_nombre = new JLabel("Ingrese un nombre (max. 12 caracteres): ");
 				texto_nombre = new JTextField(texto_nombre.getText());
@@ -1073,6 +1089,8 @@ public class Interfaz extends JFrame{
 						
 //						ActionListener();
 						
+						System.out.println(texto_nombre.getText());
+						
 						interfazCreacion();
 						
 					}
@@ -1128,7 +1146,7 @@ public class Interfaz extends JFrame{
 		contorno2 = BorderFactory.createLineBorder(Color.RED);
 		contorno3 = BorderFactory.createLineBorder(Color.BLACK);
 		
-		texto_nombre = new JTextField("");
+		//texto_nombre = new JTextField("");
 		texto_nombre2 = new JTextField("");
 		
 		cp = getContentPane();
@@ -1347,7 +1365,7 @@ public class Interfaz extends JFrame{
 	}
 	
 	
-	public void funcionJuego() {
+	public int funcionJuego() {
 	
 		while(jugando) {
 					
@@ -1407,33 +1425,14 @@ public class Interfaz extends JFrame{
 				
 				//SETEO LAS MANOS
 				j.setAmbasManos(true, MAQUINA);
+							
+				llamadaHilos();
 				
-				accionUsuario = false;
-				Thread t = new Thread() {
-	    			
-	    			@Override
-	    			public void run() {
-			    		
-	    				System.out.print("\nEspero que el jugador realice una accion ");
-	    				while(accionUsuario == false) {
-	    					try {
-				    			System.out.print(". ");
-				    			Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-			    		}
-			    		System.out.println("\nRetomo la ejecucion\n");
-	    			}
-	    			
-	    		};
-	    		
-				t.start();			
-				
-				try {
-					t.join();					
-//							Thread.sleep(1000);
-				}catch(InterruptedException e) {}
+				if(botonRendirse == true) {
+					
+					return 1;
+					
+				}
 				
 				/*EL JUGADOR CANTA ENVIDO*/
 				
@@ -1445,6 +1444,10 @@ public class Interfaz extends JFrame{
 					MAQUINA.setPuedoCantarEnvido(false);
 					
 					cantaEnvidoJugador();		//DENTRO DE ESTA FUNCION HAY OTRAS PARA EL TRUCO Y TIRARDIR
+					
+					if(botonRendirse == true) {
+						return 1;
+					}
 					
 				}
 				
@@ -1471,6 +1474,10 @@ public class Interfaz extends JFrame{
 						
 						cantaEnvidoIA();
 						
+						if(botonRendirse == true) {
+							return 1;
+						}
+						
 					}
 					
 					if(jugando == false) {
@@ -1496,6 +1503,9 @@ public class Interfaz extends JFrame{
 					//SE DESARROLLA LA FUNCION DEL TRUCO
 					truco2();
 					
+					if(botonRendirse == true) {
+						return 1;
+					}
 					
 				}
 				
@@ -1539,6 +1549,10 @@ public class Interfaz extends JFrame{
 						
 						cantaEnvidoIA(); 
 						
+						if(botonRendirse == true) {
+							return 1;
+						}
+						
 						mazo.setEnabled(true);
 						envido.setEnabled(false);
 					}
@@ -1562,6 +1576,10 @@ public class Interfaz extends JFrame{
 						mazo.setEnabled(false);
 						truco3();
 						
+						if(botonRendirse == true) {
+							return 1;
+						}
+						
 					}
 					
 					//LA IA PUEDE TIRAR DIRECTAMENTE
@@ -1569,6 +1587,10 @@ public class Interfaz extends JFrame{
 					else {
 						
 						tiraDir2();
+						
+						if(botonRendirse == true) {
+							return 1;
+						}
 						
 					}
 					
@@ -1620,6 +1642,10 @@ public class Interfaz extends JFrame{
 		        		mazo.setEnabled(false);
 		        		cantaEnvidoIA();
 			    		
+		        		if(botonRendirse == true) {
+							return 1;
+						}
+		        		
 					}
 		        	
 		        	if(jugando == false) {
@@ -1696,35 +1722,12 @@ public class Interfaz extends JFrame{
 		        quiero.setEnabled(false);
 		        noQuiero.setEnabled(false);
 			        
-	        	accionUsuario = false;
-		        Thread espero3 = new Thread() {
-	    			
-	    			@Override
-	    			public void run() {
-			    		
-	    				System.out.print("\nEspero que el jugador tire carta / me cante truco/envido y concluya su turno ");
-	    				while(accionUsuario == false) {
-	    					try {
-				    			System.out.print(". ");
-				    			Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-			    		}
-			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-	    			}
-	    			
-	    		};
-    			
-	    		espero3.start();	
+		        llamadaHilos();
 	    		
-	    		try {
-					espero3.join();					
-//										Thread.sleep(1000);
-				}catch(InterruptedException e) {}
-	    		
-		    		
-		    		
+		        if(botonRendirse == true) {
+		        	return 1;
+		        }
+		        
 	    		/*EL JUGADOR PUEDE CANTAR ENVIDO (SI NO SE CANTO PREVIAMENTE)*/
 	    		
 	    		if(cantado[0].equals("envido") || cantado[0].equals("real envido") || cantado[0].equals("falta envido")) {
@@ -1733,6 +1736,10 @@ public class Interfaz extends JFrame{
 	    			
 	    			cantaEnvidoJugador();
 		    		
+	    			if(botonRendirse == true) {
+						return 1;
+					}
+	    			
 	    		}
 	    		
 	    		
@@ -1741,6 +1748,10 @@ public class Interfaz extends JFrame{
 	    		else if(cantado[0].equals("truco")) {
 	    			
 	    			truco();
+	    			
+	    			if(botonRendirse == true) {
+						return 1;
+					}
 	    			
 	    		} 
 		        
@@ -1758,12 +1769,18 @@ public class Interfaz extends JFrame{
 	    			
 	    			tirarDir();
 	    			
+	    			if(botonRendirse == true) {
+						return 1;
+					}
+	    			
 	    		}
 	    		
 	    		texto.setText("<html>"+ "" +"</html>");
 	    		  											
 								
 			}	//FIN RONDAS IMPARES
+			
+			
 			
 			try {
 				Thread.sleep(1000);
@@ -1772,6 +1789,8 @@ public class Interfaz extends JFrame{
 			}
 			
 			irseAlMazo = false;
+			
+			
 			
 			//RESETEO ALGUNAS VARIABLES DE LOS JUGADORES
 			MAQUINA.reset();
@@ -1825,96 +1844,21 @@ public class Interfaz extends JFrame{
 			
 			}
 			
+			
+			
+			
 		} //FIN WHILE JUEGO
 	
+		//puntosMaximosSuperados();
 		
-		if(botonRendirse == true) {					//TODO - EN VEZ DE RESTAURAR DENTRO DE RENDIRSE, LO HAGO AFUERA LUEGO DE QUE SALGA DEL BUCLE
-			
-			botonRendirse = false;
-			
-			//RESTAURO CADA VARIABLE
-			
-			MAQUINA.reset();
-			j.reset();
-		
-			//REPONGO LAS CARTAS
-			mazoCartas.reponer();
-			
-			//RESTAURAR POR LAS DUDAS LAS CARTAS QUE SE REPARTIERON
-			for(int i=0;i<3;++i){
-	            MAQUINA.cartas[i] = null;
-				j.cartas[i] = null;
-				MAQUINA.copyCartas[i] = null;
-				j.copyCartas[i] = null;
-			}
-		
-			for(int i=0;i<5;i++) {
-        		cantado[i] = "";
-        	}
-			
-			//RESTAURAR EN CERO LAS CARTAS SOBRE LA MESA
-			l1.setIcon(null); l2.setIcon(null); l3.setIcon(null);
-			l4.setIcon(null); l5.setIcon(null); l6.setIcon(null);
-			
-			//RESTAURAR EN CERO LAS CARTAS DEL JUGADOR
-			c1.setIcon(null); c2.setIcon(null); c3.setIcon(null);
-			
-			//RESTAURAR EL MENU IZQUIERDO
-			flecha2.setEnabled(true);
-			flecha.setEnabled(true);
-			reiniciarMenu();
-			
-			//RESTAURAR TEXTO EN VACIO
-			texto.setText("<html>"+ "" +"</html>");
-			pts1.setText("0");
-			pts2.setText("0");
-		
-			//RESTAURO PUNTOS DEL JUGADOR
-			j.puntos = 0;
-			MAQUINA.puntos = 0;
-			
-			//REINICIO EL NRO DE RONDAS
-			ronda=1;
-			
-			//INVERTIR IMAGENES DE MANO Y MAZO
-			invertirManoMazo();
-			
-			cantoEnvido = false;
-			acumulador = "";
-																						
-			//REMUEVO LA INTERFAZ DE JUEGO
-			inicio.removeAll();
-			
-			cp.removeAll();
-//			cp.add(ventanaPrincipal());
-//			cp.revalidate();
-//			cp.repaint();
-			
-//			ActionListener();
-			
-			interfazCreacion();
-			
-		}
-		
-		if(MAQUINA.getPuntos() >= 30) {
-			
-			texto.setText("<html>"+ "LA IA GANO" +"</html>");
-			
-		}
-		else if(j.getPuntos() >= 30){
-			
-			texto.setText("<html>"+ "EL JUGADOR GANO" +"</html>");
-			
-		}
-		
-		System.out.println("\n\nFIN FIN FINNNNN !!!!!!!\n\n");
+		return 0;
 		
 	}
 	
 	
 	//FUNCION TRUCO - RONDAS PARES - EL JUGADOR TIRA DIRECT. Y LA IA CANTA TRUCO EN PRIMERA
 	
-	public void truco3() {
+	public int truco3() {
 		
 		texto.setText("<html>"+ cantado[0] +"</html>");
 		
@@ -1925,32 +1869,11 @@ public class Interfaz extends JFrame{
 		retruco.setEnabled(true);
 		mazo.setEnabled(false);
 		
-		accionUsuario = false;
-		Thread espero13 = new Thread() {
-			
-			@Override
-			public void run() {
-	    		
-				System.out.print("\nEspero que el jugador quiera/no quiera truco - revire ");
-				while(accionUsuario == false) {
-					try {
-		    			System.out.print(". ");
-		    			Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-	    		}
-	    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-			}
-			
-		};
+		llamadaHilos();
 		
-		espero13.start();	
-		
-		try {
-			espero13.join();					
-//			Thread.sleep(1000);
-		}catch(InterruptedException e) {}
+		if(botonRendirse == true) {
+        	return 1;
+        }
 		
 		/*SI EL JUGADOR QUIERE*/
 		
@@ -2034,32 +1957,11 @@ public class Interfaz extends JFrame{
 				quiero.setEnabled(true);
 				noQuiero.setEnabled(true);
 				
-				accionUsuario = false;
-				Thread espero14 = new Thread() {
-					
-					@Override
-					public void run() {
-			    		
-						System.out.print("\nEspero que el jugador quiera/no quiera vale cuatro ");
-						while(accionUsuario == false) {
-							try {
-				    			System.out.print(". ");
-				    			Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-			    		}
-			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-					}
-					
-				};
+				llamadaHilos();
 				
-				espero14.start();	
-				
-				try {
-					espero14.join();					
-//					Thread.sleep(1000);
-				}catch(InterruptedException e) {}
+				if(botonRendirse == true) {
+		        	return 1;
+		        }
 				
 				/*SI EL JUGADOR QUIERE*/
 				
@@ -2089,14 +1991,14 @@ public class Interfaz extends JFrame{
 			
 		}
 		
-		
+		return 0;
 		
 	}
 	
 	
 	//FUNCION TRUCO - RONDAS PARES - LA IA ES LA QUE CANTA TRUCO EN PRIMERA - FUNCION QUE SIRVE PARA AHORRAR CODIGO DENTRO DE TRUCO3
 	
-	public void trucoCantadoIA() {
+	public int trucoCantadoIA() {
 		
 		//LA IA TIRA
 		
@@ -2120,32 +2022,11 @@ public class Interfaz extends JFrame{
 			
 			mazo.setEnabled(true);
 			
-			accionUsuario = false;
-			Thread espero13 = new Thread() {
-				
-				@Override
-				public void run() {
-		    		
-					System.out.print("\nEspero que el jugador tire en segunda (gane primera y tire en segunda) ");
-					while(accionUsuario == false) {
-						try {
-			    			System.out.print(". ");
-			    			Thread.sleep(1000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-		    		}
-		    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-				}
-				
-			};
+			llamadaHilos();
 			
-			espero13.start();	
-			
-			try {
-				espero13.join();					
-//				Thread.sleep(1000);
-			}catch(InterruptedException e) {}
+			if(botonRendirse == true) {
+	        	return 1;
+	        }
 			
 			/*EL JUGADOR SE VA AL MAZO*/
 			
@@ -2166,32 +2047,11 @@ public class Interfaz extends JFrame{
 				
 				if(aux.returnOrden(auxJ) < aux.returnOrden(auxIA)) {
 					
-					accionUsuario = false;
-					Thread espero14 = new Thread() {
-						
-						@Override
-						public void run() {
-				    		
-							System.out.print("\nEspero que el jugador tire en tercera (gane primera y me gano segunda) ");
-							while(accionUsuario == false) {
-								try {
-					    			System.out.print(". ");
-					    			Thread.sleep(1000);
-								} catch (InterruptedException e) {
-									e.printStackTrace();
-								}
-				    		}
-				    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-						}
-						
-					};
+					llamadaHilos();
 					
-					espero14.start();	
-					
-					try {
-						espero14.join();					
-	//					Thread.sleep(1000);
-					}catch(InterruptedException e) {}
+					if(botonRendirse == true) {
+			        	return 1;
+			        }
 					
 					/*EL JUGADOR SE VA AL MAZO*/
 					
@@ -2287,33 +2147,11 @@ public class Interfaz extends JFrame{
 				c3.setEnabled(true);
 			}
 			
-			accionUsuario = false;
-			Thread espero15 = new Thread() {
-				
-				@Override
-				public void run() {
-		    		
-					System.out.print("\nEspero que el jugador tire en segunda (me gano primera) ");
-					while(accionUsuario == false) {
-						try {
-			    			System.out.print(". ");
-			    			Thread.sleep(1000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-		    		}
-		    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-				}
-				
-			};
+			llamadaHilos();
 			
-			espero15.start();	
-			
-			try {
-				espero15.join();					
-//				Thread.sleep(1000);
-			}catch(InterruptedException e) {}
-			
+			if(botonRendirse == true) {
+	        	return 1;
+	        }
 			
 			/*EL JUGADOR VA AL MAZO*/
 			
@@ -2387,32 +2225,11 @@ public class Interfaz extends JFrame{
 				c3.setEnabled(true);
 			}
 			
-			accionUsuario = false;
-			Thread espero16 = new Thread() {
-				
-				@Override
-				public void run() {
-		    		
-					System.out.print("\nEspero que el jugador tire en segunda (empardamos primera) ");
-					while(accionUsuario == false) {
-						try {
-			    			System.out.print(". ");
-			    			Thread.sleep(1000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-		    		}
-		    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-				}
-				
-			};
+			llamadaHilos();
 			
-			espero16.start();	
-			
-			try {
-				espero16.join();					
-//				Thread.sleep(1000);
-			}catch(InterruptedException e) {}
+			if(botonRendirse == true) {
+	        	return 1;
+	        }
 			
 			if(irseAlMazo == true) {
 				
@@ -2477,32 +2294,11 @@ public class Interfaz extends JFrame{
 						c3.setEnabled(true);
 					}
 					
-					accionUsuario = false;
-					Thread espero17 = new Thread() {
-						
-						@Override
-						public void run() {
-				    		
-							System.out.print("\nEspero que el jugador tire en tercera (empardamos segunda) ");
-							while(accionUsuario == false) {
-								try {
-					    			System.out.print(". ");
-					    			Thread.sleep(1000);
-								} catch (InterruptedException e) {
-									e.printStackTrace();
-								}
-				    		}
-				    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-						}
-						
-					};
+					llamadaHilos();
 					
-					espero17.start();	
-					
-					try {
-						espero17.join();					
-	//					Thread.sleep(1000);
-					}catch(InterruptedException e) {}
+					if(botonRendirse == true) {
+			        	return 1;
+			        }
 					
 					auxJ = queCartaFueTirada();
 					
@@ -2547,6 +2343,7 @@ public class Interfaz extends JFrame{
 			
 		}
 		
+		return 0;
 		
 	}
 	
@@ -2560,7 +2357,7 @@ public class Interfaz extends JFrame{
 	
 	//OJO QUE ESTOY USANDO THREADS CON NOMBRES YA USADOS
 	
-	public void trucoQueridoRondasPares() {
+	public int trucoQueridoRondasPares() {
 		
 		c1.setEnabled(true);
 		c2.setEnabled(true);
@@ -2570,32 +2367,11 @@ public class Interfaz extends JFrame{
 		flecha2.setEnabled(true);
 		mazo.setEnabled(true);
 		
-		accionUsuario = false;
-		Thread espero7 = new Thread() {
-			
-			@Override
-			public void run() {
-	    		
-				System.out.print("\nEspero que el jugador tire en primera (yo todavia no tire) ");
-				while(accionUsuario == false) {
-					try {
-		    			System.out.print(". ");
-		    			Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-	    		}
-	    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-			}
-			
-		};
+		llamadaHilos();
 		
-		espero7.start();	
-		
-		try {
-			espero7.join();					
-//			Thread.sleep(1000);
-		}catch(InterruptedException e) {}
+		if(botonRendirse == true) {
+        	return 1;
+        }
 		
 		/*EL JUGADOR SE VA AL MAZO*/
 		
@@ -2637,32 +2413,11 @@ public class Interfaz extends JFrame{
 					c3.setEnabled(true);
 				}
 				
-				accionUsuario = false;
-				Thread espero8 = new Thread() {
-					
-					@Override
-					public void run() {
-			    		
-						System.out.print("\nEspero que el jugador tire en segunda (gane primera) ");
-						while(accionUsuario == false) {
-							try {
-				    			System.out.print(". ");
-				    			Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-			    		}
-			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-					}
-					
-				};
+				llamadaHilos();
 				
-				espero8.start();	
-				
-				try {
-					espero8.join();					
-	//				Thread.sleep(1000);
-				}catch(InterruptedException e) {}
+				if(botonRendirse == true) {
+		        	return 1;
+		        }
 				
 				/*EL JUGADOR SE VA AL MAZO*/
 				
@@ -2682,32 +2437,7 @@ public class Interfaz extends JFrame{
 					
 					if(aux.returnOrden(auxJ) < aux.returnOrden(auxIA)) {
 						
-						accionUsuario = false;
-						Thread espero9 = new Thread() {
-							
-							@Override
-							public void run() {
-					    		
-								System.out.print("\nEspero que el jugador tire en tercera (gane primera y me gano segunda) ");
-								while(accionUsuario == false) {
-									try {
-						    			System.out.print(". ");
-						    			Thread.sleep(1000);
-									} catch (InterruptedException e) {
-										e.printStackTrace();
-									}
-					    		}
-					    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-							}
-							
-						};
-						
-						espero9.start();	
-						
-						try {
-							espero9.join();					
-		//					Thread.sleep(1000);
-						}catch(InterruptedException e) {}
+						llamadaHilos();
 						
 						/*EL JUGADOR SE VA AL MAZO*/
 						
@@ -2801,32 +2531,11 @@ public class Interfaz extends JFrame{
 					c3.setEnabled(true);
 				}
 				
-				accionUsuario = false;
-				Thread espero10 = new Thread() {
-					
-					@Override
-					public void run() {
-			    		
-						System.out.print("\nEspero que el jugador tire en segunda (me gano primera) ");
-						while(accionUsuario == false) {
-							try {
-				    			System.out.print(". ");
-				    			Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-			    		}
-			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-					}
-					
-				};
+				llamadaHilos();
 				
-				espero10.start();	
-				
-				try {
-					espero10.join();					
-	//				Thread.sleep(1000);
-				}catch(InterruptedException e) {}
+				if(botonRendirse == true) {
+		        	return 1;
+		        }
 				
 				/*EL JUGADOR SE VA AL MAZO*/
 				
@@ -2866,32 +2575,11 @@ public class Interfaz extends JFrame{
 							c3.setEnabled(true);
 						}
 						
-						accionUsuario = false;
-						Thread espero11 = new Thread() {
-							
-							@Override
-							public void run() {
-					    		
-								System.out.print("\nEspero que el jugador tire en tercera (me gano primera y gane segunda) ");
-								while(accionUsuario == false) {
-									try {
-						    			System.out.print(". ");
-						    			Thread.sleep(1000);
-									} catch (InterruptedException e) {
-										e.printStackTrace();
-									}
-					    		}
-					    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-							}
-							
-						};
+						llamadaHilos();
 						
-						espero11.start();	
-						
-						try {
-							espero11.join();					
-		//					Thread.sleep(1000);
-						}catch(InterruptedException e) {}
+						if(botonRendirse == true) {
+				        	return 1;
+				        }
 						
 						/*EL JUGADOR SE VA AL MAZO*/
 						
@@ -2983,32 +2671,11 @@ public class Interfaz extends JFrame{
 					c3.setEnabled(true);
 				}
 				
-				accionUsuario = false;
-				Thread espero12 = new Thread() {
-					
-					@Override
-					public void run() {
-			    		
-						System.out.print("\nEspero que el jugador tire en segunda (empardamos primera) ");
-						while(accionUsuario == false) {
-							try {
-				    			System.out.print(". ");
-				    			Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-			    		}
-			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-					}
-					
-				};
+				llamadaHilos();
 				
-				espero12.start();	
-				
-				try {
-					espero12.join();					
-	//				Thread.sleep(1000);
-				}catch(InterruptedException e) {}
+				if(botonRendirse == true) {
+		        	return 1;
+		        }
 				
 				/*EL JUGADOR SE VA AL MAZO*/
 				
@@ -3089,32 +2756,11 @@ public class Interfaz extends JFrame{
 							c3.setEnabled(true);
 						}
 						
-						accionUsuario = false;
-						Thread espero13 = new Thread() {
-							
-							@Override
-							public void run() {
-					    		
-								System.out.print("\nEspero que el jugador tire en tercera (empardamos segunda) ");
-								while(accionUsuario == false) {
-									try {
-						    			System.out.print(". ");
-						    			Thread.sleep(1000);
-									} catch (InterruptedException e) {
-										e.printStackTrace();
-									}
-					    		}
-					    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-							}
-							
-						};
+						llamadaHilos();
 						
-						espero13.start();	
-						
-						try {
-							espero13.join();					
-		//					Thread.sleep(1000);
-						}catch(InterruptedException e) {}
+						if(botonRendirse == true) {
+				        	return 1;
+				        }
 						
 						/*EL JUGADOR SE VA AL MAZO*/
 						
@@ -3180,12 +2826,14 @@ public class Interfaz extends JFrame{
 			}
 		}
 		
+		return 0;
+		
 	}
 	
 	
 	//FUNCION TIRAR DIRECTAMENTE - RONDAS PARES
 	
-	public void tiraDir2() {
+	public int tiraDir2() {
 		
 		auxIA = tiraIA[0];
 		
@@ -3212,32 +2860,11 @@ public class Interfaz extends JFrame{
 				
 				texto.setText("<html>"+ cantado[0] +"</html>");
 				
-				accionUsuario = false;
-				Thread espero13 = new Thread() {
-					
-					@Override
-					public void run() {
-			    		
-						System.out.print("\nEspero que el jugador quiera/no quiera truco - revire ");
-						while(accionUsuario == false) {
-							try {
-				    			System.out.print(". ");
-				    			Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-			    		}
-			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-					}
-					
-				};
+				llamadaHilos();
 				
-				espero13.start();	
-				
-				try {
-					espero13.join();					
-//					Thread.sleep(1000);
-				}catch(InterruptedException e) {}
+				if(botonRendirse == true) {
+		        	return 1;
+		        }
 				
 				/*SI EL JUGADOR QUIERE*/
 				
@@ -3320,32 +2947,11 @@ public class Interfaz extends JFrame{
 						quiero.setEnabled(true);
 						noQuiero.setEnabled(true);
 						
-						accionUsuario = false;
-						Thread espero14 = new Thread() {
-							
-							@Override
-							public void run() {
-					    		
-								System.out.print("\nEspero que el jugador quiera/no quiera vale cuatro ");
-								while(accionUsuario == false) {
-									try {
-						    			System.out.print(". ");
-						    			Thread.sleep(1000);
-									} catch (InterruptedException e) {
-										e.printStackTrace();
-									}
-					    		}
-					    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-							}
-							
-						};
+						llamadaHilos();
 						
-						espero14.start();	
-						
-						try {
-							espero14.join();					
-//							Thread.sleep(1000);
-						}catch(InterruptedException e) {}
+						if(botonRendirse == true) {
+				        	return 1;
+				        }
 						
 						/*SI EL JUGADOR QUIERE*/
 						
@@ -3399,32 +3005,11 @@ public class Interfaz extends JFrame{
 				truco.setEnabled(true);
 				cantarTruco.setEnabled(true);
 				
-				accionUsuario = false;
-				Thread espero15 = new Thread() {
-					
-					@Override
-					public void run() {
-			    		
-						System.out.print("\nEspero que el jugador tire / cante truco (gane primera y tire en segunda) ");
-						while(accionUsuario == false) {
-							try {
-				    			System.out.print(". ");
-				    			Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-			    		}
-			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-					}
-					
-				};
+				llamadaHilos();
 				
-				espero15.start();	
-				
-				try {
-					espero15.join();					
-//					Thread.sleep(1000);
-				}catch(InterruptedException e) {}
+				if(botonRendirse == true) {
+		        	return 1;
+		        }
 				
 				/*EL JUGADOR SE VA AL MAZO*/
 				
@@ -3495,32 +3080,11 @@ public class Interfaz extends JFrame{
 						noQuiero.setEnabled(true);
 						vale_4.setEnabled(true);
 						
-						accionUsuario = false;
-						Thread espero16 = new Thread() {
-							
-							@Override
-							public void run() {
-					    		
-								System.out.print("\nEspero que el jugador quiera/no quiera retruco - revire ");
-								while(accionUsuario == false) {
-									try {
-						    			System.out.print(". ");
-						    			Thread.sleep(1000);
-									} catch (InterruptedException e) {
-										e.printStackTrace();
-									}
-					    		}
-					    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-							}
-							
-						};
+						llamadaHilos();
 						
-						espero16.start();	
-						
-						try {
-							espero16.join();					
-//							Thread.sleep(1000);
-						}catch(InterruptedException e) {}
+						if(botonRendirse == true) {
+				        	return 1;
+				        }
 						
 						truco.setEnabled(false);
 						
@@ -3621,32 +3185,11 @@ public class Interfaz extends JFrame{
 						
 						cantarTruco.setEnabled(true);
 						
-						accionUsuario = false;
-						Thread espero17 = new Thread() {
-							
-							@Override
-							public void run() {
-					    		
-								System.out.print("\nEspero que el jugador tire en tercera (gane primera y me gano segunda) ");
-								while(accionUsuario == false) {
-									try {
-						    			System.out.print(". ");
-						    			Thread.sleep(1000);
-									} catch (InterruptedException e) {
-										e.printStackTrace();
-									}
-					    		}
-					    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-							}
-							
-						};
+						llamadaHilos();
 						
-						espero17.start();	
-						
-						try {
-							espero17.join();					
-//							Thread.sleep(1000);
-						}catch(InterruptedException e) {}
+						if(botonRendirse == true) {
+				        	return 1;
+				        }
 						
 						cantarTruco.setEnabled(false);
 						
@@ -3716,32 +3259,11 @@ public class Interfaz extends JFrame{
 								noQuiero.setEnabled(true);
 								vale_4.setEnabled(true);
 								
-								accionUsuario = false;
-								Thread espero18 = new Thread() {
-									
-									@Override
-									public void run() {
-							    		
-										System.out.print("\nEspero que el jugador quiera/no quiera retruco - revire ");
-										while(accionUsuario == false) {
-											try {
-								    			System.out.print(". ");
-								    			Thread.sleep(1000);
-											} catch (InterruptedException e) {
-												e.printStackTrace();
-											}
-							    		}
-							    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-									}
-									
-								};
+								llamadaHilos();
 								
-								espero18.start();	
-								
-								try {
-									espero18.join();					
-//									Thread.sleep(1000);
-								}catch(InterruptedException e) {}
+								if(botonRendirse == true) {
+						        	return 1;
+						        }
 								
 								vale_4.setEnabled(false);
 								
@@ -3842,32 +3364,11 @@ public class Interfaz extends JFrame{
 								retruco.setEnabled(true);
 								mazo.setEnabled(false);
 								
-								accionUsuario = false;
-								Thread espero19 = new Thread() {
-									
-									@Override
-									public void run() {
-							    		
-										System.out.print("\nEspero que el jugador quiera/no quiera truco - revire (estamos en tercera)");
-										while(accionUsuario == false) {
-											try {
-								    			System.out.print(". ");
-								    			Thread.sleep(1000);
-											} catch (InterruptedException e) {
-												e.printStackTrace();
-											}
-							    		}
-							    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-									}
-									
-								};
+								llamadaHilos();
 								
-								espero19.start();	
-								
-								try {
-									espero19.join();					
-//									Thread.sleep(1000);
-								}catch(InterruptedException e) {}
+								if(botonRendirse == true) {
+						        	return 1;
+						        }
 								
 								/*SI EL JUGADOR QUIERE*/
 								
@@ -3948,32 +3449,11 @@ public class Interfaz extends JFrame{
 										quiero.setEnabled(true);
 										noQuiero.setEnabled(true);
 										
-										accionUsuario = false;
-										Thread espero20 = new Thread() {
-											
-											@Override
-											public void run() {
-									    		
-												System.out.print("\nEspero que el jugador quiera/no quiera vale cuatro ");
-												while(accionUsuario == false) {
-													try {
-										    			System.out.print(". ");
-										    			Thread.sleep(1000);
-													} catch (InterruptedException e) {
-														e.printStackTrace();
-													}
-									    		}
-									    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-											}
-											
-										};
+										llamadaHilos();
 										
-										espero20.start();	
-										
-										try {
-											espero20.join();					
-//											Thread.sleep(1000);
-										}catch(InterruptedException e) {}
+										if(botonRendirse == true) {
+								        	return 1;
+								        }
 										
 										/*SI EL JUGADOR QUIERE*/
 										
@@ -4095,32 +3575,11 @@ public class Interfaz extends JFrame{
 				c3.setEnabled(true);
 			}
 			
-			accionUsuario = false;
-			Thread espero21 = new Thread() {
-				
-				@Override
-				public void run() {
-		    		
-					System.out.print("\nEspero que el jugador tire (me gano primera) ");
-					while(accionUsuario == false) {
-						try {
-			    			System.out.print(". ");
-			    			Thread.sleep(1000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-		    		}
-		    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-				}
-				
-			};
+			llamadaHilos();
 			
-			espero21.start();	
-			
-			try {
-				espero21.join();					
-//				Thread.sleep(1000);
-			}catch(InterruptedException e) {}
+			if(botonRendirse == true) {
+	        	return 1;
+	        }
 			
 			cantarTruco.setEnabled(false);
 			
@@ -4189,32 +3648,11 @@ public class Interfaz extends JFrame{
 					noQuiero.setEnabled(true);
 					vale_4.setEnabled(true);
 					
-					accionUsuario = false;
-					Thread espero22 = new Thread() {
-						
-						@Override
-						public void run() {
-				    		
-							System.out.print("\nEspero que el jugador quiera/no quiera retruco ");
-							while(accionUsuario == false) {
-								try {
-					    			System.out.print(". ");
-					    			Thread.sleep(1000);
-								} catch (InterruptedException e) {
-									e.printStackTrace();
-								}
-				    		}
-				    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-						}
-						
-					};
+					llamadaHilos();
 					
-					espero22.start();	
-					
-					try {
-						espero22.join();					
-//						Thread.sleep(1000);
-					}catch(InterruptedException e) {}
+					if(botonRendirse == true) {
+			        	return 1;
+			        }
 					
 //					/*SI EL JUGADOR QUIERE*/
 					
@@ -4318,32 +3756,11 @@ public class Interfaz extends JFrame{
 					retruco.setEnabled(true);
 					mazo.setEnabled(false);
 					
-					accionUsuario = false;
-					Thread espero24 = new Thread() {
-						
-						@Override
-						public void run() {
-				    		
-							System.out.print("\nEspero que el jugador quiera/no quiera truco - revire ");
-							while(accionUsuario == false) {
-								try {
-					    			System.out.print(". ");
-					    			Thread.sleep(1000);
-								} catch (InterruptedException e) {
-									e.printStackTrace();
-								}
-				    		}
-				    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-						}
-						
-					};
+					llamadaHilos();
 					
-					espero24.start();	
-					
-					try {
-						espero24.join();					
-//						Thread.sleep(1000);
-					}catch(InterruptedException e) {}
+					if(botonRendirse == true) {
+			        	return 1;
+			        }
 					
 					retruco.setEnabled(false);
 					
@@ -4427,32 +3844,11 @@ public class Interfaz extends JFrame{
 							quiero.setEnabled(true);
 							noQuiero.setEnabled(true);
 							
-							accionUsuario = false;
-							Thread espero25 = new Thread() {
-								
-								@Override
-								public void run() {
-						    		
-									System.out.print("\nEspero que el jugador quiera/no quiera vale cuatro ");
-									while(accionUsuario == false) {
-										try {
-							    			System.out.print(". ");
-							    			Thread.sleep(1000);
-										} catch (InterruptedException e) {
-											e.printStackTrace();
-										}
-						    		}
-						    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-								}
-								
-							};
+							llamadaHilos();
 							
-							espero25.start();	
-							
-							try {
-								espero25.join();					
-//								Thread.sleep(1000);
-							}catch(InterruptedException e) {}
+							if(botonRendirse == true) {
+					        	return 1;
+					        }
 							
 							/*SI EL JUGADOR QUIERE*/
 							
@@ -4511,32 +3907,11 @@ public class Interfaz extends JFrame{
 							noQuiero.setEnabled(true);
 							mazo.setEnabled(false);
 							
-							accionUsuario = false;
-							Thread espero27 = new Thread() {
-								
-								@Override
-								public void run() {
-						    		
-									System.out.print("\nEspero que el jugador quiera/no quiera truco - revire (me gano primera y gane segunda)");
-									while(accionUsuario == false) {
-										try {
-							    			System.out.print(". ");
-							    			Thread.sleep(1000);
-										} catch (InterruptedException e) {
-											e.printStackTrace();
-										}
-						    		}
-						    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-								}
-								
-							};
+							llamadaHilos();
 							
-							espero27.start();	
-							
-							try {
-								espero27.join();					
-//								Thread.sleep(1000);
-							}catch(InterruptedException e) {}
+							if(botonRendirse == true) {
+					        	return 1;
+					        }
 							
 							/*SI EL JUGADOR QUIERE*/
 							
@@ -4618,32 +3993,11 @@ public class Interfaz extends JFrame{
 									quiero.setEnabled(true);
 									noQuiero.setEnabled(true);
 									
-									accionUsuario = false;
-									Thread espero28 = new Thread() {
-										
-										@Override
-										public void run() {
-								    		
-											System.out.print("\nEspero que el jugador quiera/no quiera vale cuatro ");
-											while(accionUsuario == false) {
-												try {
-									    			System.out.print(". ");
-									    			Thread.sleep(1000);
-												} catch (InterruptedException e) {
-													e.printStackTrace();
-												}
-								    		}
-								    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-										}
-										
-									};
+									llamadaHilos();
 									
-									espero28.start();	
-									
-									try {
-										espero28.join();					
-//										Thread.sleep(1000);
-									}catch(InterruptedException e) {}
+									if(botonRendirse == true) {
+							        	return 1;
+							        }
 									
 									/*SI EL JUGADOR QUIERE*/
 									
@@ -4696,32 +4050,11 @@ public class Interfaz extends JFrame{
 							truco.setEnabled(true);
 							cantarTruco.setEnabled(true);
 							
-							accionUsuario = false;
-							Thread espero29 = new Thread() {
-								
-								@Override
-								public void run() {
-						    		
-									System.out.print("\nEspero que el jugador tire (me gano primera y gane segunda y ya tire la ultima) ");
-									while(accionUsuario == false) {
-										try {
-							    			System.out.print(". ");
-							    			Thread.sleep(1000);
-										} catch (InterruptedException e) {
-											e.printStackTrace();
-										}
-						    		}
-						    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-								}
-								
-							};
+							llamadaHilos();
 							
-							espero29.start();	
-							
-							try {
-								espero29.join();					
-//								Thread.sleep(1000);
-							}catch(InterruptedException e) {}
+							if(botonRendirse == true) {
+					        	return 1;
+					        }
 							
 							cantarTruco.setEnabled(false);
 							
@@ -4792,32 +4125,11 @@ public class Interfaz extends JFrame{
 									quiero.setEnabled(true);
 									noQuiero.setEnabled(true);
 									
-									accionUsuario = false;
-									Thread espero30 = new Thread() {
-										
-										@Override
-										public void run() {
-								    		
-											System.out.print("\nEspero que el jugador quiera/no quiera retruco ");
-											while(accionUsuario == false) {
-												try {
-									    			System.out.print(". ");
-									    			Thread.sleep(1000);
-												} catch (InterruptedException e) {
-													e.printStackTrace();
-												}
-								    		}
-								    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-										}
-										
-									};
+									llamadaHilos();
 									
-									espero30.start();	
-									
-									try {
-										espero30.join();					
-//										Thread.sleep(1000);
-									}catch(InterruptedException e) {}
+									if(botonRendirse == true) {
+							        	return 1;
+							        }
 									
 									/*SI EL JUGADOR QUIERE*/
 									
@@ -4987,32 +4299,11 @@ public class Interfaz extends JFrame{
 				c3.setEnabled(true);
 			}
 			
-			accionUsuario = false;
-			Thread espero35 = new Thread() {
-				
-				@Override
-				public void run() {
-		    		
-					System.out.print("\nEspero que el jugador tire en segunda (empardamos primera) ");
-					while(accionUsuario == false) {
-						try {
-			    			System.out.print(". ");
-			    			Thread.sleep(1000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-		    		}
-		    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-				}
-				
-			};
+			llamadaHilos();
 			
-			espero35.start();	
-			
-			try {
-				espero35.join();					
-//				Thread.sleep(1000);
-			}catch(InterruptedException e) {}
+			if(botonRendirse == true) {
+	        	return 1;
+	        }
 			
 			cantarTruco.setEnabled(false);
 			
@@ -5083,32 +4374,11 @@ public class Interfaz extends JFrame{
 					quiero.setEnabled(true);
 					noQuiero.setEnabled(true);
 					
-					accionUsuario = false;
-					Thread espero36 = new Thread() {
-						
-						@Override
-						public void run() {
-				    		
-							System.out.print("\nEspero que el jugador quiera/no quiera retruco ");
-							while(accionUsuario == false) {
-								try {
-					    			System.out.print(". ");
-					    			Thread.sleep(1000);
-								} catch (InterruptedException e) {
-									e.printStackTrace();
-								}
-				    		}
-				    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-						}
-						
-					};
+					llamadaHilos();
 					
-					espero36.start();	
-					
-					try {
-						espero36.join();					
-//						Thread.sleep(1000);
-					}catch(InterruptedException e) {}
+					if(botonRendirse == true) {
+			        	return 1;
+			        }
 					
 					/*SI EL JUGADOR QUIERE*/
 					
@@ -5211,32 +4481,11 @@ public class Interfaz extends JFrame{
 					noQuiero.setEnabled(true);
 					mazo.setEnabled(false);
 					
-					accionUsuario = false;
-					Thread espero37 = new Thread() {
-						
-						@Override
-						public void run() {
-				    		
-							System.out.print("\nEspero que el jugador quiera/no quiera truco - revire ");
-							while(accionUsuario == false) {
-								try {
-					    			System.out.print(". ");
-					    			Thread.sleep(1000);
-								} catch (InterruptedException e) {
-									e.printStackTrace();
-								}
-				    		}
-				    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-						}
-						
-					};
+					llamadaHilos();
 					
-					espero37.start();	
-					
-					try {
-						espero37.join();					
-//						Thread.sleep(1000);
-					}catch(InterruptedException e) {}
+					if(botonRendirse == true) {
+			        	return 1;
+			        }
 					
 					/*SI EL JUGADOR QUIERE*/
 					
@@ -5318,32 +4567,11 @@ public class Interfaz extends JFrame{
 							quiero.setEnabled(true);
 							noQuiero.setEnabled(true);
 							
-							accionUsuario = false;
-							Thread espero38 = new Thread() {
-								
-								@Override
-								public void run() {
-						    		
-									System.out.print("\nEspero que el jugador quiera/no quiera vale cuatro ");
-									while(accionUsuario == false) {
-										try {
-							    			System.out.print(". ");
-							    			Thread.sleep(1000);
-										} catch (InterruptedException e) {
-											e.printStackTrace();
-										}
-						    		}
-						    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-								}
-								
-							};
+							llamadaHilos();
 							
-							espero38.start();	
-							
-							try {
-								espero38.join();					
-//								Thread.sleep(1000);
-							}catch(InterruptedException e) {}
+							if(botonRendirse == true) {
+					        	return 1;
+					        }
 							
 							/*SI EL JUGADOR QUIERE*/
 							
@@ -5435,32 +4663,11 @@ public class Interfaz extends JFrame{
 						
 						cantarTruco.setEnabled(true);
 						
-						accionUsuario = false;
-						Thread espero39 = new Thread() {
-							
-							@Override
-							public void run() {
-					    		
-								System.out.print("\nEspero que el jugador tire en tercera (empardamos segunda) ");
-								while(accionUsuario == false) {
-									try {
-						    			System.out.print(". ");
-						    			Thread.sleep(1000);
-									} catch (InterruptedException e) {
-										e.printStackTrace();
-									}
-					    		}
-					    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-							}
-							
-						};
+						llamadaHilos();
 						
-						espero39.start();	
-						
-						try {
-							espero39.join();					
-//							Thread.sleep(1000);
-						}catch(InterruptedException e) {}
+						if(botonRendirse == true) {
+				        	return 1;
+				        }
 						
 						cantarTruco.setEnabled(false);
 						c1.setEnabled(false);
@@ -5531,32 +4738,11 @@ public class Interfaz extends JFrame{
 								quiero.setEnabled(true);
 								noQuiero.setEnabled(true);
 								
-								accionUsuario = false;
-								Thread espero40 = new Thread() {
-									
-									@Override
-									public void run() {
-							    		
-										System.out.print("\nEspero que el jugador quiera/no quiera retruco ");
-										while(accionUsuario == false) {
-											try {
-								    			System.out.print(". ");
-								    			Thread.sleep(1000);
-											} catch (InterruptedException e) {
-												e.printStackTrace();
-											}
-							    		}
-							    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-									}
-									
-								};
+								llamadaHilos();
 								
-								espero40.start();	
-								
-								try {
-									espero40.join();					
-//									Thread.sleep(1000);
-								}catch(InterruptedException e) {}
+								if(botonRendirse == true) {
+						        	return 1;
+						        }
 								
 								/*SI EL JUGADOR QUIERE*/
 								
@@ -5658,32 +4844,11 @@ public class Interfaz extends JFrame{
 								noQuiero.setEnabled(true);
 								mazo.setEnabled(false);
 								
-								accionUsuario = false;
-								Thread espero41 = new Thread() {
-									
-									@Override
-									public void run() {
-							    		
-										System.out.print("\nEspero que el jugador quiera/no quiera truco - revire ");
-										while(accionUsuario == false) {
-											try {
-								    			System.out.print(". ");
-								    			Thread.sleep(1000);
-											} catch (InterruptedException e) {
-												e.printStackTrace();
-											}
-							    		}
-							    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-									}
-									
-								};
+								llamadaHilos();
 								
-								espero41.start();	
-								
-								try {
-									espero41.join();					
-//									Thread.sleep(1000);
-								}catch(InterruptedException e) {}
+								if(botonRendirse == true) {
+						        	return 1;
+						        }
 								
 								/*SI EL JUGADOR QUIERE*/
 								
@@ -5765,32 +4930,11 @@ public class Interfaz extends JFrame{
 										quiero.setEnabled(true);
 										noQuiero.setEnabled(true);
 										
-										accionUsuario = false;
-										Thread espero42 = new Thread() {
-											
-											@Override
-											public void run() {
-									    		
-												System.out.print("\nEspero que el jugador quiera/no quiera vale cuatro ");
-												while(accionUsuario == false) {
-													try {
-										    			System.out.print(". ");
-										    			Thread.sleep(1000);
-													} catch (InterruptedException e) {
-														e.printStackTrace();
-													}
-									    		}
-									    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-											}
-											
-										};
+										llamadaHilos();
 										
-										espero42.start();	
-										
-										try {
-											espero42.join();					
-//											Thread.sleep(1000);
-										}catch(InterruptedException e) {}
+										if(botonRendirse == true) {
+								        	return 1;
+								        }
 										
 										/*SI EL JUGADOR QUIERE*/
 										
@@ -5870,12 +5014,14 @@ public class Interfaz extends JFrame{
 			
 		}
 		
+		return 0;
+		
 	}
 	
 	
 	//FUNCION TRUCO
 	
-	public void truco() {
+	public int truco() {
 		
 		flecha2.setEnabled(false);
 		
@@ -5926,32 +5072,11 @@ public class Interfaz extends JFrame{
 			
 			vale_4.setEnabled(true);
 			
-			accionUsuario = false;
-			Thread espero13 = new Thread() {
-    			
-    			@Override
-    			public void run() {
-		    		
-    				System.out.print("\nEspero que el jugador quiera/no quiera retruco - revire ");
-    				while(accionUsuario == false) {
-    					try {
-			    			System.out.print(". ");
-			    			Thread.sleep(1000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-		    		}
-		    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-    			}
-    			
-    		};
+			llamadaHilos();
 			
-    		espero13.start();	
-    		
-    		try {
-				espero13.join();					
-//				Thread.sleep(1000);
-			}catch(InterruptedException e) {}
+			if(botonRendirse == true) {
+	        	return 1;
+	        }
 			
     		/*SI EL JUGADOR QUIERE*/
     		
@@ -6069,12 +5194,14 @@ public class Interfaz extends JFrame{
 			
 		}
 		
+		return 0;
+		
 	}
 	
 	
 	//FUNCION TIRAR DIRECTAMENTE
 	
-	public void tirarDir() {
+	public int tirarDir() {
 		
 		envido.setEnabled(false);
 		flecha.setEnabled(true);
@@ -6114,33 +5241,12 @@ public class Interfaz extends JFrame{
 					retruco.setEnabled(true);
 					mazo.setEnabled(false);
 										
-					accionUsuario = false;
-					Thread espero15 = new Thread() {
-	    			
-	    			@Override
-	    			public void run() {
-			    		
-	    				System.out.print("\nEspero que el jugador quiera/no quiera el truco ");
-	    				while(accionUsuario == false) {
-	    					try {
-				    			System.out.print(". ");
-				    			Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-			    		}
-			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-	    			}
-	    			
-	    		};
-    			
-	    		espero15.start();	
-	    		
-	    		try {
-					espero15.join();					
-//					Thread.sleep(1000);
-				}catch(InterruptedException e) {}
+					llamadaHilos();
 				
+					if(botonRendirse == true) {
+			        	return 1;
+			        }
+					
 				/*SI EL JUGADOR QUIERE*/
 				
 				if(cantado[1].equals("quiero")) {		//BLOQUE 1
@@ -6219,32 +5325,11 @@ public class Interfaz extends JFrame{
 						quiero.setEnabled(true);
 						noQuiero.setEnabled(true);
 			    		
-			    		accionUsuario = false;
-						Thread espero32 = new Thread() {
-    	    			
-    	    			@Override
-    	    			public void run() {
-    			    		
-    	    				System.out.print("\nEspero que el jugador quiera/no quiera el vale cuatro ");
-    	    				while(accionUsuario == false) {
-    	    					try {
-    				    			System.out.print(". ");
-    				    			Thread.sleep(1000);
-    							} catch (InterruptedException e) {
-    								e.printStackTrace();
-    							}
-    			    		}
-    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-    	    			}
-    	    			
-						};
-        			
-	    	    		espero32.start();	
-	    	    		
-	    	    		try {
-	    					espero32.join();					
-//												    					Thread.sleep(1000);
-	    				}catch(InterruptedException e) {}
+						llamadaHilos();
+						
+						if(botonRendirse == true) {
+				        	return 1;
+				        }
 						
 						/*SI EL JUGADOR QUIERE*/
 						
@@ -6295,33 +5380,12 @@ public class Interfaz extends JFrame{
 				flecha2.setEnabled(true);
 				cantarTruco.setEnabled(true);
 				
-				accionUsuario = false;
-				Thread espero13 = new Thread() {
-	    			
-	    			@Override
-	    			public void run() {
-			    		
-	    				System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
-	    				while(accionUsuario == false) {
-	    					try {
-				    			System.out.print(". ");
-				    			Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-			    		}
-			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-	    			}
-	    			
-	    		};
+				llamadaHilos();
     			
-	    		espero13.start();	
-	    		
-	    		try {
-					espero13.join();					
-//					Thread.sleep(1000);
-				}catch(InterruptedException e) {}
-    			
+				if(botonRendirse == true) {
+		        	return 1;
+		        }
+				
 	    		/*EL JUGADOR PUEDE IRSE AL MAZO*/
 	    		
 	    		if(irseAlMazo == true) {
@@ -6392,32 +5456,11 @@ public class Interfaz extends JFrame{
 						
 						vale_4.setEnabled(true);
 
-						accionUsuario = false;
-	    				Thread espero33 = new Thread() {
-	    	    			
-	    	    			@Override
-	    	    			public void run() {
-	    			    		
-	    	    				System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
-	    	    				while(accionUsuario == false) {
-	    	    					try {
-	    				    			System.out.print(". ");
-	    				    			Thread.sleep(1000);
-	    							} catch (InterruptedException e) {
-	    								e.printStackTrace();
-	    							}
-	    			    		}
-	    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-	    	    			}
-	    	    			
-	    	    		};
-	        			
-	    	    		espero33.start();	
-	    	    		
-	    	    		try {
-	    					espero33.join();					
-//	    					Thread.sleep(1000);
-	    				}catch(InterruptedException e) {}
+						llamadaHilos();
+						
+						if(botonRendirse == true) {
+				        	return 1;
+				        }
 						
 						/*SI EL JUGADOR QUIERE*/
 						
@@ -6527,32 +5570,11 @@ public class Interfaz extends JFrame{
 						flecha2.setEnabled(true);
 						cantarTruco.setEnabled(true);
 						
-						accionUsuario = false;
-	    				Thread espero17 = new Thread() {
-	    	    			
-	    	    			@Override
-	    	    			public void run() {
-	    			    		
-	    	    				System.out.print("\nEspero que el jugador tire en tercera (le gane primera y me gano en segunda) ");
-	    	    				while(accionUsuario == false) {
-	    	    					try {
-	    				    			System.out.print(". ");
-	    				    			Thread.sleep(1000);
-	    							} catch (InterruptedException e) {
-	    								e.printStackTrace();
-	    							}
-	    			    		}
-	    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-	    	    			}
-	    	    			
-	    	    		};
-	        			
-	    	    		espero17.start();	
-	    	    		
-	    	    		try {
-	    					espero17.join();					
-//	    					Thread.sleep(1000);
-	    				}catch(InterruptedException e) {}
+						llamadaHilos();
+						
+						if(botonRendirse == true) {
+				        	return 1;
+				        }
 						
 	    	    		/*EL JUGADOR PUEDE IRSE AL MAZO*/
 	    	    		
@@ -6630,33 +5652,12 @@ public class Interfaz extends JFrame{
 	    						
 	    						vale_4.setEnabled(true);
 	    						
-								accionUsuario = false;
-			    				Thread espero34 = new Thread() {
-			    	    			
-			    	    			@Override
-			    	    			public void run() {
-			    			    		
-			    	    				System.out.print("\nEspero que el jugador acepte o no el retruco ");
-			    	    				while(accionUsuario == false) {
-			    	    					try {
-			    				    			System.out.print(". ");
-			    				    			Thread.sleep(1000);
-			    							} catch (InterruptedException e) {
-			    								e.printStackTrace();
-			    							}
-			    			    		}
-			    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-			    	    			}
-			    	    			
-			    	    		};
-			        			
-			    	    		espero34.start();	
-			    	    		
-			    	    		try {
-			    					espero34.join();					
-//			    					Thread.sleep(1000);
-			    				}catch(InterruptedException e) {}
+	    						llamadaHilos();
 								
+	    						if(botonRendirse == true) {
+	    				        	return 1;
+	    				        }
+	    						
 								/*SI EL JUGADOR QUIERE*/
 								
 								if(cantado[2].equals("quiero")) {		//BLOQUE 3
@@ -6761,33 +5762,12 @@ public class Interfaz extends JFrame{
 					    		c2.setEnabled(false);
 					    		c3.setEnabled(false);
 								
-								accionUsuario = false;
-			    				Thread espero18 = new Thread() {
-			    	    			
-			    	    			@Override
-			    	    			public void run() {
-			    			    		
-			    	    				System.out.print("\nEspero que el jugador quiera/no quiera truco (estamos en tercera) ");
-			    	    				while(accionUsuario == false) {
-			    	    					try {
-			    				    			System.out.print(". ");
-			    				    			Thread.sleep(1000);
-			    							} catch (InterruptedException e) {
-			    								e.printStackTrace();
-			    							}
-			    			    		}
-			    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-			    	    			}
-			    	    			
-			    	    		};
-			        			
-			    	    		espero18.start();	
-			    	    		
-			    	    		try {
-			    					espero18.join();					
-//			    					Thread.sleep(1000);
-			    				}catch(InterruptedException e) {}
+					    		llamadaHilos();
 								
+					    		if(botonRendirse == true) {
+						        	return 1;
+						        }
+					    		
 								/*SI EL JUGADOR QUIERE*/
 								
 								if(cantado[1].equals("quiero")) {	//BLOQUE 4
@@ -6868,33 +5848,12 @@ public class Interfaz extends JFrame{
 			    						quiero.setEnabled(true);
 			    						noQuiero.setEnabled(true);
 
-    									accionUsuario = false;
-					    				Thread espero35 = new Thread() {
-					    	    			
-					    	    			@Override
-					    	    			public void run() {
-					    			    		
-					    	    				System.out.print("\nEspero que el jugador quiera/no quiera vale cuatro (estamos en tercera) ");
-					    	    				while(accionUsuario == false) {
-					    	    					try {
-					    				    			System.out.print(". ");
-					    				    			Thread.sleep(1000);
-					    							} catch (InterruptedException e) {
-					    								e.printStackTrace();
-					    							}
-					    			    		}
-					    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-					    	    			}
-					    	    			
-					    	    		};
-					        			
-					    	    		espero35.start();	
-					    	    		
-					    	    		try {
-					    					espero35.join();					
-//					    					Thread.sleep(1000);
-					    				}catch(InterruptedException e) {}
+			    						llamadaHilos();
 										
+			    						if(botonRendirse == true) {
+			    				        	return 1;
+			    				        }
+			    						
 										/*SI EL JUGADOR QUIERE*/
 										
 										if(cantado[3].equals("quiero")) {	//BLOQUE 4
@@ -7004,32 +5963,11 @@ public class Interfaz extends JFrame{
 				truco.setEnabled(true);
 				retruco.setEnabled(true);
 				
-				accionUsuario = false;
-				Thread espero19 = new Thread() {
-	    			
-	    			@Override
-	    			public void run() {
-			    		
-	    				System.out.print("\nEspero que el jugador quiera el truco (empardamos primera) ");
-	    				while(accionUsuario == false) {
-	    					try {
-				    			System.out.print(". ");
-				    			Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-			    		}
-			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-	    			}
-	    			
-	    		};
-    			
-	    		espero19.start();	
-	    		
-	    		try {
-					espero19.join();					
-//					Thread.sleep(1000);
-				}catch(InterruptedException e) {}
+				llamadaHilos();
+				
+				if(botonRendirse == true) {
+		        	return 1;
+		        }
 				
 				/*EL JUGADOR QUIERE*/
 				
@@ -7109,33 +6047,12 @@ public class Interfaz extends JFrame{
 						quiero.setEnabled(true);
 						noQuiero.setEnabled(true);
 
-    					accionUsuario = false;
-	    				Thread espero36 = new Thread() {
-	    	    			
-	    	    			@Override
-	    	    			public void run() {
-	    			    		
-	    	    				System.out.print("\nEspero que el jugador quiera el vale cuatro (empardamos primera) ");
-	    	    				while(accionUsuario == false) {
-	    	    					try {
-	    				    			System.out.print(". ");
-	    				    			Thread.sleep(1000);
-	    							} catch (InterruptedException e) {
-	    								e.printStackTrace();
-	    							}
-	    			    		}
-	    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-	    	    			}
-	    	    			
-	    	    		};
-	        			
-	    	    		espero36.start();	
-	    	    		
-	    	    		try {
-	    					espero36.join();					
-//	    					Thread.sleep(1000);
-	    				}catch(InterruptedException e) {}
-																    							
+						llamadaHilos();
+											
+						if(botonRendirse == true) {
+				        	return 1;
+				        }
+						
 						/*SI EL JUGADOR QUIERE*/
 						
 						if(cantado[3].equals("quiero")) {
@@ -7186,32 +6103,11 @@ public class Interfaz extends JFrame{
 				flecha2.setEnabled(true);
 				cantarTruco.setEnabled(true);
 				
-				accionUsuario = false;
-				Thread espero24 = new Thread() {
-	    			
-	    			@Override
-	    			public void run() {
-			    		
-	    				System.out.print("\nEspero que el jugador tire en segunda (empardamos primera) ");
-	    				while(accionUsuario == false) {
-	    					try {
-				    			System.out.print(". ");
-				    			Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-			    		}
-			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-	    			}
-	    			
-	    		};
-    			
-	    		espero24.start();	
-	    		
-	    		try {
-					espero24.join();					
-//					Thread.sleep(1000);
-				}catch(InterruptedException e) {}
+				llamadaHilos();
+				
+				if(botonRendirse == true) {
+		        	return 1;
+		        }
 				
 	    		/*EL JUGADOR SE VA AL MAZO*/
 	    		
@@ -7284,32 +6180,11 @@ public class Interfaz extends JFrame{
 						
 						vale_4.setEnabled(true);
 						
-						accionUsuario = false;
-	    				Thread espero25 = new Thread() {
-	    	    			
-	    	    			@Override
-	    	    			public void run() {
-	    			    		
-	    	    				System.out.print("\nEspero que el jugador quiera retruco (empardamos primera) ");
-	    	    				while(accionUsuario == false) {
-	    	    					try {
-	    				    			System.out.print(". ");
-	    				    			Thread.sleep(1000);
-	    							} catch (InterruptedException e) {
-	    								e.printStackTrace();
-	    							}
-	    			    		}
-	    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-	    	    			}
-	    	    			
-	    	    		};
-	        			
-	    	    		espero25.start();	
-	    	    		
-	    	    		try {
-	    					espero25.join();					
-//	    					Thread.sleep(1000);
-	    				}catch(InterruptedException e) {}
+						llamadaHilos();
+						
+						if(botonRendirse == true) {
+				        	return 1;
+				        }
 						
 						/*SI EL JUGADOR QUIERE*/
 						
@@ -7444,34 +6319,12 @@ public class Interfaz extends JFrame{
     						truco.setEnabled(true);
     						retruco.setEnabled(true);
     						
-	    					accionUsuario = false;
-		    				Thread espero26 = new Thread() {
-		    	    			
-		    	    			@Override
-		    	    			public void run() {
-		    			    		
-		    	    				System.out.print("\nEspero que el jugador quiera/no quiera el truco (empardamos segunda) ");
-		    	    				while(accionUsuario == false) {
-		    	    					try {
-		    				    			System.out.print(". ");
-		    				    			Thread.sleep(1000);
-		    							} catch (InterruptedException e) {
-		    								e.printStackTrace();
-		    							}
-		    			    		}
-		    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-		    	    			}
-		    	    			
-		    	    		};
-		        			
-		    	    		espero26.start();	
-		    	    		
-		    	    		try {
-		    					espero26.join();					
-//		    					Thread.sleep(1000);
-		    				}catch(InterruptedException e) {}
+    						llamadaHilos();
 	    					
-
+    						if(botonRendirse == true) {
+    				        	return 1;
+    				        }
+    						
 		    				/*SI EL JUGADOR QUIERE*/
 		    				
 		    				if(cantado[1].equals("quiero")) {			//BLOQUE 7
@@ -7550,32 +6403,11 @@ public class Interfaz extends JFrame{
 		    						quiero.setEnabled(true);
 		    						noQuiero.setEnabled(true);
 		    						
-		    						accionUsuario = false;
-				    				Thread espero28 = new Thread() {
-				    	    			
-				    	    			@Override
-				    	    			public void run() {
-				    			    		
-				    	    				System.out.print("\nEspero que el jugador quiera/no quiera vale cuatro (empardamos segunda) ");
-				    	    				while(accionUsuario == false) {
-				    	    					try {
-				    				    			System.out.print(". ");
-				    				    			Thread.sleep(1000);
-				    							} catch (InterruptedException e) {
-				    								e.printStackTrace();
-				    							}
-				    			    		}
-				    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-				    	    			}
-				    	    			
-				    	    		};
-				        			
-				    	    		espero28.start();	
-				    	    		
-				    	    		try {
-				    					espero28.join();					
-//				    					Thread.sleep(1000);
-				    				}catch(InterruptedException e) {}
+		    						llamadaHilos();
+		    						
+		    						if(botonRendirse == true) {
+		    				        	return 1;
+		    				        }
 		    						
 		    						/*SI EL JUGADOR QUIERE*/
 		    						
@@ -7627,32 +6459,11 @@ public class Interfaz extends JFrame{
 	    						c3.setEnabled(true);
 	    					}
 	    					
-	    					accionUsuario = false;
-	    					Thread espero28 = new Thread() {
-	    						
-	    						@Override
-	    						public void run() {
-	    				    		
-	    							System.out.print("\nEspero que el jugador tire en tercera (empardamos segunda y tire en tercera) ");
-	    							while(accionUsuario == false) {
-	    								try {
-	    					    			System.out.print(". ");
-	    					    			Thread.sleep(1000);
-	    								} catch (InterruptedException e) {
-	    									e.printStackTrace();
-	    								}
-	    				    		}
-	    				    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-	    						}
-	    						
-	    					};
+	    					llamadaHilos();
 	    					
-	    					espero28.start();	
-	    					
-	    					try {
-	    						espero28.join();					
-//	    						Thread.sleep(1000);
-	    					}catch(InterruptedException e) {}
+	    					if(botonRendirse == true) {
+	    			        	return 1;
+	    			        }
 	    					
 	    					/*SI EL JUGADOR SE VA AL MAZO*/
 	    					
@@ -7724,34 +6535,12 @@ public class Interfaz extends JFrame{
 		    						
 		    						vale_4.setEnabled(true);
 		    						
-	    							accionUsuario = false;
-			    					Thread espero29 = new Thread() {
-			    						
-			    						@Override
-			    						public void run() {
-			    				    		
-			    							System.out.print("\nEspero que el jugador quiera/no quiera retruco (empardamos segunda y tire en tercera) ");
-			    							while(accionUsuario == false) {
-			    								try {
-			    					    			System.out.print(". ");
-			    					    			Thread.sleep(1000);
-			    								} catch (InterruptedException e) {
-			    									e.printStackTrace();
-			    								}
-			    				    		}
-			    				    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-			    						}
-			    						
-			    					};
-			    					
-			    					espero29.start();	
-			    					
-			    					try {
-			    						espero29.join();					
-//			    						Thread.sleep(1000);
-			    					}catch(InterruptedException e) {}
+		    						llamadaHilos();
 	    							
-	    							
+		    						if(botonRendirse == true) {
+		    				        	return 1;
+		    				        }
+		    						
 			    					/*SI EL JUGADOR QUIERE*/
 			    					
 			    					if(cantado[2].equals("quiero")) {
@@ -7852,32 +6641,11 @@ public class Interfaz extends JFrame{
 		
 		else if(aux.returnOrden(auxJ) < aux.returnOrden(auxIA)) {
 			
-			accionUsuario = false;
-			Thread espero30 = new Thread() {
-				
-				@Override
-				public void run() {
-		    		
-					System.out.print("\nEspero que el jugador tire en segunda (me gano primera) ");
-					while(accionUsuario == false) {
-						try {
-			    			System.out.print(". ");
-			    			Thread.sleep(1000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-		    		}
-		    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-				}
-				
-			};
+			llamadaHilos();
 			
-			espero30.start();	
-			
-			try {
-				espero30.join();					
-//				Thread.sleep(1000);
-			}catch(InterruptedException e) {}
+			if(botonRendirse == true) {
+	        	return 1;
+	        }
 			
 			/*EL JUGADOR SE VA AL MAZO*/
 			
@@ -7947,32 +6715,11 @@ public class Interfaz extends JFrame{
 					
 					vale_4.setEnabled(true);
 					
-					accionUsuario = false;
-					Thread espero29 = new Thread() {
-						
-						@Override
-						public void run() {
-							
-							System.out.print("\nEspero que el jugador quiera/no quiera retruco ");
-							while(accionUsuario == false) {
-								try {
-					    			System.out.print(". ");
-					    			Thread.sleep(1000);
-								} catch (InterruptedException e) {
-									e.printStackTrace();
-								}
-							}
-							System.out.println("\nRetomo la ejecucion (mi turno)\n");
-						}
-						
-					};
-																				    					
-					espero29.start();	
-																				    					
-					try {
-						espero29.join();					
-						//Thread.sleep(1000);
-					}catch(InterruptedException e) {}
+					llamadaHilos();
+					
+					if(botonRendirse == true) {
+			        	return 1;
+			        }
 					
 					/*SI EL JUGADOR QUIERE*/
 					
@@ -8081,32 +6828,11 @@ public class Interfaz extends JFrame{
 					flecha2.setEnabled(false);
 					retruco.setEnabled(true);
 					
-					accionUsuario = false;
-					Thread espero32 = new Thread() {
-						
-						@Override
-						public void run() {
-				    		
-							System.out.print("\nEspero que el jugador quiera/no quiera truco (me gano primera) ");
-							while(accionUsuario == false) {
-								try {
-					    			System.out.print(". ");
-					    			Thread.sleep(1000);
-								} catch (InterruptedException e) {
-									e.printStackTrace();
-								}
-				    		}
-				    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-						}
-						
-					};
+					llamadaHilos();
 					
-					espero32.start();	
-					
-					try {
-						espero32.join();					
-	//					Thread.sleep(1000);
-					}catch(InterruptedException e) {}
+					if(botonRendirse == true) {
+			        	return 1;
+			        }
 					
 					/*SI EL JUGADOR QUIERE*/
 					
@@ -8186,32 +6912,11 @@ public class Interfaz extends JFrame{
 							quiero.setEnabled(true);
 							noQuiero.setEnabled(true);
 	
-							accionUsuario = false;
-	    					Thread espero33 = new Thread() {
-	    						
-	    						@Override
-	    						public void run() {
-	    				    		
-	    							System.out.print("\nEspero que el jugador quiera/no quiera retruco (me gano primera) ");
-	    							while(accionUsuario == false) {
-	    								try {
-	    					    			System.out.print(". ");
-	    					    			Thread.sleep(1000);
-	    								} catch (InterruptedException e) {
-	    									e.printStackTrace();
-	    								}
-	    				    		}
-	    				    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-	    						}
-	    						
-	    					};
-	    					
-	    					espero33.start();	
-	    					
-	    					try {
-	    						espero33.join();					
-	//    						Thread.sleep(1000);
-	    					}catch(InterruptedException e) {}
+							llamadaHilos();
+							
+							if(botonRendirse == true) {
+					        	return 1;
+					        }
 							
 							/*SI EL JUGADOR QUIERE*/
 	    					
@@ -8271,33 +6976,11 @@ public class Interfaz extends JFrame{
 							flecha2.setEnabled(true);
 							retruco.setEnabled(true);
 							
-							accionUsuario = false;
-							Thread espero38 = new Thread() {
-								
-								@Override
-								public void run() {
-									
-									System.out.print("\nEspero que el jugador quiera/no quiera truco (me gano primera y gane segunda, pero antes de tirar, canto) ");
-									while(accionUsuario == false) {
-										try {
-							    			System.out.print(". ");
-							    			Thread.sleep(1000);
-										} catch (InterruptedException e) {
-											e.printStackTrace();
-										}
-									}
-									System.out.println("\nRetomo la ejecucion (mi turno)\n");
-								}
-								
-							};
-																						    					
-							espero38.start();	
-																						    					
-							try {
-								espero38.join();					
-								//Thread.sleep(1000);
-							}catch(InterruptedException e) {}
+							llamadaHilos();
 							
+							if(botonRendirse == true) {
+					        	return 1;
+					        }
 							
 							System.out.println(cantado[0]);
 							System.out.println(cantado[1]);
@@ -8388,32 +7071,11 @@ public class Interfaz extends JFrame{
 									quiero.setEnabled(true);
 									noQuiero.setEnabled(true);
 
-									accionUsuario = false;
-									Thread espero39 = new Thread() {
-										
-										@Override
-										public void run() {
-											
-											System.out.print("\nEspero que el jugador quiera/no quiera vale cuatro ");
-											while(accionUsuario == false) {
-												try {
-									    			System.out.print(". ");
-									    			Thread.sleep(1000);
-												} catch (InterruptedException e) {
-													e.printStackTrace();
-												}
-											}
-											System.out.println("\nRetomo la ejecucion (mi turno)\n");
-										}
-										
-									};
-																								    					
-									espero39.start();	
-																								    					
-									try {
-										espero39.join();					
-										//Thread.sleep(1000);
-									}catch(InterruptedException e) {}
+									llamadaHilos();
+									
+									if(botonRendirse == true) {
+							        	return 1;
+							        }
 									
 									/*SI EL JUGADOR QUIERE*/
 									
@@ -8467,32 +7129,11 @@ public class Interfaz extends JFrame{
 							flecha2.setEnabled(true);
 							cantarTruco.setEnabled(true);
 							
-							accionUsuario = false;
-							Thread espero31 = new Thread() {
-								
-								@Override
-								public void run() {
-						    		
-									System.out.print("\nEspero que el jugador tire en tercera (me gano primera y le gane segunda) ");
-									while(accionUsuario == false) {
-										try {
-							    			System.out.print(". ");
-							    			Thread.sleep(1000);
-										} catch (InterruptedException e) {
-											e.printStackTrace();
-										}
-						    		}
-						    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-								}
-								
-							};
+							llamadaHilos();
 							
-							espero31.start();	
-							
-							try {
-								espero31.join();					
-		//						Thread.sleep(1000);
-							}catch(InterruptedException e) {}
+							if(botonRendirse == true) {
+					        	return 1;
+					        }
 							
 							/*EL JUGADOR PUEDE IRSE AL MAZO*/
 							
@@ -8566,33 +7207,11 @@ public class Interfaz extends JFrame{
 									noQuiero.setEnabled(true);
 									vale_4.setEnabled(true);
 									
-						    		accionUsuario = false;
-									Thread espero38 = new Thread() {
-			    	    			
-			    	    			@Override
-			    	    			public void run() {
-			    			    		
-			    	    				System.out.print("\nEspero que el jugador quiera/no quiera el retruco ");
-			    	    				while(accionUsuario == false) {
-			    	    					try {
-			    				    			System.out.print(". ");
-			    				    			Thread.sleep(1000);
-			    							} catch (InterruptedException e) {
-			    								e.printStackTrace();
-			    							}
-			    			    		}
-			    			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-			    	    			}
-			    	    			
-									};
-			        			
-				    	    		espero38.start();	
-				    	    		
-				    	    		try {
-				    					espero38.join();					
-//															    					Thread.sleep(1000);
-				    				}catch(InterruptedException e) {}
+									llamadaHilos();
 									
+									if(botonRendirse == true) {
+							        	return 1;
+							        }
 									
 				    	    		/*SI EL JUGADOR QUIERE*/
 				    	    		
@@ -8741,6 +7360,8 @@ public class Interfaz extends JFrame{
 													    			
 		}
 		
+		return 0;
+		
 	}
 	
 	
@@ -8821,7 +7442,7 @@ public class Interfaz extends JFrame{
 	}	
 	
 	
-	public void trucoQueridoB11() {
+	public int trucoQueridoB11() {
 		
 		mazo.setEnabled(true);
 		
@@ -8835,32 +7456,11 @@ public class Interfaz extends JFrame{
 			c3.setEnabled(true);
 		}
 		
-		accionUsuario = false;
-		Thread espero44 = new Thread() {
-			
-			@Override
-			public void run() {
-	    		
-				System.out.print("\nEspero que el jugador tire en tercera (empardamos segunda) ");
-				while(accionUsuario == false) {
-					try {
-		    			System.out.print(". ");
-		    			Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-	    		}
-	    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-			}
-			
-		};
+		llamadaHilos();
 		
-		espero44.start();	
-		
-		try {
-			espero44.join();					
-//			Thread.sleep(1000);
-		}catch(InterruptedException e) {}
+		if(botonRendirse == true) {
+        	return 1;
+        }
 		
 		/*EL JUGADOR SE VA AL MAZO*/
 		
@@ -8913,10 +7513,12 @@ public class Interfaz extends JFrame{
 		
 		}
 		
+		return 0;
+		
 	}
 	
 	
-	public void trucoQueridoB10() {
+	public int trucoQueridoB10() {
 		
 		auxIA = tiraIA[0];
 		
@@ -8973,32 +7575,11 @@ public class Interfaz extends JFrame{
 				c3.setEnabled(true);
 			}
 			
-			accionUsuario = false;
-			Thread espero44 = new Thread() {
-				
-				@Override
-				public void run() {
-		    		
-					System.out.print("\nEspero que el jugador tire en tercera (empardamos segunda) ");
-					while(accionUsuario == false) {
-						try {
-			    			System.out.print(". ");
-			    			Thread.sleep(1000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-		    		}
-		    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-				}
-				
-			};
+			llamadaHilos();
 			
-			espero44.start();	
-			
-			try {
-				espero44.join();					
-//				Thread.sleep(1000);
-			}catch(InterruptedException e) {}
+			if(botonRendirse == true) {
+	        	return 1;
+	        }
 			
 			/*EL JUGADOR SE VA AL MAZO*/
     		
@@ -9053,10 +7634,12 @@ public class Interfaz extends JFrame{
 			
 		}
 		
+		return 0;
+		
 	}	
 	
 	
-	public void trucoQueridoB9() {
+	public int trucoQueridoB9() {
 		
 		mazo.setEnabled(true);
 		
@@ -9070,32 +7653,11 @@ public class Interfaz extends JFrame{
 			c3.setEnabled(true);
 		}
 		
-		accionUsuario = false;
-		Thread espero43 = new Thread() {
-			
-			@Override
-			public void run() {
-	    		
-				System.out.print("\nEspero que el jugador tire en segunda (empardamos primera) ");
-				while(accionUsuario == false) {
-					try {
-		    			System.out.print(". ");
-		    			Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-	    		}
-	    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-			}
-			
-		};
+		llamadaHilos();
 		
-		espero43.start();	
-		
-		try {
-			espero43.join();					
-//			Thread.sleep(1000);
-		}catch(InterruptedException e) {}
+		if(botonRendirse == true) {
+        	return 1;
+        }
 		
 		/*EL JUGADOR SE VA AL MAZO*/
 		
@@ -9170,32 +7732,11 @@ public class Interfaz extends JFrame{
 					c3.setEnabled(true);
 				}
 				
-				accionUsuario = false;
-				Thread espero44 = new Thread() {
-					
-					@Override
-					public void run() {
-			    		
-						System.out.print("\nEspero que el jugador tire en tercera (empardamos segunda) ");
-						while(accionUsuario == false) {
-							try {
-				    			System.out.print(". ");
-				    			Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-			    		}
-			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-					}
-					
-				};
+				llamadaHilos();
 				
-				espero44.start();	
-				
-				try {
-					espero44.join();					
-	//				Thread.sleep(1000);
-				}catch(InterruptedException e) {}
+				if(botonRendirse == true) {
+		        	return 1;
+		        }
 				
 				/*EL JUGADOR SE VA AL MAZO*/
 	    		
@@ -9252,11 +7793,13 @@ public class Interfaz extends JFrame{
 		
 		}
 		
+		return 0;
+		
 	}
 	
 	
 	
-	public void trucoQueridoB8() {
+	public int trucoQueridoB8() {
 		
 		mazo.setEnabled(true);
 		
@@ -9270,32 +7813,11 @@ public class Interfaz extends JFrame{
 			c3.setEnabled(true);
 		}
 		
-		accionUsuario = false;
-		Thread espero13 = new Thread() {
-			
-			@Override
-			public void run() {
-	    		
-				System.out.print("\nEspero que el jugador tire en la ultima ");
-				while(accionUsuario == false) {
-					try {
-		    			System.out.print(". ");
-		    			Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-	    		}
-	    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-			}
-			
-		};
+		llamadaHilos();
 		
-		espero13.start();	
-		
-		try {
-			espero13.join();					
-//			Thread.sleep(1000);
-		}catch(InterruptedException e) {}
+		if(botonRendirse == true) {
+        	return 1;
+        }
 		
 		/*EL JUGADOR SE VA AL MAZO*/
 		
@@ -9343,10 +7865,12 @@ public class Interfaz extends JFrame{
 		
 		}
 		
+		return 0;
+		
 	}
 	
 	
-	public void trucoQueridoB7() {
+	public int trucoQueridoB7() {
 		
 		tiratmp[0] = tiraIA[1];
 		auxIA = tiraIA[1];
@@ -9364,32 +7888,11 @@ public class Interfaz extends JFrame{
 			c3.setEnabled(true);
 		}
 		
-		accionUsuario = false;
-		Thread espero13 = new Thread() {
-			
-			@Override
-			public void run() {
-	    		
-				System.out.print("\nEspero que el jugador tire en tercera (me gano primera y gane segunda) ");
-				while(accionUsuario == false) {
-					try {
-		    			System.out.print(". ");
-		    			Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-	    		}
-	    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-			}
-			
-		};
+		llamadaHilos();
 		
-		espero13.start();	
-		
-		try {
-			espero13.join();					
-//			Thread.sleep(1000);
-		}catch(InterruptedException e) {}
+		if(botonRendirse == true) {
+        	return 1;
+        }
 		
 		/*EL JUGADOR SE VA AL MAZO*/
 		
@@ -9437,10 +7940,12 @@ public class Interfaz extends JFrame{
 		
 		}
 		
+		return 0;
+		
 	}
 	
 	
-	public void trucoQueridoB6() {
+	public int trucoQueridoB6() {
 		
 		/*SI LA IA MATA*/
 		
@@ -9460,32 +7965,11 @@ public class Interfaz extends JFrame{
 				c3.setEnabled(true);
 			}
 			
-			accionUsuario = false;
-			Thread espero14 = new Thread() {
-				
-				@Override
-				public void run() {
-		    		
-					System.out.print("\nEspero que el jugador tire la ultima (me gano primera y gane segunda) ");
-					while(accionUsuario == false) {
-						try {
-			    			System.out.print(". ");
-			    			Thread.sleep(1000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-		    		}
-		    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-				}
-				
-			};
+			llamadaHilos();
 			
-			espero14.start();	
-			
-			try {
-				espero14.join();					
-//				Thread.sleep(1000);
-			}catch(InterruptedException e) {}
+			if(botonRendirse == true) {
+	        	return 1;
+	        }
 			
 			/*EL JUGADOR SE VA AL MAZO*/
     		
@@ -9554,10 +8038,12 @@ public class Interfaz extends JFrame{
 			
 		}
 		
+		return 0;
+		
 	}
 	
 	
-	public void trucoQueridoB5() {
+	public int trucoQueridoB5() {
 		
 		mazo.setEnabled(true);
 		
@@ -9571,32 +8057,11 @@ public class Interfaz extends JFrame{
 			c3.setEnabled(true);
 		}
 		
-		accionUsuario = false;
-		Thread espero13 = new Thread() {
-			
-			@Override
-			public void run() {
-	    		
-				System.out.print("\nEspero que el jugador tire en segunda (me gano primera) ");
-				while(accionUsuario == false) {
-					try {
-		    			System.out.print(". ");
-		    			Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-	    		}
-	    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-			}
-			
-		};
+		llamadaHilos();
 		
-		espero13.start();	
-		
-		try {
-			espero13.join();					
-//			Thread.sleep(1000);
-		}catch(InterruptedException e) {}
+		if(botonRendirse == true) {
+        	return 1;
+        }
 		
 		/*EL JUGADOR SE VA AL MAZO*/
 		
@@ -9636,32 +8101,11 @@ public class Interfaz extends JFrame{
 					c3.setEnabled(true);
 				}
 				
-				accionUsuario = false;
-				Thread espero14 = new Thread() {
-					
-					@Override
-					public void run() {
-			    		
-						System.out.print("\nEspero que el jugador tire la ultima (me gano primera y gane segunda) ");
-						while(accionUsuario == false) {
-							try {
-				    			System.out.print(". ");
-				    			Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-			    		}
-			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-					}
-					
-				};
+				llamadaHilos();
 				
-				espero14.start();	
-				
-				try {
-					espero14.join();					
-	//				Thread.sleep(1000);
-				}catch(InterruptedException e) {}
+				if(botonRendirse == true) {
+		        	return 1;
+		        }
 				
 				/*EL JUGADOR SE VA AL MAZO*/
 	    		
@@ -9732,6 +8176,8 @@ public class Interfaz extends JFrame{
 		
 		}
 		
+		return 0;
+		
 	}	
 	
 	
@@ -9773,7 +8219,7 @@ public class Interfaz extends JFrame{
 	}
 	
 	
-	public void trucoQueridoB3() {
+	public int trucoQueridoB3() {
 		
 		mazo.setEnabled(true);
 		
@@ -9787,32 +8233,11 @@ public class Interfaz extends JFrame{
 			c3.setEnabled(true);
 		}
 		
-		accionUsuario = false;
-		Thread espero13 = new Thread() {
-			
-			@Override
-			public void run() {
-	    		
-				System.out.print("\nEspero que el jugador tire en tercera (gane primera y me gano segunda) ");
-				while(accionUsuario == false) {
-					try {
-		    			System.out.print(". ");
-		    			Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-	    		}
-	    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-			}
-			
-		};
+		llamadaHilos();
 		
-		espero13.start();	
-		
-		try {
-			espero13.join();					
-//			Thread.sleep(1000);
-		}catch(InterruptedException e) {}
+		if(botonRendirse == true) {
+        	return 1;
+        }
 		
 		/*EL JUGADOR SE VA AL MAZO*/
 		
@@ -9865,10 +8290,12 @@ public class Interfaz extends JFrame{
 		
 		}
 		
+		return 0;
+		
 	}
 	
 	
-	public void trucoQueridoB2() {
+	public int trucoQueridoB2() {
 		
 		mazo.setEnabled(true);
 		
@@ -9882,32 +8309,11 @@ public class Interfaz extends JFrame{
 			c3.setEnabled(true);
 		}
 		
-		accionUsuario = false;
-		Thread espero13 = new Thread() {
-			
-			@Override
-			public void run() {
-	    		
-				System.out.print("\nEspero que el jugador tire en segunda (gane primera) ");
-				while(accionUsuario == false) {
-					try {
-		    			System.out.print(". ");
-		    			Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-	    		}
-	    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-			}
-			
-		};
+		llamadaHilos();
 		
-		espero13.start();	
-		
-		try {
-			espero13.join();					
-//			Thread.sleep(1000);
-		}catch(InterruptedException e) {}
+		if(botonRendirse == true) {
+        	return 1;
+        }
 		
 		/*EL JUGADOR SE VA AL MAZO*/
 		
@@ -9927,32 +8333,11 @@ public class Interfaz extends JFrame{
 			
 			if(aux.returnOrden(auxJ) < aux.returnOrden(auxIA)) {
 				
-				accionUsuario = false;
-				Thread espero14 = new Thread() {
-					
-					@Override
-					public void run() {
-			    		
-						System.out.print("\nEspero que el jugador tire en tercera (gane primera y me gano segunda) ");
-						while(accionUsuario == false) {
-							try {
-				    			System.out.print(". ");
-				    			Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-			    		}
-			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-					}
-					
-				};
+				llamadaHilos();
 				
-				espero14.start();	
-				
-				try {
-					espero14.join();					
-	//				Thread.sleep(1000);
-				}catch(InterruptedException e) {}
+				if(botonRendirse == true) {
+		        	return 1;
+		        }
 				
 				/*EL JUGADOR SE VA AL MAZO*/
 	    		
@@ -10024,10 +8409,12 @@ public class Interfaz extends JFrame{
 		
 		}
 		
+		return 0;
+		
 	}
 
 	
-	public void trucoQueridoB1() {
+	public int trucoQueridoB1() {
 		
 		auxIA = tiraIA[1];
 		tiratmp[0] = tiraIA[1];
@@ -10045,32 +8432,11 @@ public class Interfaz extends JFrame{
 			c3.setEnabled(true);
 		}
 		
-		accionUsuario = false;
-		Thread espero13 = new Thread() {
-			
-			@Override
-			public void run() {
-	    		
-				System.out.print("\nEspero que el jugador tire en segunda (gane primera) ");
-				while(accionUsuario == false) {
-					try {
-		    			System.out.print(". ");
-		    			Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-	    		}
-	    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-			}
-			
-		};
+		llamadaHilos();
 		
-		espero13.start();	
-		
-		try {
-			espero13.join();					
-//			Thread.sleep(1000);
-		}catch(InterruptedException e) {}
+		if(botonRendirse == true) {
+        	return 1;
+        }
 		
 		/*EL JUGADOR SE VA AL MAZO*/
 		
@@ -10090,32 +8456,11 @@ public class Interfaz extends JFrame{
 			
 			if(aux.returnOrden(auxJ) < aux.returnOrden(auxIA)) {
 				
-				accionUsuario = false;
-				Thread espero14 = new Thread() {
-					
-					@Override
-					public void run() {
-			    		
-						System.out.print("\nEspero que el jugador tire en tercera (gane primera y me gano segunda) ");
-						while(accionUsuario == false) {
-							try {
-				    			System.out.print(". ");
-				    			Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-			    		}
-			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-					}
-					
-				};
+				llamadaHilos();
 				
-				espero14.start();	
-				
-				try {
-					espero14.join();					
-	//				Thread.sleep(1000);
-				}catch(InterruptedException e) {}
+				if(botonRendirse == true) {
+		        	return 1;
+		        }
 				
 				/*EL JUGADOR SE VA AL MAZO*/
 	    		
@@ -10187,11 +8532,13 @@ public class Interfaz extends JFrame{
 		
 		}
 		
+		return 0;
+		
 	}
 	
 	
 	
-	public void trucoQueridoBloque12() {
+	public int trucoQueridoBloque12() {
 		
 		flecha2.setEnabled(true);
 		mazo.setEnabled(true);
@@ -10206,32 +8553,11 @@ public class Interfaz extends JFrame{
 			c3.setEnabled(true);
 		}
 		
-		accionUsuario = false;
-		Thread espero41 = new Thread() {
-			
-			@Override
-			public void run() {
-	    		
-				System.out.print("\nEspero que el jugador tire en segunda (me gano primera) ");
-				while(accionUsuario == false) {
-					try {
-		    			System.out.print(". ");
-		    			Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-	    		}
-	    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-			}
-			
-		};
+		llamadaHilos();
 		
-		espero41.start();	
-		
-		try {
-			espero41.join();					
-//			Thread.sleep(1000);
-		}catch(InterruptedException e) {}
+		if(botonRendirse == true) {
+        	return 1;
+        }
 		
 		/*EL JUGADOR SE VA AL MAZO*/
 		
@@ -10274,32 +8600,11 @@ public class Interfaz extends JFrame{
 					c3.setEnabled(true);
 				}
 				
-				accionUsuario = false;
-				Thread espero31 = new Thread() {
-					
-					@Override
-					public void run() {
-			    		
-						System.out.print("\nEspero que el jugador tire en tercera (me gano primera y le gane segunda) ");
-						while(accionUsuario == false) {
-							try {
-				    			System.out.print(". ");
-				    			Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-			    		}
-			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-					}
-					
-				};
+				llamadaHilos();
 				
-				espero31.start();	
-				
-				try {
-					espero31.join();					
-	//						Thread.sleep(1000);
-				}catch(InterruptedException e) {}
+				if(botonRendirse == true) {
+		        	return 1;
+		        }
 				
 				/*EL JUGADOR SE VA AL MAZO*/
 	    		
@@ -10366,10 +8671,12 @@ public class Interfaz extends JFrame{
 		
 		}
 		
+		return 0;
+		
 	}
 	
 	
-	public void trucoQueridoBloque11() {
+	public int trucoQueridoBloque11() {
 		
 		tiratmp[0] = tiraIA[1];
 		tiraIAnull = true;
@@ -10388,32 +8695,11 @@ public class Interfaz extends JFrame{
 			c3.setEnabled(true);
 		}
 		
-		accionUsuario = false;
-		Thread espero40 = new Thread() {
-			
-			@Override
-			public void run() {
-	    		
-				System.out.print("\nEspero que el jugador tire ");
-				while(accionUsuario == false) {
-					try {
-		    			System.out.print(". ");
-		    			Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-	    		}
-	    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-			}
-			
-		};
+		llamadaHilos();
 		
-		espero40.start();	
-		
-		try {
-			espero40.join();					
-//						Thread.sleep(1000);
-		}catch(InterruptedException e) {}
+		if(botonRendirse == true) {
+        	return 1;
+        }
 		
 		/*EL JUGADOR SE VA AL MAZO*/
 		
@@ -10458,10 +8744,12 @@ public class Interfaz extends JFrame{
 		
 		}
 		
+		return 0;
+		
 	}
 	
 	
-	public void trucoQueridoBloque10() {
+	public int trucoQueridoBloque10() {
 		
 		flecha2.setEnabled(true);
 		mazo.setEnabled(true);
@@ -10477,32 +8765,12 @@ public class Interfaz extends JFrame{
 		}
 		
 		//ESPERO QUE EL JUGADOR TIRE CARTA O SE VAYA AL MAZO (SOLO ESAS DOS OPCIONES)
-		accionUsuario = false;
-		Thread espero32 = new Thread() {
-			
-			@Override
-			public void run() {
-	    		
-				System.out.print("\nEspero que el jugador tire en tercera (me gano primera y gane segunda) ");
-				while(accionUsuario == false) {
-					try {
-		    			System.out.print(". ");
-		    			Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-	    		}
-	    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-			}
-			
-		};
 		
-		espero32.start();	
+		llamadaHilos();
 		
-		try {
-			espero32.join();					
-//	    						Thread.sleep(1000);
-		}catch(InterruptedException e) {}
+		if(botonRendirse == true) {
+        	return 1;
+        }
 		
 		/*EL JUGADOR SE VA AL MAZO*/
 		
@@ -10547,10 +8815,12 @@ public class Interfaz extends JFrame{
 		
 		}
 		
+		return 0;
+		
 	}
 	
 	
-	public void trucoQueridoBloque9() {
+	public int trucoQueridoBloque9() {
 		
 		tiratmp[0] = auxIA;
 		tiraIAnull = true;						//CHEQUEAR ESTO
@@ -10579,32 +8849,11 @@ public class Interfaz extends JFrame{
 				c3.setEnabled(true);
 			}
 			
-			accionUsuario = false;
-			Thread espero31 = new Thread() {
-				
-				@Override
-				public void run() {
-		    		
-					System.out.print("\nEspero que el jugador tire en tercera (me gano primera y le gane segunda) ");
-					while(accionUsuario == false) {
-						try {
-			    			System.out.print(". ");
-			    			Thread.sleep(1000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-		    		}
-		    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-				}
-				
-			};
+			llamadaHilos();
 			
-			espero31.start();	
-			
-			try {
-				espero31.join();					
-//				Thread.sleep(1000);
-			}catch(InterruptedException e) {}
+			if(botonRendirse == true) {
+	        	return 1;
+	        }
 			
 			/*EL JUGADOR SE VA AL MAZO*/
     		
@@ -10672,11 +8921,13 @@ public class Interfaz extends JFrame{
 			
 		}
 		
+		return 0;
+		
 	}
 	
 	
 	
-	public void trucoQueridoBloque8() {
+	public int trucoQueridoBloque8() {
 		
 		flecha2.setEnabled(true);
 		mazo.setEnabled(true);
@@ -10691,32 +8942,11 @@ public class Interfaz extends JFrame{
 			c3.setEnabled(true);
 		}
 		
-		accionUsuario = false;
-		Thread espero30 = new Thread() {
-			
-			@Override
-			public void run() {
-	    		
-				System.out.print("\nEspero que el jugador tire en tercera (empardamos segunda y ya tire todas las cartas) ");
-				while(accionUsuario == false) {
-					try {
-		    			System.out.print(". ");
-		    			Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-	    		}
-	    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-			}
-			
-		};
+		llamadaHilos();
 		
-		espero30.start();	
-		
-		try {
-			espero30.join();					
-//			Thread.sleep(1000);
-		}catch(InterruptedException e) {}
+		if(botonRendirse == true) {
+        	return 1;
+        }
 		
 		/*EL JUGADOR SE VA AL MAZO*/
 		
@@ -10772,10 +9002,12 @@ public class Interfaz extends JFrame{
 		
 		}
 		
+		return 0;
+		
 	}
 	
 	
-	public void trucoQueridoBloque7() {
+	public int trucoQueridoBloque7() {
 		
 		tiraIAnull = true;
 		mostrarTirada(tiraIA,tiraIAnull);
@@ -10794,32 +9026,11 @@ public class Interfaz extends JFrame{
 			c3.setEnabled(true);
 		}
 		
-		accionUsuario = false;
-		Thread espero27 = new Thread() {
-			
-			@Override
-			public void run() {
-	    		
-				System.out.print("\nEspero que el jugador tire en tercera (empardamos segunda) ");
-				while(accionUsuario == false) {
-					try {
-		    			System.out.print(". ");
-		    			Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-	    		}
-	    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-			}
-			
-		};
+		llamadaHilos();
 		
-		espero27.start();	
-		
-		try {
-			espero27.join();					
-//			Thread.sleep(1000);
-		}catch(InterruptedException e) {}
+		if(botonRendirse == true) {
+        	return 1;
+        }
 		
 		/*EL JUGADOR SE VA AL MAZO*/
 		
@@ -10862,11 +9073,13 @@ public class Interfaz extends JFrame{
 			}
 		
 		}
+	
+		return 0;
 		
 	}
 	
 	
-	public void trucoQueridoBloque6() {
+	public int trucoQueridoBloque6() {
 		
 		flecha2.setEnabled(true);
 		mazo.setEnabled(true);
@@ -10881,32 +9094,11 @@ public class Interfaz extends JFrame{
 			c3.setEnabled(true);
 		}
 		
-		accionUsuario = false;
-		Thread espero22 = new Thread() {
-			
-			@Override
-			public void run() {
-	    		
-				System.out.print("\nEspero que el jugador tire en segunda (empardamos primera) ");
-				while(accionUsuario == false) {
-					try {
-		    			System.out.print(". ");
-		    			Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-	    		}
-	    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-			}
-			
-		};
+		llamadaHilos();
 		
-		espero22.start();	
-		
-		try {
-			espero22.join();					
-//			Thread.sleep(1000);
-		}catch(InterruptedException e) {}
+		if(botonRendirse == true) {
+        	return 1;
+        }
 		
 		/*EL JUGADOR SE VA AL MAZO*/
 		
@@ -10973,32 +9165,11 @@ public class Interfaz extends JFrame{
 					c3.setEnabled(true);
 				}
 				
-				accionUsuario = false;
-				Thread espero23 = new Thread() {
-	    			
-	    			@Override
-	    			public void run() {
-			    		
-	    				System.out.print("\nEspero que el jugador tire en tercera (empardamos segunda) ");
-	    				while(accionUsuario == false) {
-	    					try {
-				    			System.out.print(". ");
-				    			Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-			    		}
-			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-	    			}
-	    			
-	    		};
+				llamadaHilos();
 				
-	    		espero23.start();	
-	    		
-	    		try {
-					espero23.join();					
-	//				Thread.sleep(1000);
-				}catch(InterruptedException e) {}
+				if(botonRendirse == true) {
+		        	return 1;
+		        }
 				
 	    		/*EL JUGADOR SE VA AL MAZO*/
 	    		
@@ -11048,10 +9219,12 @@ public class Interfaz extends JFrame{
 		
 		}
 		
+		return 0;
+		
 	}
 	
 	
-	public void trucoQueridoBloque5() {
+	public int trucoQueridoBloque5() {
 		
 		truco.setEnabled(false);
 		flecha2.setEnabled(true);				//POR SI QUIERE IRSE AL MAZO
@@ -11073,32 +9246,11 @@ public class Interfaz extends JFrame{
 			c3.setEnabled(true);
 		}
 		
-		accionUsuario = false;
-		Thread espero20 = new Thread() {
-			
-			@Override
-			public void run() {
-	    		
-				System.out.print("\nEspero que el jugador tire en segunda (empardamos primera) ");
-				while(accionUsuario == false) {
-					try {
-		    			System.out.print(". ");
-		    			Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-	    		}
-	    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-			}
-			
-		};
+		llamadaHilos();
 		
-		espero20.start();	
-		
-		try {
-			espero20.join();					
-//			Thread.sleep(1000);
-		}catch(InterruptedException e) {}
+		if(botonRendirse == true) {
+        	return 1;
+        }
 		
 		/*EL JUGADOR SE VA AL MAZO*/
 		
@@ -11167,32 +9319,11 @@ public class Interfaz extends JFrame{
 					c3.setEnabled(true);
 				}
 				
-				accionUsuario = false;
-				Thread espero21 = new Thread() {
-	    			
-	    			@Override
-	    			public void run() {
-			    		
-	    				System.out.print("\nEspero que el jugador tire en tercera (empardamos segunda) ");
-	    				while(accionUsuario == false) {
-	    					try {
-				    			System.out.print(". ");
-				    			Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-			    		}
-			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-	    			}
-	    			
-	    		};
+				llamadaHilos();
 				
-	    		espero21.start();	
-	    		
-	    		try {
-					espero21.join();					
-	//				Thread.sleep(1000);
-				}catch(InterruptedException e) {}
+				if(botonRendirse == true) {
+		        	return 1;
+		        }
 				
 	    		/*EL JUGADOR SE VA AL MAZO*/
 	    		
@@ -11242,6 +9373,8 @@ public class Interfaz extends JFrame{
 		
 		}
 		
+		return 0;
+		
 	}
 	
 	
@@ -11281,7 +9414,7 @@ public class Interfaz extends JFrame{
 	}
 	
 	
-	public void trucoQueridoBloque3() {
+	public int trucoQueridoBloque3() {
 		
 		flecha2.setEnabled(true);
 		mazo.setEnabled(true);
@@ -11296,32 +9429,11 @@ public class Interfaz extends JFrame{
 			c3.setEnabled(true);
 		}
 		
-		accionUsuario = false;
-		Thread espero18 = new Thread() {
-			
-			@Override
-			public void run() {
-	    		
-				System.out.print("\nEspero que el jugador tire en tercera (me gano segunda primera) ");
-				while(accionUsuario == false) {
-					try {
-		    			System.out.print(". ");
-		    			Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-	    		}
-	    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-			}
-			
-		};
+		llamadaHilos();
 		
-		espero18.start();	
-		
-		try {
-			espero18.join();					
-//			Thread.sleep(1000);
-		}catch(InterruptedException e) {}
+		if(botonRendirse == true) {
+        	return 1;
+        }
 		
 		/*EL JUGADOR SE VA AL MAZO*/
 		
@@ -11373,10 +9485,12 @@ public class Interfaz extends JFrame{
 		
 		}
 		
+		return 0;
+		
 	}
 	
 	
-	public void trucoQueridoBloque2() {
+	public int trucoQueridoBloque2() {
 		
 		flecha2.setEnabled(true);
 		mazo.setEnabled(true);
@@ -11391,32 +9505,11 @@ public class Interfaz extends JFrame{
 			c3.setEnabled(true);
 		}
 		
-		accionUsuario = false;
-		Thread espero16 = new Thread() {
-			
-			@Override
-			public void run() {
-	    		
-				System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
-				while(accionUsuario == false) {
-					try {
-		    			System.out.print(". ");
-		    			Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-	    		}
-	    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-			}
-			
-		};
+		llamadaHilos();
 		
-		espero16.start();	
-		
-		try {
-			espero16.join();					
-//			Thread.sleep(1000);
-		}catch(InterruptedException e) {}
+		if(botonRendirse == true) {
+        	return 1;
+        }
 		
 		/*EL JUGADOR SE VA AL MAZO*/
 		
@@ -11455,32 +9548,12 @@ public class Interfaz extends JFrame{
 			else {
 				
 				//TIRA NUEVAMENTE
-				accionUsuario = false;
-				Thread espero17 = new Thread() {
-	    			
-	    			@Override
-	    			public void run() {
-			    		
-	    				System.out.print("\nEspero que el jugador tire en tercera (me gano segunda) ");
-	    				while(accionUsuario == false) {
-	    					try {
-				    			System.out.print(". ");
-				    			Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-			    		}
-			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-	    			}
-	    			
-	    		};
 				
-	    		espero17.start();	
-	    		
-	    		try {
-					espero17.join();					
-	//				Thread.sleep(1000);
-				}catch(InterruptedException e) {}
+				llamadaHilos();
+				
+				if(botonRendirse == true) {
+		        	return 1;
+		        }
 				
 	    		/*EL JUGADOR SE VA AL MAZO*/
 	    		
@@ -11534,10 +9607,12 @@ public class Interfaz extends JFrame{
 		
 		}
 		
+		return 0;
+		
 	}
 	
 	
-	public void trucoQueridoBloque1() {
+	public int trucoQueridoBloque1() {
 		
 		truco.setEnabled(false);
 		flecha2.setEnabled(true);				//POR SI QUIERE IRSE AL MAZO
@@ -11560,32 +9635,11 @@ public class Interfaz extends JFrame{
 			c3.setEnabled(true);
 		}
 		
-		accionUsuario = false;
-		Thread espero14 = new Thread() {
-			
-			@Override
-			public void run() {
-	    		
-				System.out.print("\nEspero que el jugador tire en segunda (le gane primera) ");
-				while(accionUsuario == false) {
-					try {
-		    			System.out.print(". ");
-		    			Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-	    		}
-	    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-			}
-			
-		};
+		llamadaHilos();
 		
-		espero14.start();	
-		
-		try {
-			espero14.join();					
-//			Thread.sleep(1000);
-		}catch(InterruptedException e) {}
+		if(botonRendirse == true) {
+        	return 1;
+        }
 		
 		/*EL JUGADOR SE VA AL MAZO*/
 		
@@ -11605,32 +9659,11 @@ public class Interfaz extends JFrame{
 			
 			if(aux.returnOrden(auxJ) < aux.returnOrden(auxIA)) {
 				
-				accionUsuario = false;
-				Thread espero16 = new Thread() {
-	    			
-	    			@Override
-	    			public void run() {
-			    		
-	    				System.out.print("\nEspero que el jugador tire en tercera (me gano segunda) ");
-	    				while(accionUsuario == false) {
-	    					try {
-				    			System.out.print(". ");
-				    			Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-			    		}
-			    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-	    			}
-	    			
-	    		};
+				llamadaHilos();
 				
-	    		espero16.start();	
-	    		
-	    		try {
-					espero16.join();					
-	//				Thread.sleep(1000);
-				}catch(InterruptedException e) {}
+				if(botonRendirse == true) {
+		        	return 1;
+		        }
 				
 	    		//EL JUGADOR TIRA LA ULTIMA
 	    		auxJ = queCartaFueTirada();
@@ -11685,47 +9718,27 @@ public class Interfaz extends JFrame{
 		
 		}
 		
+		return 0;
 		
 	}
 	
 	
 	
-	public void trucoQuerido() {
+	public int trucoQuerido() {
 		
 		c1.setEnabled(true);
 		c2.setEnabled(true);
 		c3.setEnabled(true);
-		
-		accionUsuario = false;
+
 		truco.setEnabled(false);
 		flecha2.setEnabled(true);
 		mazo.setEnabled(true);
 				
-		Thread espero7 = new Thread() {
-			
-			@Override
-			public void run() {
-	    		
-				System.out.print("\nEspero que el jugador tire en primera ");
-				while(accionUsuario == false) {
-					try {
-		    			System.out.print(". ");
-		    			Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-	    		}
-	    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-			}
-			
-		};
+		llamadaHilos();
 		
-		espero7.start();	
-		
-		try {
-			espero7.join();					
-//			Thread.sleep(1000);
-		}catch(InterruptedException e) {}
+		if(botonRendirse == true) {
+        	return 1;
+        }
 		
 		/*EL JUGADOR SE VA AL MAZO*/
 		
@@ -11765,32 +9778,11 @@ public class Interfaz extends JFrame{
 					c3.setEnabled(true);
 				}
 				
-				accionUsuario = false;
-				Thread espero8 = new Thread() {
-	    			
-	    			@Override
-	    			public void run() {
-			    		
-	    				System.out.print("\nEspero que el jugador tire en segunda (gane primera) ");
-	    				while(accionUsuario == false) {
-	    					try {
-				    			System.out.print(". ");
-				    			Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-			    		}
-			    		System.out.println("\nRetomo la ejecucion (me toca a mi)\n");
-	    			}
-	    			
-	    		};
+				llamadaHilos();
 				
-	    		espero8.start();	
-	    		
-	    		try {
-					espero8.join();					
-	//				Thread.sleep(1000);
-				}catch(InterruptedException e) {}
+				if(botonRendirse == true) {
+		        	return 1;
+		        }
 				
 	    		/*EL JUGADOR SE VA AL MAZO*/
 	    		
@@ -11828,32 +9820,11 @@ public class Interfaz extends JFrame{
 		    			
 		    			auxJ = queCartaFueTirada();		//se puede comentar/eliminar
 		    			
-		    			accionUsuario = false;
-		    			Thread espero9 = new Thread() {
-			    			
-			    			@Override
-			    			public void run() {
-					    		
-			    				System.out.print("\nEspero que el jugador tire en tercera (le gane primera y me gano segunda) ");
-			    				while(accionUsuario == false) {
-			    					try {
-						    			System.out.print(". ");
-						    			Thread.sleep(1000);
-									} catch (InterruptedException e) {
-										e.printStackTrace();
-									}
-					    		}
-					    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-			    			}
-			    			
-			    		};
+		    			llamadaHilos();
 		    			
-			    		espero9.start();	
-			    		
-			    		try {
-							espero9.join();					
-		//					Thread.sleep(1000);
-						}catch(InterruptedException e) {}
+		    			if(botonRendirse == true) {
+				        	return 1;
+				        }
 		    			
 			    		/*EL JUGADOR SE VA AL MAZO*/
 			    		
@@ -11949,32 +9920,11 @@ public class Interfaz extends JFrame{
 					c3.setEnabled(true);
 				}
 				
-				accionUsuario = false;
-				Thread espero10 = new Thread() {
-	    			
-	    			@Override
-	    			public void run() {
-			    		
-	    				System.out.print("\nEspero que el jugador tire en segunda (empardamos primera y ya tire en segunda) ");
-	    				while(accionUsuario == false) {
-	    					try {
-				    			System.out.print(". ");
-				    			Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-			    		}
-			    		System.out.println("\nRetomo la ejecucion (me toca a mi)\n");
-	    			}
-	    			
-	    		};
+				llamadaHilos();
 				
-	    		espero10.start();	
-	    		
-	    		try {
-					espero10.join();					
-	//				Thread.sleep(1000);
-				}catch(InterruptedException e) {}
+				if(botonRendirse == true) {
+		        	return 1;
+		        }
 				
 	    		/*EL JUGADOR SE VA AL MAZO*/
 	    		
@@ -12042,32 +9992,11 @@ public class Interfaz extends JFrame{
 		    				c3.setEnabled(true);
 		    			}
 		    			
-		    			accionUsuario = false;
-		    			Thread espero11 = new Thread() {
-			    			
-			    			@Override
-			    			public void run() {
-					    		
-			    				System.out.print("\nEspero que el jugador tire en tercera (empardamos dos veces y ya tire todas las cartas) ");
-			    				while(accionUsuario == false) {
-			    					try {
-						    			System.out.print(". ");
-						    			Thread.sleep(1000);
-									} catch (InterruptedException e) {
-										e.printStackTrace();
-									}
-					    		}
-					    		System.out.println("\nRetomo la ejecucion (me toca a mi)\n");
-			    			}
-			    			
-			    		};
+		    			llamadaHilos();
 		    			
-			    		espero11.start();	
-			    		
-			    		try {
-							espero11.join();					
-		//					Thread.sleep(1000);
-						}catch(InterruptedException e) {}
+		    			if(botonRendirse == true) {
+				        	return 1;
+				        }
 		    			
 			    		/*EL JUGADOR SE VA AL MAZO*/
 			    		
@@ -12127,33 +10056,12 @@ public class Interfaz extends JFrame{
 			
 			else {
 				
-				accionUsuario = false;
-				Thread espero8 = new Thread() {
-	    			
-	    			@Override
-	    			public void run() {
-			    		
-	    				System.out.print("\nEspero que el jugador tire en segunda (me gano primera) ");
-	    				while(accionUsuario == false) {
-	    					try {
-				    			System.out.print(". ");
-				    			Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-			    		}
-			    		System.out.println("\nRetomo la ejecucion (me toca a mi)\n");
-	    			}
-	    			
-	    		};
+				llamadaHilos();
+	    		
+				if(botonRendirse == true) {
+		        	return 1;
+		        }
 				
-	    		espero8.start();	
-	    		
-	    		try {
-					espero8.join();					
-	//				Thread.sleep(1000);
-				}catch(InterruptedException e) {}
-	    		
 	    		/*EL JUGADOR SE VA AL MAZO*/
 	    		
 	    		if(irseAlMazo == true) {
@@ -12192,32 +10100,11 @@ public class Interfaz extends JFrame{
 		    				c3.setEnabled(true);
 		    			}
 		    			
-		    			accionUsuario = false;
-		    			Thread espero12 = new Thread() {
-			    			
-			    			@Override
-			    			public void run() {
-					    		
-			    				System.out.print("\nEspero que el jugador tire en tercera (yo ya tire las 3 cartas) ");
-			    				while(accionUsuario == false) {
-			    					try {
-						    			System.out.print(". ");
-						    			Thread.sleep(1000);
-									} catch (InterruptedException e) {
-										e.printStackTrace();
-									}
-					    		}
-					    		System.out.println("\nRetomo la ejecucion (me toca a mi)\n");
-			    			}
-			    			
-			    		};
+		    			llamadaHilos();
 		    			
-			    		espero12.start();	
-			    		
-			    		try {
-							espero12.join();					
-		//					Thread.sleep(1000);
-						}catch(InterruptedException e) {}
+		    			if(botonRendirse == true) {
+				        	return 1;
+				        }
 		    			
 			    		/*EL JUGADOR SE VA AL MAZO*/
 			    		
@@ -12285,6 +10172,8 @@ public class Interfaz extends JFrame{
 			}
 				
 		}
+		
+		return 0;
 		
 	}
 	
@@ -12807,8 +10696,6 @@ public class Interfaz extends JFrame{
 			
 			jugando = false;
 			
-			JOptionPane.showMessageDialog(Interfaz.this, "FIN DEL JUEGO.");
-			
 			quiero.setEnabled(false);
 			noQuiero.setEnabled(false);
 			c1.setEnabled(false);
@@ -12823,10 +10710,8 @@ public class Interfaz extends JFrame{
 			real_envido.setEnabled(false);
 			falta_envido.setEnabled(false);
 			mazo.setEnabled(false);
-			flecha.setEnabled(true);
-			flecha2.setEnabled(true);
-			
-			texto.setEnabled(true);
+			flecha.setEnabled(false);
+			flecha2.setEnabled(false);
 			
 			rendirse.setText("MENU");			
 			
@@ -12836,8 +10721,6 @@ public class Interfaz extends JFrame{
 			
 			jugando = false;
 			
-			JOptionPane.showMessageDialog(Interfaz.this, "FIN DEL JUEGO.");
-			
 			quiero.setEnabled(false);
 			noQuiero.setEnabled(false);
 			c1.setEnabled(false);
@@ -12852,10 +10735,8 @@ public class Interfaz extends JFrame{
 			real_envido.setEnabled(false);
 			falta_envido.setEnabled(false);
 			mazo.setEnabled(false);
-			flecha.setEnabled(true);
-			flecha2.setEnabled(true);
-			
-			texto.setEnabled(true);
+			flecha.setEnabled(false);
+			flecha2.setEnabled(false);
 			
 			rendirse.setText("MENU");
 			
@@ -12974,32 +10855,11 @@ public class Interfaz extends JFrame{
 				real_envido.setEnabled(true);
 				falta_envido.setEnabled(true);
 				
-				accionUsuario = false;
-				Thread espero3 = new Thread() {
-	    			
-	    			@Override
-	    			public void run() {
-			    		
-	    				System.out.print("\nEspero que el jugador concluya su turno ");
-	    				while(accionUsuario == false) {
-	    					try {
-				    			System.out.print(". ");
-				    			Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-			    		}
-			    		System.out.println("\nRetomo la ejecucion (me toca a mi)\n");
-	    			}
-	    			
-	    		};
-    			
-	    		espero3.start();	
-	    		
-	    		try {
-					espero3.join();					
-//						Thread.sleep(1000);
-				}catch(InterruptedException e) {}
+				llamadaHilos();
+				
+				if(botonRendirse == true) {
+		        	return 1;
+		        }
 				
 	    		/* SI EL JUGADOR QUIERE */
 	    		
@@ -13114,33 +10974,12 @@ public class Interfaz extends JFrame{
 		    			quiero.setEnabled(true);
 	    				noQuiero.setEnabled(true);
 		    			
-		    			accionUsuario = false;
-		    			Thread espero5 = new Thread() {
-			    			
-			    			@Override
-			    			public void run() {
-					    		
-			    				System.out.print("\nEspero que el jugador concluya su turno ");
-			    				while(accionUsuario == false) {
-			    					try {
-						    			System.out.print(". ");
-						    			Thread.sleep(1000);
-									} catch (InterruptedException e) {
-										e.printStackTrace();
-									}
-					    		}
-					    		System.out.println("\nRetomo la ejecucion (me toca a mi)\n");
-			    			}
-			    			
-			    		};
+	    				llamadaHilos();
 		    			
-			    		espero5.start();	
-			    		
-			    		try {
-							espero5.join();					
-//								Thread.sleep(1000);
-						}catch(InterruptedException e) {}
-		    			
+	    				if(botonRendirse == true) {
+	    		        	return 1;
+	    		        }
+	    				
 			    		/* SI EL JUGADOR QUIERE */
 			    		
 			    		if(cantado[4].equals("quiero")) {
@@ -13190,32 +11029,11 @@ public class Interfaz extends JFrame{
 				real_envido.setEnabled(false);
 				falta_envido.setEnabled(true);
 				
-				accionUsuario = false;
-				Thread espero4 = new Thread() {
-    			
-	    			@Override
-	    			public void run() {
-			    		
-	    				System.out.print("\nEspero que el jugador concluya su turno ");
-	    				while(accionUsuario == false) {
-	    					try {
-				    			System.out.print(". ");
-				    			Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-			    		}
-			    		System.out.println("\nRetomo la ejecucion (me toca a mi)\n");
-	    			}
-	    			
-	    		};
-    			
-	    		espero4.start();	
-	    		
-	    		try {
-					espero4.join();					
-//						Thread.sleep(1000);
-				}catch(InterruptedException e) {}
+				llamadaHilos();
+				
+				if(botonRendirse == true) {
+		        	return 1;
+		        }
 				
 	    		/* SI EL JUGADOR QUIERE */
 	    		
@@ -13392,34 +11210,11 @@ public class Interfaz extends JFrame{
 		c2.setEnabled(true);
 		c3.setEnabled(true);
 		
-		accionUsuario = false;
-		Thread espero6 = new Thread() {
-			
-			@Override
-			public void run() {
-	    		
-				System.out.print("\nEspero que el jugador cante truco / tire carta y concluya su turno ");
-				while(accionUsuario == false) {
-					try {
-		    			System.out.print(". ");
-		    			Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-	    		}
-	    		System.out.println("\nRetomo la ejecucion (mi turno)\n");
-			}
-			
-		};
+		llamadaHilos();
 		
-		espero6.start();	
-		
-		try {
-			espero6.join();					
-//			Thread.sleep(1000);
-		}catch(InterruptedException e) {}
-		
-		
+		if(botonRendirse == true) {
+        	return 1;
+        }
 		
 		/*EL JUGADOR CANTA TRUCO*/
 		
@@ -13494,7 +11289,7 @@ public class Interfaz extends JFrame{
 	
 	
 	
-	public void cantaEnvidoIA() {
+	public int cantaEnvidoIA() {
 		
 		if(cantado[0].equals("falta envido")) {
 			envido.setEnabled(false);
@@ -13523,33 +11318,11 @@ public class Interfaz extends JFrame{
 		c2.setEnabled(false);
 		c3.setEnabled(false);
 		
-		accionUsuario = false;
-		Thread espero = new Thread() {
-			
-			@Override
-			public void run() {
-	    		
-				System.out.print("\nEspero que el jugador quiera/no quiera el envido o revire ");
-				while(accionUsuario == false) {
-					try {
-		    			System.out.print(". ");
-		    			Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-	    		}
-	    		System.out.println("\nRetomo la ejecucion\n");
-			}
-			
-		};
+		llamadaHilos();
 		
-		espero.start();			
-		
-		try {
-			espero.join();					
-//			Thread.sleep(1000);
-		}catch(InterruptedException e) {}
-		
+		if(botonRendirse == true) {
+        	return 1;
+        }
 		
 		//SI EL JUGADOR QUIERE
 		
@@ -13677,37 +11450,12 @@ public class Interfaz extends JFrame{
 					falta_envido.setEnabled(false);
 				}
 				
-				System.out.println(cantado[0]);				//TODO - QUITAR ESTO
-				System.out.println(cantado[1]);
-				System.out.println(cantado[2]);
+				llamadaHilos();
+	    		
+				if(botonRendirse == true) {
+		        	return 1;
+		        }
 				
-				accionUsuario = false;
-	    		Thread espero2 = new Thread() {
-	    			
-	    			@Override
-	    			public void run() {
-			    		
-	    				System.out.print("\nEspero que el jugador quiera/no quiera - revire (2) ");
-	    				while(accionUsuario == false) {
-	    					try {
-				    			System.out.print(". ");
-				    			Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-			    		}
-			    		System.out.println("\nRetomo la ejecucion\n");
-	    			}
-	    			
-	    		};
-    			
-	    		espero2.start();			//nota: ver donde ponerlo si no funca
-	    		
-				try {
-					espero2.join();					
-//					Thread.sleep(1000);
-				}catch(InterruptedException e) {}
-	    		
 				falta_envido.setEnabled(false);
 				
 				//SI EL JUGADOR QUIERE
@@ -13806,6 +11554,8 @@ public class Interfaz extends JFrame{
 			
 		}
 		
+		return 0;
+		
 	}
 	
 	
@@ -13828,9 +11578,30 @@ public class Interfaz extends JFrame{
 	//FUNCION QUE SERVIRA PARA LLAMAR UN HILO EN VEZ DE CREAR MUCHOS DE FORMA INDIVIDUAL
 	public void llamadaHilos() {
 		
+		accionUsuario = false;
+		Thread t = new Thread() {
+			
+			@Override
+			public void run() {
+				while(accionUsuario == false) {
+					try {
+		    			Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+	    		}
+			}
+			
+		};
 		
+		t.start();			
 		
+		try {
+			t.join();					
+//					Thread.sleep(1000);
+		}catch(InterruptedException e) {}
 		
+		//puntosMaximosSuperados();
 		
 	}
 
