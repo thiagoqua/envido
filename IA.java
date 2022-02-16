@@ -32,7 +32,6 @@ public class IA extends Jugador{
             int puntosEnvido = super.getPuntosEnvido();
             checkIfMentimos();
             if(puntosEnvido <= 24 && mentimos){                 //si no tengo puntos y puedo mentir
-                System.out.println("SE MIENTE PERRO");
                 super.cantoPrimi = true;
                 cantar(0,cantos);                   //canto envido
             }
@@ -143,7 +142,6 @@ public class IA extends Jugador{
         tiradasGood = tiradasGood();
         checkIfMentimos();
         while(cantos[end+1] != null && cantos[end+1] != ""){++end;}
-        System.out.println("end: " + end);
         if(j.getPuntos() >= 28){                                //a todo lo que cante le digo que si
         	 cantar(6,cantos);  
         }
@@ -158,7 +156,6 @@ public class IA extends Jugador{
                 cantar(2,cantos);                   //falta envido
             }
             else if(puntosEnvido < 25 && mentimos){
-                System.out.println("SE MIENTE PERRO.");
                 cantar(1,cantos);                   //real envido
             }
             else{
@@ -179,7 +176,6 @@ public class IA extends Jugador{
                 cantar(2,cantos);                   //falta envido
             }
             else if(puntosEnvido <= 24 && mentimos){
-                System.out.println("SE MIENTE PERRO.");
                 cantar(1,cantos);                   //real envido
             }
             else{
@@ -201,7 +197,7 @@ public class IA extends Jugador{
             }
         }
         else if(cantos[end].equals("falta envido")){
-            if(puntosEnvido > 31){
+            if(puntosEnvido >= 30){
                 cantar(6,cantos);                   //quiero
             }
             else{
@@ -223,7 +219,6 @@ public class IA extends Jugador{
                 cantar(6,cantos);                   //quiero
             }
             else if(tiradasGood == 0 && cartasGood == 0 && mentimos){
-                System.out.println("SE MIENTE PERRO");
                 cantar(4,cantos);                   //retruco
             }
             else{
@@ -238,7 +233,6 @@ public class IA extends Jugador{
                 cantar(5,cantos);                   //vale cuatro
             }
             else if(cartasGood < 2 && mentimos){
-                System.out.println("SE MIENTE PERRO");
                 cantar(5,cantos);                   //vale cuatro
             }
             else{
@@ -482,7 +476,7 @@ public class IA extends Jugador{
     private void checkIfMentimos(){
         /*si se quiere que la IA mienta menos o más hay que modificar el valor con el que se compara aVer*/
         int aVer = (int)(Math.random() * 20);
-        if(aVer <= 18)
+        if(aVer <= 10)
             mentimos = true;
         else
             mentimos = false;

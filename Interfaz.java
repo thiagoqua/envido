@@ -432,7 +432,6 @@ public class Interfaz extends JFrame{
 											while(true){
 												recibo = server.receive();
 												caja_mensajes.append(recibo);
-												System.out.println(recibo);
 											}
 										}
 									}
@@ -567,8 +566,6 @@ public class Interfaz extends JFrame{
 						cp.add(unionDer,BorderLayout.EAST);
 						
 						/*SE SETEAN ALGUNAS CONFIGS PEQUE�AS*/
-						
-						System.out.println(texto_nombre.getText());
 						
 						j1.setText(texto_nombre.getText());			//SE ESTABLECE EL NOMBRE ESCRITO POR EL JUGADOR
 						j2.setText("BOT EASY");						//NOMBRE DE LA IA
@@ -1089,8 +1086,6 @@ public class Interfaz extends JFrame{
 						
 //						ActionListener();
 						
-						System.out.println(texto_nombre.getText());
-						
 						interfazCreacion();
 						
 					}
@@ -1391,10 +1386,7 @@ public class Interfaz extends JFrame{
 		    		j.cartas[i] = mazoCartas.sacar();
 					j.copyCartas[i] = j.cartas[i];            
 		    }
-		 	
-	        for(Carta x : MAQUINA.cartas)
-	            System.out.println(x + "\n");
-			
+
 			/*SE VISUALIZAN LAS CARTAS DEL JUGADOR EN PANTALLA*/
 
 			mostrarCartasJugador();
@@ -1509,14 +1501,6 @@ public class Interfaz extends JFrame{
 					
 				}
 				
-				/*EL JUGADOR SE VA AL MAZO*/
-				
-				else if(irseAlMazo == true) {
-					
-					System.out.println("ME VOY AL MAZO");
-					
-				}
-				
 				/*EL JUGADOR TIRA DIRECTAMENTE*/
 				
 				else {
@@ -1625,14 +1609,6 @@ public class Interfaz extends JFrame{
 				MAQUINA.setPuedoCantarEnvido(true);		//nota: decidir si quiero que sea true o false
 				tiraIA = MAQUINA.yourTurn(cantado,null);
 				auxIA = tiraIA[0];
-				
-				System.out.println("\nTira:");
-				System.out.println(tiraIA[0]);
-				
-				System.out.println("\nCantado:");
-		        for(int i = 0;cantado[i] != "";++i) {
-		            System.out.println(cantado[i]);
-		        }
 				
 		        /* CANTA ENVIDO (SI TIENE) */
 		        
@@ -1752,14 +1728,6 @@ public class Interfaz extends JFrame{
 	    			if(botonRendirse == true) {
 						return 1;
 					}
-	    			
-	    		} 
-		        
-	    		/*EL JUGADOR SE VA AL MAZO*/
-	    		
-	    		else if(irseAlMazo == true) {
-	    			
-	    			System.out.println("ME VOY AL MAZO");
 	    			
 	    		}
 	    		
@@ -2031,9 +1999,7 @@ public class Interfaz extends JFrame{
 			/*EL JUGADOR SE VA AL MAZO*/
 			
 			if(irseAlMazo == true) {
-				
-				System.out.println("ME VOY AL MAZO");
-				
+
 			}
 			
 			/*EL JUGADOR TIRA*/
@@ -2056,8 +2022,6 @@ public class Interfaz extends JFrame{
 					/*EL JUGADOR SE VA AL MAZO*/
 					
 					if(irseAlMazo == true) {
-						
-						System.out.println("ME VOY AL MAZO");
 						
 					}
 					
@@ -2157,8 +2121,6 @@ public class Interfaz extends JFrame{
 			
 			if(irseAlMazo == true) {
 				
-				System.out.println("ME VOY AL MAZO");
-				
 			}
 			
 			/*EL JUGADOR TIRA*/
@@ -2232,8 +2194,6 @@ public class Interfaz extends JFrame{
 	        }
 			
 			if(irseAlMazo == true) {
-				
-				System.out.println("ME VOY AL MAZO");
 				
 			}
 			
@@ -2377,8 +2337,6 @@ public class Interfaz extends JFrame{
 		
 		if(irseAlMazo == true) {
 			
-			System.out.println("ME VOY AL MAZO");
-			
 		}
 		
 		/*EL JUGADOR TIRA*/
@@ -2423,8 +2381,6 @@ public class Interfaz extends JFrame{
 				
 				if(irseAlMazo == true) {
 					
-					System.out.println("ME VOY AL MAZO");
-					
 				}
 				
 				/*EL JUGADOR TIRA*/
@@ -2442,8 +2398,6 @@ public class Interfaz extends JFrame{
 						/*EL JUGADOR SE VA AL MAZO*/
 						
 						if(irseAlMazo == true) {
-							
-							System.out.println("ME VOY AL MAZO");
 							
 						}
 						
@@ -2540,8 +2494,6 @@ public class Interfaz extends JFrame{
 				/*EL JUGADOR SE VA AL MAZO*/
 				
 				if(irseAlMazo == true) {
-					
-					System.out.println("ME VOY AL MAZO");
 					
 				}
 				
@@ -2681,8 +2633,6 @@ public class Interfaz extends JFrame{
 				
 				if(irseAlMazo == true) {
 					
-					System.out.println("ME VOY AL MAZO");
-					
 				}
 				
 				/*EL JUGADOR TIRA*/
@@ -2765,8 +2715,6 @@ public class Interfaz extends JFrame{
 						/*EL JUGADOR SE VA AL MAZO*/
 						
 						if(irseAlMazo == true) {
-							
-							System.out.println("ME VOY AL MAZO");
 							
 						}
 						
@@ -3014,9 +2962,7 @@ public class Interfaz extends JFrame{
 				/*EL JUGADOR SE VA AL MAZO*/
 				
 				if(irseAlMazo == true) {
-					
-					System.out.println("ME VOY AL MAZO");
-					
+
 				}
 				
 				/*EL JUGADOR CANTA TRUCO*/
@@ -3196,8 +3142,6 @@ public class Interfaz extends JFrame{
 						/*EL JUGADOR SE VA AL MAZO*/
 						
 						if(irseAlMazo == true) {
-							
-							System.out.println("ME VOY AL MAZO");
 							
 						}
 						
@@ -3586,8 +3530,6 @@ public class Interfaz extends JFrame{
 			/*EL JUGADOR PUEDE IRSE AL MAZO*/
 			
 			if(irseAlMazo == true) {
-				
-				System.out.println("ME VOY AL MAZO");
 				
 			}
 			
@@ -4062,8 +4004,6 @@ public class Interfaz extends JFrame{
 							
 							if(irseAlMazo == true) {
 								
-								System.out.println("ME VOY AL MAZO");
-								
 							}
 							
 							/*EL JUGADOR CANTA TRUCO*/
@@ -4310,8 +4250,6 @@ public class Interfaz extends JFrame{
 			/*EL JUGADOR SE VA AL MAZO*/
 			
 			if(irseAlMazo == true) {
-				
-				System.out.println("ME VOY AL MAZO");
 				
 			}
 			
@@ -4677,8 +4615,6 @@ public class Interfaz extends JFrame{
 						/*EL JUGADOR SE VA AL MAZO*/
 						
 						if(irseAlMazo == true) {
-							
-							System.out.println("ME VOY AL MAZO");
 							
 						}
 						
@@ -5390,8 +5326,6 @@ public class Interfaz extends JFrame{
 	    		
 	    		if(irseAlMazo == true) {
 	    			
-	    			System.out.println("ME VOY AL MAZO");
-	    			
 	    		}
 	    		
 				/*EL JUGADOR PUEDE CANTAR TRUCO*/
@@ -5580,15 +5514,11 @@ public class Interfaz extends JFrame{
 	    	    		
 	    	    		if(irseAlMazo == true) {
 	    	    			
-	    	    			System.out.println("ME VOY AL MAZO");
-	    	    			
 	    	    		}
 	    	    		
 						/*EL JUGADOR PUEDE CANTAR TRUCO*/
 						
 	    	    		else if(cantado[0].equals("truco")) {
-							
-	    	    			System.out.println("HOLA HOLAAA");
 	    	    			
 							flecha2.setEnabled(false);
 							cantarTruco.setEnabled(false);
@@ -5603,8 +5533,6 @@ public class Interfaz extends JFrame{
 							/*SI LA IA QUIERE*/
 							
 							if(cantado[1].equals("quiero")) {			//BLOQUE 3
-								
-								System.out.println("QUIERO PAPAAAA");
 								
     							texto.setText("<html>"+ cantado[1] +"</html>");
     							
@@ -5621,8 +5549,6 @@ public class Interfaz extends JFrame{
 							/*SI LA IA NO QUIERE*/
 							
 							else if(cantado[1].equals("no quiero")) {
-								
-								System.out.println("NO QUIERO PAPAAAA");
 								
     							texto.setText("<html>"+ cantado[1] +"</html>");
     							
@@ -6113,8 +6039,6 @@ public class Interfaz extends JFrame{
 	    		
 	    		if(irseAlMazo == true) {
 	    			
-	    			System.out.println("ME VOY AL MAZO");
-	    			
 	    		}
 	    		
 				/*EL JUGADOR CANTA TRUCO*/
@@ -6469,8 +6393,6 @@ public class Interfaz extends JFrame{
 	    					
 	    					if(irseAlMazo == true) {
 	    						
-	    						System.out.println("ME VOY AL MAZO");
-	    						
 	    					}
 	    					
 	    					/*SI EL JUGADOR CANTA TRUCO*/
@@ -6650,8 +6572,6 @@ public class Interfaz extends JFrame{
 			/*EL JUGADOR SE VA AL MAZO*/
 			
 			if(irseAlMazo == true) {
-				
-				System.out.println("ME VOY AL MAZO");
 				
 			}
 			
@@ -6982,16 +6902,9 @@ public class Interfaz extends JFrame{
 					        	return 1;
 					        }
 							
-							System.out.println(cantado[0]);
-							System.out.println(cantado[1]);
-							System.out.println(cantado[2]);
-							System.out.println(cantado[3]);
-							
 							/*SI EL JUGADOR QUIERE*/
 							
 							if(cantado[1].equals("quiero")) {							//BLOQUE 11
-								
-								System.out.println("ENTRE A QUIERO");
 								
 								retruco.setEnabled(false);
 								trucoQueridoBloque11();
@@ -7002,8 +6915,6 @@ public class Interfaz extends JFrame{
 							
 							else if(cantado[1].equals("no quiero")) {
 								//LA IA GANA
-								
-								System.out.println("ENTRE A NO QUIERO");
 								
 								sistPuntuacion(cantado,MAQUINA,j);
 								acumulador = String.valueOf(MAQUINA.getPuntos());
@@ -7139,8 +7050,6 @@ public class Interfaz extends JFrame{
 							
 							if(irseAlMazo == true) {
 								
-								System.out.println("ME VOY AL MAZO");
-								
 							}
 							
 							/*EL JUGADOR PUEDE CANTAR TRUCO*/
@@ -7177,8 +7086,6 @@ public class Interfaz extends JFrame{
 								/*SI LA IA NO QUIERE*/
 								
 								else if(cantado[1].equals("no quiero")) {
-									
-									System.out.println("NO QUISE PAPAAAA");
 									
 									texto.setText("<html>"+ cantado[1] +"</html>");
 									
@@ -7466,8 +7373,6 @@ public class Interfaz extends JFrame{
 		
 		if(irseAlMazo == true) {
 			
-			System.out.println("ME VOY AL MAZO");
-			
 		}
 		
 		/*EL JUGADOR TIRA*/
@@ -7585,8 +7490,6 @@ public class Interfaz extends JFrame{
     		
     		if(irseAlMazo == true) {
     			
-    			System.out.println("ME VOY AL MAZO");
-    			
     		}
     		
     		/*EL JUGADOR TIRA*/
@@ -7662,8 +7565,6 @@ public class Interfaz extends JFrame{
 		/*EL JUGADOR SE VA AL MAZO*/
 		
 		if(irseAlMazo == true) {
-			
-			System.out.println("ME VOY AL MAZO");
 			
 		}
 		
@@ -7741,8 +7642,6 @@ public class Interfaz extends JFrame{
 				/*EL JUGADOR SE VA AL MAZO*/
 	    		
 	    		if(irseAlMazo == true) {
-	    			
-	    			System.out.println("ME VOY AL MAZO");
 	    			
 	    		}
 	    		
@@ -7823,8 +7722,6 @@ public class Interfaz extends JFrame{
 		
 		if(irseAlMazo == true) {
 			
-			System.out.println("ME VOY AL MAZO");
-			
 		}
 		
 		/*EL JUGADOR TIRA*/
@@ -7897,8 +7794,6 @@ public class Interfaz extends JFrame{
 		/*EL JUGADOR SE VA AL MAZO*/
 		
 		if(irseAlMazo == true) {
-			
-			System.out.println("ME VOY AL MAZO");
 			
 		}
 		
@@ -7974,8 +7869,6 @@ public class Interfaz extends JFrame{
 			/*EL JUGADOR SE VA AL MAZO*/
     		
     		if(irseAlMazo == true) {
-    			
-    			System.out.println("ME VOY AL MAZO");
     			
     		}
     		
@@ -8067,8 +7960,6 @@ public class Interfaz extends JFrame{
 		
 		if(irseAlMazo == true) {
 			
-			System.out.println("ME VOY AL MAZO");
-			
 		}
 		
 		/*EL JUGADOR TIRA*/
@@ -8110,8 +8001,6 @@ public class Interfaz extends JFrame{
 				/*EL JUGADOR SE VA AL MAZO*/
 	    		
 	    		if(irseAlMazo == true) {
-	    			
-	    			System.out.println("ME VOY AL MAZO");
 	    			
 	    		}
 	    		
@@ -8243,8 +8132,6 @@ public class Interfaz extends JFrame{
 		
 		if(irseAlMazo == true) {
 			
-			System.out.println("ME VOY AL MAZO");
-			
 		}
 		
 		/*EL JUGADOR TIRA*/
@@ -8319,8 +8206,6 @@ public class Interfaz extends JFrame{
 		
 		if(irseAlMazo == true) {
 			
-			System.out.println("ME VOY AL MAZO");
-			
 		}
 		
 		/*EL JUGADOR TIRA*/
@@ -8342,8 +8227,6 @@ public class Interfaz extends JFrame{
 				/*EL JUGADOR SE VA AL MAZO*/
 	    		
 	    		if(irseAlMazo == true) {
-	    			
-	    			System.out.println("ME VOY AL MAZO");
 	    			
 	    		}
 	    		
@@ -8442,8 +8325,6 @@ public class Interfaz extends JFrame{
 		
 		if(irseAlMazo == true) {
 			
-			System.out.println("ME VOY AL MAZO");
-			
 		}
 		
 		/*EL JUGADOR TIRA*/
@@ -8465,8 +8346,6 @@ public class Interfaz extends JFrame{
 				/*EL JUGADOR SE VA AL MAZO*/
 	    		
 	    		if(irseAlMazo == true) {
-	    			
-	    			System.out.println("ME VOY AL MAZO");
 	    			
 	    		}
 	    		
@@ -8563,8 +8442,6 @@ public class Interfaz extends JFrame{
 		
 		if(irseAlMazo == true) {
 			
-			System.out.println("ME VOY AL MAZO");
-			
 		}
 		
 		/*EL JUGADOR TIRA*/
@@ -8609,8 +8486,6 @@ public class Interfaz extends JFrame{
 				/*EL JUGADOR SE VA AL MAZO*/
 	    		
 	    		if(irseAlMazo == true) {
-	    			
-	    			System.out.println("ME VOY AL MAZO");
 	    			
 	    		}
 	    		
@@ -8705,8 +8580,6 @@ public class Interfaz extends JFrame{
 		
 		if(irseAlMazo == true) {
 			
-			System.out.println("ME VOY AL MAZO");
-			
 		}
 		
 		/*EL JUGADOR TIRA*/
@@ -8775,8 +8648,6 @@ public class Interfaz extends JFrame{
 		/*EL JUGADOR SE VA AL MAZO*/
 		
 		if(irseAlMazo == true) {
-			
-			System.out.println("ME VOY AL MAZO");
 			
 		}
 		
@@ -8858,8 +8729,6 @@ public class Interfaz extends JFrame{
 			/*EL JUGADOR SE VA AL MAZO*/
     		
     		if(irseAlMazo == true) {
-    			
-    			System.out.println("ME VOY AL MAZO");
     			
     		}
     		
@@ -8952,8 +8821,6 @@ public class Interfaz extends JFrame{
 		
 		if(irseAlMazo == true) {
 			
-			System.out.println("ME VOY AL MAZO");
-			
 		}
 		
 		/*EL JUGADOR TIRA*/
@@ -9036,8 +8903,6 @@ public class Interfaz extends JFrame{
 		
 		if(irseAlMazo == true) {
 			
-			System.out.println("ME VOY AL MAZO");
-			
 		}
 		
 		/*EL JUGADOR TIRA*/
@@ -9103,8 +8968,6 @@ public class Interfaz extends JFrame{
 		/*EL JUGADOR SE VA AL MAZO*/
 		
 		if(irseAlMazo == true) {
-			
-			System.out.println("ME VOY AL MAZO");
 			
 		}
 		
@@ -9174,8 +9037,6 @@ public class Interfaz extends JFrame{
 	    		/*EL JUGADOR SE VA AL MAZO*/
 	    		
 	    		if(irseAlMazo == true) {
-	    			
-	    			System.out.println("ME VOY AL MAZO");
 	    			
 	    		}
 	    		
@@ -9256,8 +9117,6 @@ public class Interfaz extends JFrame{
 		
 		if(irseAlMazo == true) {
 			
-			System.out.println("ME VOY AL MAZO");
-			
 		}
 		
 		/*EL JUGADOR TIRA*/
@@ -9328,8 +9187,6 @@ public class Interfaz extends JFrame{
 	    		/*EL JUGADOR SE VA AL MAZO*/
 	    		
 	    		if(irseAlMazo == true) {
-	    			
-	    			System.out.println("ME VOY AL MAZO");
 	    			
 	    		}
 	    		
@@ -9439,8 +9296,6 @@ public class Interfaz extends JFrame{
 		
 		if(irseAlMazo == true) {
 			
-			System.out.println("ME VOY AL MAZO");
-			
 		}
 		
 		/*EL JUGADOR TIRA*/
@@ -9515,8 +9370,6 @@ public class Interfaz extends JFrame{
 		
 		if(irseAlMazo == true) {
 			
-			System.out.println("ME VOY AL MAZO");
-			
 		}
 		
 		/*EL JUGADOR TIRA*/
@@ -9558,8 +9411,6 @@ public class Interfaz extends JFrame{
 	    		/*EL JUGADOR SE VA AL MAZO*/
 	    		
 	    		if(irseAlMazo == true) {
-	    			
-	    			System.out.println("ME VOY AL MAZO");
 	    			
 	    		}
 	    		
@@ -9644,8 +9495,6 @@ public class Interfaz extends JFrame{
 		/*EL JUGADOR SE VA AL MAZO*/
 		
 		if(irseAlMazo == true) {
-			
-			System.out.println("ME VOY AL MAZO");
 			
 		}
 		
@@ -9744,8 +9593,6 @@ public class Interfaz extends JFrame{
 		
 		if(irseAlMazo == true) {
 			
-			System.out.println("ME VOY AL MAZO");
-			
 		}
 		
 		/*EL JUGADOR TIRA*/
@@ -9788,8 +9635,6 @@ public class Interfaz extends JFrame{
 	    		
 	    		if(irseAlMazo == true) {
 	    			
-	    			System.out.println("ME VOY AL MAZO");
-	    			
 	    		}
 	    		
 	    		/*EL JUGADOR TIRA*/
@@ -9829,8 +9674,6 @@ public class Interfaz extends JFrame{
 			    		/*EL JUGADOR SE VA AL MAZO*/
 			    		
 			    		if(irseAlMazo == true) {
-			    			
-			    			System.out.println("ME VOY AL MAZO");
 			    			
 			    		}
 			    		
@@ -9930,8 +9773,6 @@ public class Interfaz extends JFrame{
 	    		
 	    		if(irseAlMazo == true) {
 	    			
-	    			System.out.println("ME VOY AL MAZO");
-	    			
 	    		}
 	    		
 	    		/*EL JUGADOR TIRA*/
@@ -10002,8 +9843,6 @@ public class Interfaz extends JFrame{
 			    		
 			    		if(irseAlMazo == true) {
 			    			
-			    			System.out.println("ME VOY AL MAZO");
-			    			
 			    		}
 			    		
 			    		/*EL JUGADOR TIRA*/
@@ -10066,8 +9905,6 @@ public class Interfaz extends JFrame{
 	    		
 	    		if(irseAlMazo == true) {
 	    			
-	    			System.out.println("ME VOY AL MAZO");
-	    			
 	    		}
 	    		
 	    		/*EL JUGADOR TIRA*/
@@ -10109,8 +9946,6 @@ public class Interfaz extends JFrame{
 			    		/*EL JUGADOR SE VA AL MAZO*/
 			    		
 			    		if(irseAlMazo == true) {
-			    			
-			    			System.out.println("ME VOY AL MAZO");
 			    			
 			    		}
 			    		
@@ -10458,7 +10293,6 @@ public class Interfaz extends JFrame{
 	        		l3.setIcon(ctemp.getIcon());
 	        	}
 	        	else {
-	        		System.out.println("no hay mas espacio");
 	        		return -1;
 	        	}
 	        }
@@ -10844,10 +10678,6 @@ public class Interfaz extends JFrame{
 			
 			if(cantado[1].equals("envido")) {
 				
-				for(int i=0;i<5;i++) {
-    				System.out.println(cantado[i]);
-    			}
-				
 				quiero.setEnabled(true);
 				noQuiero.setEnabled(true);
 				
@@ -10901,10 +10731,6 @@ public class Interfaz extends JFrame{
 	    		/* SI EL JUGADOR REVIRA */
 	    		
 	    		else if(cantado[2].equals("real envido") || cantado[2].equals("falta envido")) {
-	    			
-	    			for(int i=0;i<5;i++) {
-	    				System.out.println(cantado[i]);
-	    			}
 	    			
 	    			real_envido.setEnabled(false);
 	    			falta_envido.setEnabled(false);
@@ -11227,8 +11053,6 @@ public class Interfaz extends JFrame{
 		/*EL JUGADOR SE VA AL MAZO*/
 		
 		else if(irseAlMazo == true) {
-			
-			System.out.println("ME VOY AL MAZO");
 			
 		}
 		
@@ -11710,7 +11534,6 @@ public class Interfaz extends JFrame{
 				while(true){
 					recibo = client.receive();
 					caja_mensajes.append(recibo);
-					System.out.println(recibo);
 				}
 			};
 		};
