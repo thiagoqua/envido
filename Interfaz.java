@@ -567,7 +567,12 @@ public class Interfaz extends JFrame{
 						
 						/*SE SETEAN ALGUNAS CONFIGS PEQUE�AS*/
 						
-						j1.setText(texto_nombre.getText());			//SE ESTABLECE EL NOMBRE ESCRITO POR EL JUGADOR
+						if(texto_nombre == null) {
+							j1.setText("");	
+						}
+						else {
+							j1.setText(texto_nombre.getText());			//SE ESTABLECE EL NOMBRE ESCRITO POR EL JUGADOR
+						}
 						j2.setText("BOT EASY");						//NOMBRE DE LA IA
 						
 						//OTROS BOTONES DESACTIVADOS (PORQUE SIEMPRE EMPIEZA LA IA)
