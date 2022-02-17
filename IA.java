@@ -215,7 +215,7 @@ public class IA extends Jugador{
             //(si me queda más de una carta buena y tuve buenas cartas)
                 cantar(4,cantos);                   //retruco
             }
-            else if(cartasGood == 1 || tiradasGood == 1){
+            else if(cartasGood == 1 || tiradasGood >= 1){
                 cantar(6,cantos);                   //quiero
             }
             else if(tiradasGood == 0 && cartasGood == 0 && mentimos){
