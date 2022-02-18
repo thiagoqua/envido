@@ -536,11 +536,6 @@ public class Interfaz extends JFrame{
 								/*CONTENEDOR PRINCIPAL*/
 								
 								cp.removeAll();
-//								cp.add(ventanaPrincipal());
-//								cp.revalidate();
-//								cp.repaint();
-								
-//								ActionListener();
 								
 								interfazCreacion();
 								
@@ -591,7 +586,7 @@ public class Interfaz extends JFrame{
 							@Override
 							public void actionPerformed(ActionEvent e) {		
 								tirarCartaEnMesa(c1);
-//								c1.setEnabled(false);		//TENER CUIDADO CON ESTO POR LAS DUDAS, PORQUE EN EL CODIGO TAMBIEN SE HACEN TRUE O FALSE
+//								
 								accionUsuario = true;
 							}
 						});
@@ -600,7 +595,7 @@ public class Interfaz extends JFrame{
 							@Override
 							public void actionPerformed(ActionEvent e) {
 								tirarCartaEnMesa(c2);
-//								c2.setEnabled(false);
+
 								accionUsuario = true;
 							}
 						});
@@ -609,7 +604,7 @@ public class Interfaz extends JFrame{
 							@Override
 							public void actionPerformed(ActionEvent e) {
 								tirarCartaEnMesa(c3);
-//								c3.setEnabled(false);
+
 								accionUsuario = true;
 							}
 						});
@@ -909,11 +904,6 @@ public class Interfaz extends JFrame{
 										inicio.removeAll();
 										
 										cp.removeAll();
-//										cp.add(ventanaPrincipal());
-//										cp.revalidate();
-//										cp.repaint();
-										
-//										ActionListener();
 										
 										interfazCreacion();
 									
@@ -926,11 +916,6 @@ public class Interfaz extends JFrame{
 							        if (result == 0) {
 							        	
 							        	MAQUINA.puntos = 30;
-							        	
-							        	//HALLAR LA FORMA DE DETENER EL HILO ACTUAL Y EL HILO PRINCIPAL
-							        	
-							        	//1. COMBINAR TODOS LOS HILOS EN UNA FUNCION Y EN ESA FUNCION LLAMAR CONTINUAMENTE A PUNTOSMAXIMOSSUPERADOS()
-							        			//SI APRETO "RENDIRSE" AGREGO 30 A LA IA, Y PUNTOSMAXIMOSSUPERADOS() BLOQUEA TODO Y LO UNICO QUE ME QUEDA ES IRME AL MENU
 							        	
 							        	botonRendirse = true;
 							        	
@@ -993,11 +978,6 @@ public class Interfaz extends JFrame{
 						inicio.removeAll();
 						
 						cp.removeAll();
-//						cp.add(ventanaPrincipal());
-//						cp.revalidate();
-//						cp.repaint();
-						
-//						ActionListener();
 						
 						interfazCreacion();
 						
@@ -1085,11 +1065,6 @@ public class Interfaz extends JFrame{
 						inicio.removeAll();
 						
 						cp.removeAll();
-//						cp.add(ventanaPrincipal());
-//						cp.revalidate();
-//						cp.repaint();
-						
-//						ActionListener();
 						
 						interfazCreacion();
 						
@@ -1495,7 +1470,6 @@ public class Interfaz extends JFrame{
 					texto.setText("<html>"+ cantado[0] +"</html>");
 					
 					MAQUINA.setPuedoCantarEnvido(false);
-					//MAQUINA.yourTurnAccept(cantado,j);
 					
 					//SE DESARROLLA LA FUNCION DEL TRUCO
 					truco2();
@@ -1821,8 +1795,6 @@ public class Interfaz extends JFrame{
 			
 			
 		} //FIN WHILE JUEGO
-	
-		//puntosMaximosSuperados();
 		
 		return 0;
 		
@@ -2178,7 +2150,7 @@ public class Interfaz extends JFrame{
 		
 		
 		
-		/*SI LA IA EMPARDA*/					//TODO - AL EMPARDAR, TAMBIEN DEVUELVE UNA SEGUNDA CARTA. TENER OJO, PORQUE PUEDE TIRAR EXCPECION
+		/*SI LA IA EMPARDA*/
 		
 		else {
 			
@@ -2790,7 +2762,7 @@ public class Interfaz extends JFrame{
 		
 		auxIA = tiraIA[0];
 		
-		/*SI LA IA MATA*/			//TODO - LA IA MATA
+		/*SI LA IA MATA*/
 		
 		if(aux.returnOrden(auxIA) < aux.returnOrden(auxJ)) {
 			
@@ -3504,7 +3476,7 @@ public class Interfaz extends JFrame{
 		
 		
 		
-		/*SI LA IA NO MATA*/		//TODO - LA IA NO MATA
+		/*SI LA IA NO MATA*/
 		
 		else if(aux.returnOrden(auxIA) > aux.returnOrden(auxJ)) {
 			
@@ -4224,7 +4196,7 @@ public class Interfaz extends JFrame{
 		
 		
 		
-		/*SI LA IA EMPARDA*/		//TODO - LA IA EMPARDA
+		/*SI LA IA EMPARDA*/
 				
 		else {
 			
@@ -7246,15 +7218,10 @@ public class Interfaz extends JFrame{
 					
 					/*SI LA IA NO MATA O EMPARDA*/
 					
-					else {																//TODO - CREO QUE NO ESTOY MOSTRANDO LA ULTIMA CARTA
-						//PODEMOS HACER USO DE TIRATMP, EN VEZ DE SOLOUNA
-						//tiraIAnull = true;
-						//tiratmp[0] = tiraIA[0];
-						//mostrarTirada(tiratmp,tiraIAnull);					
+					else {
 						
 						//EL JUGADOR GANA
 	
-						//sistPuntuacion(cantado,j,MAQUINA);
 						j.addPuntos(1);
 						acumulador = String.valueOf(j.getPuntos());
 						pts1.setText(acumulador);
@@ -7281,11 +7248,11 @@ public class Interfaz extends JFrame{
 	
 	public Carta queCartaFueTirada() {		
 		
-		//OJO CON ESTO, CUANDO YA RETORNO UNA CARTA, ENTONCES CUALQUIER 'C' DEBE ANULARSE, PORQUE YA NO EXISTE MAS NADA AH�
+		//CUANDO YA RETORNO UNA CARTA, ENTONCES CUALQUIER 'C' DEBE ANULARSE, PORQUE YA NO EXISTE MAS NADA AH�
 		
 		if(c1.getIcon()==null && c1.isEnabled() != false) {
 			c1.setEnabled(false);
-			return j.cartas[0];		//OJO CON ESTO, POSIBLEMENTE ESTE VACIO (O TAL VEZ LAS CARTAS DE LA IA ESTEN VACIAS)
+			return j.cartas[0];
 		}
 		else if(c2.getIcon()==null && c2.isEnabled() != false) {
 			c2.setEnabled(false);
@@ -7310,7 +7277,7 @@ public class Interfaz extends JFrame{
 			l6.setIcon(c.getIcon());
 		}
 		
-		c.setIcon(null);		//EN VEZ DE HACERLA NULL, DESACTIVO EL BOTON Y DEJO EL ICONO
+		c.setIcon(null);
 		
 	}
 	
@@ -10409,7 +10376,7 @@ public class Interfaz extends JFrame{
                         else
                             j2.addPuntosF(j1);   
                     }
-                    else if(cantado[index].equals("no quiero"))     //canta j2			//TODO - MODIFICADO, ES J1, NO J2
+                    else if(cantado[index].equals("no quiero"))     //canta j2
                         j1.addPuntos(5);
                     else 
                         throw new IllegalArgumentException(cantado[index] + " no matcheado");
@@ -10580,9 +10547,6 @@ public class Interfaz extends JFrame{
 			rendirse.setText("MENU");
 			
 		}
-		
-		
-		
 		
 	}
 	
@@ -11063,7 +11027,7 @@ public class Interfaz extends JFrame{
 		
 		/*EL JUGADOR TIRA DIRECTAMENTE*/
 		
-		else {			//TODO (RESUELTO) - ERROR! ESTO SIRVE PARA RONDAS PARES, PERO NO PARA IMPARES, DEBO CREAR DOS RAMIFICACIONES: UNA PARA PAR Y OTRA PARA IMPAR
+		else {
 			
 			if(ronda%2 == 0) {
 			
@@ -11262,7 +11226,7 @@ public class Interfaz extends JFrame{
 			
 			//SI LA IA REVIRA
 			
-			else if(cantado[2].equals("real envido") || cantado[2].equals("falta envido")) {	//TODO - AGREGAR UNA CONDICION MAS, QUE CANTADO[1] NO SEA FALTA ENVIDO
+			else if(cantado[2].equals("real envido") || cantado[2].equals("falta envido")) {
 				
 				texto.setText("<html>"+ cantado[2] +"</html>");
 				quiero.setEnabled(true);
@@ -11429,8 +11393,6 @@ public class Interfaz extends JFrame{
 			t.join();					
 //					Thread.sleep(1000);
 		}catch(InterruptedException e) {}
-		
-		//puntosMaximosSuperados();
 		
 	}
 
